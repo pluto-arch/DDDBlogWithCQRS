@@ -1,0 +1,26 @@
+﻿
+@model Microsoft.AspNetCore.Diagnostics.IExceptionHandlerFeature
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    <p>@Model.Error.Message</p>
+    <hr />
+    <p>
+        @Model.Error.HelpLink
+    </p>
+    <hr />
+    <p>
+        @Model.Error.Source
+    </p>
+</body>
+</html>

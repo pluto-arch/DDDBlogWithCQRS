@@ -1,0 +1,268 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>D3.Blog.Application</name>
+    </assembly>
+    <members>
+        <member name="T:D3.Blog.Application.AutoMapper.AutoMapperConfig">
+            <summary>
+            AutoMapper配置文件
+            </summary>
+        </member>
+        <member name="M:D3.Blog.Application.AutoMapper.AutoMapperConfig.RegisterMappings">
+            <summary>
+            配置automapper
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:D3.Blog.Application.AutoMapper.DomainToViewModelMappingProfile">
+            <summary>
+            领域模型映射成视图模型Dto
+            </summary>
+        </member>
+        <member name="M:D3.Blog.Application.AutoMapper.DomainToViewModelMappingProfile.#ctor">
+            <summary>
+            配置构造函数，用来创建关系映射
+            </summary>
+        </member>
+        <member name="T:D3.Blog.Application.AutoMapper.ViewModelToDomainMappingProfile">
+            <summary>
+            视图模型映射成领域命令模型和领域模型
+            </summary>
+        </member>
+        <member name="M:D3.Blog.Application.AutoMapper.ViewModelToDomainMappingProfile.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="T:D3.Blog.Application.Infrastructure.RequestLogger`1">
+            <summary>
+            请求预处理器-日志记录
+            </summary>
+        </member>
+        <member name="F:D3.Blog.Application.Infrastructure.RequestLogger`1._logger">
+            <summary>
+            日志对象
+            </summary>
+        </member>
+        <member name="F:D3.Blog.Application.Infrastructure.RequestLogger`1._user">
+            <summary>
+            当前操作用户
+            </summary>
+        </member>
+        <member name="M:D3.Blog.Application.Infrastructure.RequestLogger`1.#ctor(Serilog.ILogger,D3.Blog.Domain.Infrastructure.IUser)">
+            <summary>
+            构造函数注入
+            </summary>
+            <param name="logger"></param>
+            <param name="user"></param>
+        </member>
+        <member name="M:D3.Blog.Application.Infrastructure.RequestLogger`1.Process(`0,System.Threading.CancellationToken)">
+            <summary>
+            预处理请求，记录日志
+            </summary>
+            <param name="request"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="T:D3.Blog.Application.Infrastructure.RequestPerformanceBehaviour`2">
+            <summary>
+            请求性能记录
+            </summary>
+        </member>
+        <member name="F:D3.Blog.Application.Infrastructure.RequestPerformanceBehaviour`2._logger">
+            <summary>
+            serilog对象
+            </summary>
+        </member>
+        <member name="F:D3.Blog.Application.Infrastructure.RequestPerformanceBehaviour`2._user">
+            <summary>
+            当前操作用户
+            </summary>
+        </member>
+        <member name="F:D3.Blog.Application.Infrastructure.RequestPerformanceBehaviour`2._timer">
+            <summary>
+            计数器
+            </summary>
+        </member>
+        <member name="M:D3.Blog.Application.Infrastructure.RequestPerformanceBehaviour`2.#ctor(Serilog.ILogger,D3.Blog.Domain.Infrastructure.IUser)">
+            <summary>
+            构造函数注入
+            </summary>
+            <param name="logger"></param>
+            <param name="user"></param>
+        </member>
+        <member name="M:D3.Blog.Application.Infrastructure.RequestPerformanceBehaviour`2.Handle(`0,System.Threading.CancellationToken,MediatR.RequestHandlerDelegate{`1})">
+            <summary>
+            请求预处理-性能分析
+            </summary>
+            <param name="request"></param>
+            <param name="cancellationToken"></param>
+            <param name="next"></param>
+            <returns></returns>
+        </member>
+        <member name="T:D3.Blog.Application.Infrastructure.RequestValidationBehavior`2">
+            <summary>
+            请求处理验证
+            </summary>
+        </member>
+        <member name="F:D3.Blog.Application.Infrastructure.RequestValidationBehavior`2._logger">
+            <summary>
+            serilog对象
+            </summary>
+        </member>
+        <member name="F:D3.Blog.Application.Infrastructure.RequestValidationBehavior`2._user">
+            <summary>
+            当前操作用户
+            </summary>
+        </member>
+        <member name="F:D3.Blog.Application.Infrastructure.RequestValidationBehavior`2._validators">
+            <summary>
+            验证者
+            </summary>
+        </member>
+        <member name="M:D3.Blog.Application.Infrastructure.RequestValidationBehavior`2.#ctor(System.Collections.Generic.IEnumerable{FluentValidation.IValidator{`0}},Serilog.ILogger,D3.Blog.Domain.Infrastructure.IUser)">
+            <summary>
+            构造函数注入
+            </summary>
+            <param name="validators"></param>
+            <param name="logger"></param>
+            <param name="user"></param>
+        </member>
+        <member name="M:D3.Blog.Application.Infrastructure.RequestValidationBehavior`2.Handle(`0,System.Threading.CancellationToken,MediatR.RequestHandlerDelegate{`1})">
+            <summary>
+            验证请求处理
+            </summary>
+            <param name="request"></param>
+            <param name="cancellationToken"></param>
+            <param name="next"></param>
+            <returns></returns>
+        </member>
+        <member name="T:D3.Blog.Application.Interface.ICustomerService">
+            <summary>
+            Product Service 接口
+            这里使用的对象是视图对象模型
+            </summary>
+        </member>
+        <member name="M:D3.Blog.Application.Interface.ICustomerService.Add(D3.Blog.Application.ViewModels.CustomerViewModel)">
+            <summary>
+            创建
+            </summary>
+            <param name="model"></param>
+        </member>
+        <member name="M:D3.Blog.Application.Interface.ICustomerService.Update(D3.Blog.Application.ViewModels.CustomerViewModel)">
+            <summary>
+            更新
+            </summary>
+            <param name="updatemodel"></param>
+        </member>
+        <member name="M:D3.Blog.Application.Interface.ICustomerService.Remove(System.Int32)">
+            <summary>
+            根据id删除
+            </summary>
+            <param name="id"></param>
+        </member>
+        <member name="M:D3.Blog.Application.Interface.ICustomerService.GetAll">
+            <summary>
+            查询
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:D3.Blog.Application.Interface.ICustomerService.GetById(System.Int32)">
+            <summary>
+            根据id查询
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:D3.Blog.Application.Services.Customer.CustomerService">
+            <summary>
+            分部类，Customer的写命令服务
+            </summary>
+        </member>
+        <member name="F:D3.Blog.Application.Services.Customer.CustomerService._mapper">
+            <summary>
+            automapper对象
+            </summary>
+        </member>
+        <member name="F:D3.Blog.Application.Services.Customer.CustomerService._customerRepository">
+            <summary>
+            customer仓储
+            </summary>
+        </member>
+        <member name="F:D3.Blog.Application.Services.Customer.CustomerService.Bus">
+            <summary>
+            总线
+            </summary>
+        </member>
+        <member name="M:D3.Blog.Application.Services.Customer.CustomerService.#ctor(AutoMapper.IMapper,D3.Blog.Domain.Infrastructure.IRepositorys.ICustomerRepository,D3.Blog.Domain.Core.BUS.IMediatorHandler)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="mapper"></param>
+            <param name="customerRepository"></param>
+            <param name="bus"></param>
+        </member>
+        <member name="M:D3.Blog.Application.Services.Customer.CustomerService.Add(D3.Blog.Application.ViewModels.CustomerViewModel)">
+            <summary>
+            新增
+            </summary>
+            <param name="model"></param>
+        </member>
+        <member name="M:D3.Blog.Application.Services.Customer.CustomerService.Remove(System.Int32)">
+            <summary>
+            按id移除
+            </summary>
+            <param name="id"></param>
+        </member>
+        <member name="M:D3.Blog.Application.Services.Customer.CustomerService.Update(D3.Blog.Application.ViewModels.CustomerViewModel)">
+            <summary>
+            更新
+            </summary>
+            <param name="updatemodel"></param>
+        </member>
+        <member name="M:D3.Blog.Application.Services.Customer.CustomerService.Dispose">
+            <summary>
+            释放资源
+            </summary>
+        </member>
+        <member name="M:D3.Blog.Application.Services.Customer.CustomerService.GetAll">
+            <summary>
+            查询全部
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:D3.Blog.Application.Services.Customer.CustomerService.GetById(System.Int32)">
+            <summary>
+            根据id查询
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:D3.Blog.Application.ViewModels.CustomerViewModel">
+            <summary>
+            Product 视图模型
+            </summary>
+        </member>
+        <member name="P:D3.Blog.Application.ViewModels.CustomerViewModel.Id">
+            <summary>
+            id
+            </summary>
+        </member>
+        <member name="P:D3.Blog.Application.ViewModels.CustomerViewModel.Name">
+            <summary>
+            customer名称
+            </summary>
+        </member>
+        <member name="P:D3.Blog.Application.ViewModels.CustomerViewModel.Email">
+            <summary>
+            customer邮箱
+            </summary>
+        </member>
+        <member name="P:D3.Blog.Application.ViewModels.CustomerViewModel.BirthDate">
+            <summary>
+            customer出生日期
+            </summary>
+        </member>
+    </members>
+</doc>

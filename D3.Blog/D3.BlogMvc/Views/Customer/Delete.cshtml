@@ -1,0 +1,74 @@
+﻿@model D3.Blog.Application.ViewModels.CustomerViewModel
+@{
+    Layout = null;
+    ViewData["Title"] = "Edit Customer";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Edit</title>
+    <environment include="Development">
+        <link rel="stylesheet" asp-href-include="~/css/vender.css" />
+        <link rel="stylesheet" asp-href-include="~/css/index.min.css" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" asp-href-include="~/css/all.min.css" />
+    </environment>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <!-- import CSS -->
+    <link rel="stylesheet" href="~/elementUI/index.css">
+</head>
+<body>
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Delete">
+    <vc:summary />
+
+    <h3>Are you sure you want to delete the @Model.Name?</h3>
+    <div>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Email)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Email)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.BirthDate)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.BirthDate)
+            </dd>
+        </dl>
+
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-danger" />
+            <a asp-action="Index" class="btn btn-info">Back to List</a>
+        </div>
+    </div>
+</form>
+    <environment include="Development">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.2/axios.js"></script>
+        <script src="https://cdn.bootcss.com/holder/2.9.4/holder.min.js"></script>
+        <script src="~/js/vendor.js"></script>
+        <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/axios/axios.min.js"></script>
+        <script src="https://cdn.bootcss.com/holder/2.9.4/holder.min.js"></script>
+        <script type="text/javascript" asp-src-include="~/js/all.min.js"></script>
+        <script src="~/elementUI/index.js"></script>
+    </environment>
+</body>
+</html>

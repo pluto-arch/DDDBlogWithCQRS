@@ -1,0 +1,535 @@
+﻿@using System.Security.Claims
+@using Infrastructure.Data.Database
+@using Infrastructure.Identity.Models
+@using Microsoft.AspNetCore.Identity
+@model D3.BlogMvc.Models.AccountModels.LoginModel
+@inject UserManager<AppBlogUser> userManager
+@inject SignInManager<AppBlogUser> signInManager
+@{
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1">
+    <meta name=viewport content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
+
+    <title>Collapsible sidebar using Bootstrap 4</title>
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="~/css/home/style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+
+    <!-- Font Awesome JS -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+    <!--[if lt IE 9]><script src="https://www.xcode.me/wp-content/themes/dux/js/libs/html5.min.js"></script><![endif]-->
+
+</head>
+
+<body>
+    <div id="app">
+        <!-- Sidebar  -->
+        <nav id="sidebar">
+            <div id="dismiss">
+                <i class="fas fa-arrow-left"></i>
+            </div>
+            <div class="sidebar-header">
+                <img src="https://mdbootstrap.com/img/logo/mdb-transparent.png" height="50" alt="mdb logo">
+            </div>
+            <ul id="side-menu" class="list-unstyled components">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div id="side-user">
+                        <p style="padding-top: 0px;padding-bottom: 0px; padding-left: 20px;">@User.Identity.Name</p>
+                        <ul>
+                            <li title="个人中心"><i class="far fa-user-circle"></i></li>
+                            <li title="草稿"><i class="fas fa-file-alt"></i></li>
+                            <li title="我的收藏"><i class="fas fa-star"></i></li>
+                            <li title="我的评论"><i class="fas fa-tag"></i></li>
+                            <li title="我的通知"><i class="fas fa-bell"></i></li>
+                        </ul>
+                    </div>
+                    
+                    
+                }
+                else
+                {
+                    <p>Welcome</p>
+                }
+
+                <li class="active">
+                    <a href="#">首页</a>
+                </li>
+                <li>
+                    <a href="#">文章</a>
+                </li>
+                <li>
+                    <a href="#">工具技巧</a>
+                </li>
+                <li>
+                    <a href="#">话题心得</a>
+                </li>
+            </ul>
+
+            <ul class="list-unstyled CTAs">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <li data-flag="1" style="padding-top: 0;">
+                        <a data-flag="1" asp-controller="Account" asp-action="Logout"><i data-flag="1" class="fas fa-sign-out-alt"></i><span data-flag="1" class="faw">退出登录</span></a>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a href="#" class="download" data-toggle="modal" data-target="#Login">登录</a>
+                    </li>
+                }
+
+                <li>
+                    <a href="#" class="article">关于本站</a>
+                </li>
+            </ul>
+        </nav>
+        <div class="wrapper">
+            <!-- Page Content  -->
+            <div id="content">
+                <nav class="navbar navbar-expand-lg navbar-light bg-white">
+                    <div class="container">
+                        <a class="" id="sidebarCollapse" style="font-size: 25px;width: 60px;text-align: center;">
+                            <i class="fas fa-align-justify"></i>
+                        </a>
+                        <a class="navbar-brand mylogo" href="#">
+                            <img src="https://mdbootstrap.com/img/logo/mdb-transparent.png" height="30" alt="mdb logo">
+                        </a>
+                        <ul id="menu" class="nav navbar-nav mr-auto menu">
+                            <li class="nav-item">
+                                <a class="nav-link clickactive" href="#">首页</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">文章</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">工具技巧</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">话题心得</a>
+                            </li>
+                        </ul>
+                        <ul id="useropt" class="nav navbar-nav ml-auto useropt">
+                            <li id="write-post" class="nav-item" style="width: 88px;position: relative;">
+                                <a class="nav-link" href="#" style="color: #4285F4">
+                                    <i class="far fa-file-word"></i>&nbsp;写文章
+                                </a>
+                            </li>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <li data-flag="1" id="user-info" style="position: relative">
+                                    <a data-flag="1" v-on:click="dropDownOpt($event)" class="nav-link" href="#"><i data-flag="1" class="fa fa-user"></i>&nbsp;&nbsp;@User.Identity.Name&nbsp;&nbsp;<i data-flag="1" class="fa fa-caret-down"></i></a>
+                                    <ul data-flag="1" id="usr-opt" class="user-opt-list">
+                                        <li data-flag="1">
+                                            <a data-flag="1" href="#"><i data-flag="1" class="far fa-user-circle"></i><span data-flag="1" class="faw">我的主页</span></a>
+                                        </li>
+                                        <li data-flag="1">
+                                            <a data-flag="1" href="#"><i data-flag="1" class="fas fa-file-alt"></i><span data-flag="1" class="faw">草稿</span></a>
+                                        </li>
+                                        <li data-flag="1">
+                                            <a data-flag="1" href="#"><i data-flag="1" class="fas fa-star"></i><span data-flag="1" class="faw">我的收藏</span></a>
+                                        </li>
+                                        <li data-flag="1">
+                                            <a data-flag="1" href="#"><i data-flag="1" class="fas fa-tag"></i><span data-flag="1" class="faw">我的评论</span></a>
+                                        </li>
+                                        <li data-flag="1">
+                                            <a data-flag="1" href="#"><i data-flag="1" class="fas fa-bell"></i><span data-flag="1" class="faw">我的通知</span></a>
+                                        </li>
+                                        <hr data-flag="1"/>
+                                        <li data-flag="1" style="padding-top: 0;">
+                                            <a data-flag="1" asp-controller="Account" asp-action="Logout"><i data-flag="1" class="fas fa-sign-out-alt"></i><span data-flag="1" class="faw">退出登录</span></a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+                            else
+                            {
+                                <li id="user-login" class="nav-item" style="width: 50px;">
+                                    <a class="nav-link" href="#" data-toggle="modal" data-target="#Login">登录</a>
+                                </li>
+                            }
+                            <li class="nav-item" style="width: 40px;">
+                                <a class="nav-link" href="#">
+                                    <span class="fa fa-search" title="搜索"></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+
+                <div class="container" style="display: flex">
+                    <div id="main-content" class="bg-white" style="overflow: hidden; flex-grow: 1;">
+                        <!--帖子列表-->
+                        <transition-group name="card" tag="div">
+                            <div :key="post.id" class="my-postcard" v-for="(post,index) in posts">
+                                <div class="card flex-md-row mb-2  h-auto" style="border: none; border-bottom: 1px solid #cccccc73;">
+                                    <img class="card-img-right flex-auto d-none d-lg-block" src="~/images/visual_studio.png" alt="Card image cap" style="padding: 10px;width: 280px">
+                                    <div class="card-body d-flex flex-column align-items-start" style="padding-bottom: 5px;padding-top: 0">
+                                        <h3 class="mb-0 mb-2">
+                                            <a class="my-posttitle" href="#" style="text-decoration: none">{{post.text}}</a>
+                                        </h3>
+                                        <div class="mb-1 text-muted">
+                                            <span style="margin-right: 20px;"><i class="far fa-clock"></i>&nbsp;{{post.createtime}}</span>
+                                            <span class="text-primary" style="cursor: pointer"><i class="fas fa-user"></i>&nbsp;{{post.author}}</span>
+                                        </div>
+                                        <p class="card-text" style="font-size: 12px; color: #999; word-wrap: break-word; line-height: 20px;">这是一张更宽的卡片，下面有支持文字作为其他内容的自然引导。这是一张更宽的卡片，下面有支持文字作为其他内容的自然引导。这是一张更宽的卡片这是一张更宽的卡片这是一张更宽的卡片...</p>
+                                        <div id="post-opt">
+                                            <ul>
+                                                <li title="点赞"><i class="fas fa-thumbs-up" style="color: #ccccccb5"></i>&nbsp;<a>7</a></li>
+                                                <li title="浏览"><i class="fas fa-eye" style="color: #ccccccb5"></i><a>&nbsp;128</a></li>
+                                                <li title="收藏"><i class="fas fa-heart" style="color: #ccccccb5"></i><a>&nbsp;78</a></li>  
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </transition-group>
+                        
+                        
+
+                        <!--加载动画-->
+                        <div class="loadmore btn btn-outline-primary">
+                            <div v-on:click="loadmore">
+                                <span class="more">More...</span>
+                                <div class="sk-three-bounce">
+                                    <div class="sk-child sk-bounce1"></div>
+                                    <div class="sk-child sk-bounce2"></div>
+                                    <div class="sk-child sk-bounce3"></div>
+                                </div>
+                            </div>
+                        </div><!--end 加载动画-->
+                    </div>
+                    <aside id="aside">
+                        <section class="section my-shadow">
+                            <div class="title">网站公告</div>
+                            <hr />
+                            <div class="notice-list">
+                                <ul>
+                                    <li><a href="#">编写技术简历的47条原则</a><span class="notice-date">12-20</span></li>
+                                    <li><a href="#">编写技术简历的47条原则</a><span class="notice-date">12-20</span></li>
+                                    <li><a href="#">编写技术简历的47条原则</a><span class="notice-date">12-20</span></li>
+                                    <li><a href="#">编写技术简历的47条原则</a><span class="notice-date">12-20</span></li>
+                                    <li><a href="#">编写技术简历的47条原则</a><span class="notice-date">12-20</span></li>
+                                    <li><a href="#">编写技术简历的47条原则</a><span class="notice-date">12-20</span></li>
+                                    <li><a href="#">编写技术简历的47条原则</a><span class="notice-date">12-20</span></li>
+                                    <li><a href="#">编写技术简历的47条原则</a><span class="notice-date">12-20</span></li>
+                                    <li><a href="#">编写技术简历的47条原则</a><span class="notice-date">12-20</span></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <div class="section my-shadow" style="padding-bottom: 5px;">
+                            <div class="header">
+                                <div class="title">
+                                    <span>热门标签</span>
+                                    <a href="#" target="_blank" rel="" class="tag-link">查看全部</a>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="tag-content">
+                                <div class="tag-list">
+                                    <a href="#" target="_blank" rel="" class="tag ml-auto">C#(23)</a>
+                                    <a href="#" target="_blank" rel="" class="tag ml-auto">ASP.NET(25)</a>
+                                    <a href="#" target="_blank" rel="" class="tag ml-auto">MVC(8)</a>
+                                    <a href="#" target="_blank" rel="" class="tag ml-auto">GitHub(12)</a>
+                                    <a href="#" target="_blank" rel="" class="tag ml-auto">Dotnet Core(45)</a>
+                                    <a href="#" target="_blank" rel="" class="tag ml-auto">架构(2)</a>
+                                    <a href="#" target="_blank" rel="" class="tag ml-auto">产品(2)</a>
+                                    <a href="#" target="_blank" rel="" class="tag ml-auto">职业规划(6)</a>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+                <!--页脚-->
+                <footer class="footer">
+                    <div class="footer-header">
+                        <p>
+                            <span>Copyright</span><span>&copy;</span><span>2018&nbsp;&nbsp;</span><a href="#">阿里布布</a><span>
+                                &nbsp;&nbsp;Design By
+                                zyl
+                            </span>
+                    </div>
+                </footer>
+            </div>
+        </div>
+
+
+        <!--附带效果html-->
+        <div class="overlay"></div><!--侧边菜单覆盖物-->
+        <div class="tooltip bs-tooltip-top scroll-to-top" data-placement="left" data-toggle="tooltip" title="回到顶部">
+            <!--回到顶部-->
+            <i class="far fa-arrow-alt-circle-up fa-2x"></i>
+        </div>
+        <div class="tooltip bs-tooltip-top feedback" data-placement="left" data-toggle="tooltip" title="建议反馈">
+            <!--问题反馈和回到顶部-->
+            <i class="far fa-envelope fa-2x"></i>
+        </div>
+        <!--Modal弹窗登录-->
+        <div class="modal fade" id="Login" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document" style="width: 300px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">登录到您的账户</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="form1" asp-controller="Account" asp-action="LoginAsync" method="post">
+                            <div class="form-group">
+                                
+                                <input type="email" name="email" required="" maxlength="64" minlength="7" placeholder="电子邮件" data-purpose="email" value="" class="form-control user-error" aria-invalid="true" asp-for="Email">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" name="password" minlength="6" maxlength="64" class="textinput textInput form-control user-error" placeholder="密码" id="id_password" required="" data-purpose="password" aria-invalid="true" asp-for="Password">
+                            </div>
+                            <a v-on:click="Login" class="btn btn-default" style="width: 100%;background-color: lightblue">Sign in!</a>
+                            <p style="text-align: center; width: 100%; padding: 10px;">或<a href="#" style="text-decoration: none; color: #4285f4;font-size: 14px">&nbsp;忘记密码？</a></p>
+                        </form>
+                        <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+                            <p style="text-align: center; width: 100%; font-size: 10px;">
+                                关联账户登录：
+                                @{
+                                    var loginProviders = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+                                    if (loginProviders.Count == 0)
+                                    { }
+                                    else
+                                    {
+                                        foreach (var provider in loginProviders)
+                                        {
+                                            <button type="submit" class="" data-toggle="tooltip" data-placement="top" title="正在准备中" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.Name</button>
+                                        }
+                                    }
+                                }
+
+                            </p>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <h5 style="text-align: center; width: 100%;">还没有帐户吗？ <a href="#" style="color: #4285f4">注册</a></h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.bootcss.com/babel-polyfill/7.2.5/polyfill.min.js"></script>
+    <!-- jQuery CDN - Slim version (=without AJAX) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+    <!-- jQuery Custom Scroller CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="~/js/axios/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/holder/2.9.4/holder.min.js"></script>
+<script>
+    //占位
+    Holder.addTheme('thumb', {
+        bg: '#68217A',
+        fg: '#FFFFFF',
+        text: 'ASP.NET CORE',
+        size: 18,
+        font: "Monaco",
+        fontweight: "normal"
+    });
+</script>
+<script type="text/javascript">
+    var datass= [
+        {
+            id: 1,
+            text: 'asp.net core',
+            content: '这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架',
+            author: 'admin',
+            createtime: '2018-10-02',
+            count1: 123,
+            count2: 231
+        },
+        {
+            id: 2,
+            text: 'asp.net core',
+            content: '这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架',
+            author: 'admin',
+            createtime: '2018-10-02',
+            count1: 123,
+            count2: 231
+        },
+        {
+            id: 3,
+            text: 'asp.net core',
+            content: '这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架',
+            author: 'admin',
+            createtime: '2018-10-02',
+            count1: 123,
+            count2: 231
+        },
+        {
+            id: 4,
+            text: 'asp.net core',
+            content: '这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架',
+            author: 'admin',
+            createtime: '2018-10-02',
+            count1: 123,
+            count2: 231
+        },
+        {
+            id: 5,
+            text: 'asp.net core',
+            content: '这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架',
+            author: 'admin',
+            createtime: '2018-10-02',
+            count1: 123,
+            count2: 231
+        }, {
+            id: 6,
+            text: 'asp.net core',
+            content: '这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架',
+            author: 'admin',
+            createtime: '2018-10-02',
+            count1: 123,
+            count2: 231
+        }
+    ];
+    Vue.prototype.$http = axios;
+    var app = new Vue({
+        el: '#app',
+        data: {
+            message: 'Collapsible Sidebar Using Bootstrap 4!',
+            isDown: false,
+            posts: datass,
+            count: 6
+        },
+        mounted: function () {
+            this.$nextTick(function() {
+                this.setNavBarMenu();
+
+            });
+        },
+        methods: {
+            setNavBarMenu:function(){
+                var v = this;
+                $('#usr-opt').hide();
+                $('body').click(function(event){  
+                    if($(event.target).data("flag")!=1){
+                        v.isDown=false;
+                    }  
+                });
+                $(window).scroll(function(){
+                    var topp = $(document).scrollTop();
+                    if(topp>1000){
+                        $('.scroll-to-top').show();
+                    }else{
+                        $('.scroll-to-top').hide();
+                    }
+                });
+                $('.scroll-to-top').click(function(){
+                    $('html ,body').animate({scrollTop: 0}, 300);
+                    return false;
+                });
+
+                $('[data-toggle="tooltip"]').tooltip()
+                $('#dismiss, .overlay').on('click', function () {
+                    $('#sidebar').removeClass('active');
+                    $('.overlay').removeClass('active');
+                    $('body').css('overflow','auto');
+                });
+                $('#sidebarCollapse').on('click', function () {
+                    $('body').css('overflow','hidden');
+                    $('#sidebar').addClass('active');
+                    $('.overlay').addClass('active');
+                    $('.collapse.in').toggleClass('in');
+                    $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+                });
+                $('#menu li a').click(function () {
+                    var f = this;
+                    $('#menu li a').each(function () {
+                        this.className = this == f ? 'nav-link clickactive' : 'nav-link'
+                    });
+                });
+                $('#side-menu li').click(function () {
+                    var f = this;
+                    $('#side-menu li').each(function () {
+                        this.className = this == f ? 'active' : ''
+                    });
+                });
+            }
+            ,Login: function() {
+                var v = this;
+                v.$http.post('/Account/LoginAsync', $('#form1').serialize())
+                    .then(res => {
+                        if (res.data.length > 0) {
+                            console.log(res.data);
+                            alert(res.data);
+                        } else {
+                            window.location.reload();//登录成功，刷新当前页面
+                        }
+                    }).catch(error => {
+                        console.log(error);
+                    });
+            }
+            ,dropDownOpt:function(){
+                //个人操作下拉
+                var v=this;
+                v.isDown=!v.isDown;
+            }
+            , loadmore: function() {
+                var v = this;
+                v.count++;
+                $('.sk-three-bounce').show();
+                $('.more').hide();
+                $('.sk-child').addClass('activeLoading');
+                setTimeout(function () {
+                        $('.sk-child').removeClass('activeLoading');
+                        $('.sk-three-bounce').hide();
+                        $('.more').show();
+                        //从后台加载数据
+                        var readdata = [
+                            {
+                                id: v.count,
+                                text: 'asp.net core',
+                                content: '这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架',
+                                author: 'admin',
+                                createtime: '2018-10-02',
+                                count1: 123,
+                                count2: 231
+                            }
+                        ];
+                        readdata.forEach(function (v) {
+                            datass.push(v);
+                        });
+                    },
+                    2000);
+            }
+        },
+        watch: {
+            isDown:function(newval,oldval){
+                if(newval){
+                    $('#usr-opt').slideDown();
+                }else{
+                    $('#usr-opt').slideUp();
+                }
+            }
+        },
+    });
+</script>
+</body>
+
+</html>

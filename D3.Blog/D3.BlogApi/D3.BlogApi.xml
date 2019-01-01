@@ -1,0 +1,181 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>D3.BlogApi</name>
+    </assembly>
+    <members>
+        <member name="T:D3.BlogApi.AuthHelper.JwtHelper">
+            <summary>
+            生成Token，和解析Token
+            </summary>
+        </member>
+        <member name="F:D3.BlogApi.AuthHelper.JwtHelper._configuration">
+            <summary>
+            配置文件
+            </summary>
+        </member>
+        <member name="M:D3.BlogApi.AuthHelper.JwtHelper.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            构造函数，注入配置文件
+            </summary>
+            <param name="configuration"></param>
+        </member>
+        <member name="M:D3.BlogApi.AuthHelper.JwtHelper.GenerateJwtToken(System.String,Infrastructure.Identity.Models.AppBlogUser)">
+            <summary>
+            生成jwtToken
+            </summary>
+            <param name="role"></param>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="T:D3.BlogApi.Controllers.AccountController">
+            <summary>
+            用户账户控制器
+            </summary>
+        </member>
+        <member name="T:D3.BlogApi.Controllers.ValuesController">
+            <summary>
+            valueController
+            </summary>
+        </member>
+        <member name="M:D3.BlogApi.Controllers.ValuesController.Get">
+            <summary>
+            GET api/values
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:D3.BlogApi.Controllers.ValuesController.Get(System.Int32)">
+            <summary>
+            GET api/values/5
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:D3.BlogApi.Controllers.ValuesController.Post(System.String)">
+            <summary>
+            POST api/values
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:D3.BlogApi.Controllers.ValuesController.Put(System.Int32,System.String)">
+            <summary>
+            PUT api/values/5
+            </summary>
+            <param name="id"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:D3.BlogApi.Controllers.ValuesController.Delete(System.Int32)">
+            <summary>
+            DELETE api/values/5
+            </summary>
+            <param name="id"></param>
+        </member>
+        <member name="T:D3.BlogApi.InitialSetup.AutoMapperSetup">
+            <summary>
+            automap配置
+            </summary>
+        </member>
+        <member name="M:D3.BlogApi.InitialSetup.AutoMapperSetup.AddAutoMapperSetup(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            注入automapper
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="T:D3.BlogApi.InitialSetup.Dependency">
+            <summary>
+            依赖注入
+            </summary>d
+        </member>
+        <member name="M:D3.BlogApi.InitialSetup.Dependency.ConfigureDependencies(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            配置依赖注入
+            IServiceCollection：负责注册
+            IServiceProvider：负责提供实例
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="T:D3.BlogApi.Models.AccountModels.LoginModel">
+            <summary>
+            登录模型
+            </summary>
+        </member>
+        <member name="P:D3.BlogApi.Models.AccountModels.LoginModel.Email">
+            <summary>
+            邮箱
+            </summary>
+        </member>
+        <member name="P:D3.BlogApi.Models.AccountModels.LoginModel.Password">
+            <summary>
+            密码
+            </summary>
+        </member>
+        <member name="T:D3.BlogApi.Models.AccountModels.RegisterModel">
+            <summary>
+            注册模型
+            </summary>
+        </member>
+        <member name="P:D3.BlogApi.Models.AccountModels.RegisterModel.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:D3.BlogApi.Models.AccountModels.RegisterModel.Email">
+            <summary>
+            邮箱
+            </summary>
+        </member>
+        <member name="P:D3.BlogApi.Models.AccountModels.RegisterModel.Password">
+            <summary>
+            密码
+            </summary>
+        </member>
+        <member name="T:D3.BlogApi.Program">
+            <summary>
+            api入口
+            </summary>
+        </member>
+        <member name="M:D3.BlogApi.Program.Main(System.String[])">
+            <summary>
+            入口函数
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:D3.BlogApi.Program.CreateWebHostBuilder(System.String[])">
+            <summary>
+            
+            </summary>构建web宿主
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="T:D3.BlogApi.Startup">
+            <summary>
+            api启动配置
+            </summary>
+        </member>
+        <member name="M:D3.BlogApi.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            构造函数注入配置文件
+            </summary>
+            <param name="configuration"></param>
+        </member>
+        <member name="P:D3.BlogApi.Startup.Configuration">
+            <summary>
+            配置文件
+            </summary>
+        </member>
+        <member name="M:D3.BlogApi.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            This method gets called by the runtime. Use this method to add services to the container.
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:D3.BlogApi.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IHostingEnvironment,Microsoft.Extensions.Logging.ILoggerFactory)">
+            <summary>
+            此方法由运行时调用。使用此方法配置HTTP请求管道。
+            </summary>
+            <param name="app"></param>
+            <param name="env"></param>
+            <param name="loggerFactory"></param>
+        </member>
+    </members>
+</doc>

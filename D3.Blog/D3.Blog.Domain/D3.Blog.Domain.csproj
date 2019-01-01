@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="CommandHandlers\Customer\CustomerCommandHandler.cs~RF543417.TMP" />
+    <None Remove="Infrastructure\IUnitOfWork.cs~RF333d3f.TMP" />
+    <None Remove="Validations\CustomerValidations\CreateValidation.cs~RF1990f7b.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="8.1.2" />
+    <PackageReference Include="MediatR" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\D3.Blog.Domain.Core\D3.Blog.Domain.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Infrastructure\IRepositorys\" />
+    <Folder Include="Validations\ArticleVaildations\" />
+  </ItemGroup>
+
+</Project>

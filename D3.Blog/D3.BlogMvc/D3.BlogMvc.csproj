@@ -1,0 +1,99 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <UserSecretsId>c07863fc-59b1-49da-9a1b-2709d519e050</UserSecretsId>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <CodeAnalysisRuleSet>D3.BlogMvc.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <CodeAnalysisRuleSet>D3.BlogMvc.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\css\site.css~RF1791c0.TMP" />
+    <Content Remove="wwwroot\css\site.css~RF1da7bc.TMP" />
+    <Content Remove="wwwroot\js\home.js~RF147775c.TMP" />
+    <Content Remove="wwwroot\js\login.js~RF1c3abfd.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Controllers\HomeController.cs~RFb9b458.TMP" />
+    <None Remove="Controllers\HomeController.cs~RFf19b03.TMP" />
+    <None Remove="package.json~RF2ae194b.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="Areas\Admin\Views\" />
+    <Folder Include="wwwroot\images\" />
+    <Folder Include="wwwroot\elementUI\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\assets\bootstrap\css\bootstrap-theme.css.map" />
+    <None Include="wwwroot\assets\bootstrap\css\bootstrap.css.map" />
+    <None Include="wwwroot\assets\bootstrap\fonts\glyphicons-halflings-regular.svg" />
+    <None Include="wwwroot\assets\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
+    <None Include="wwwroot\assets\bootstrap\js\bootstrap.js" />
+    <None Include="wwwroot\assets\bootstrap\js\bootstrap.min.js" />
+    <None Include="wwwroot\assets\bootstrap\js\npm.js" />
+    <None Include="wwwroot\assets\font-awesome\fonts\fontawesome-webfont.svg" />
+    <None Include="wwwroot\assets\font-awesome\fonts\fontawesome-webfont.woff2" />
+    <None Include="wwwroot\assets\font-awesome\less\animated.less" />
+    <None Include="wwwroot\assets\font-awesome\less\bordered-pulled.less" />
+    <None Include="wwwroot\assets\font-awesome\less\core.less" />
+    <None Include="wwwroot\assets\font-awesome\less\fixed-width.less" />
+    <None Include="wwwroot\assets\font-awesome\less\font-awesome.less" />
+    <None Include="wwwroot\assets\font-awesome\less\icons.less" />
+    <None Include="wwwroot\assets\font-awesome\less\larger.less" />
+    <None Include="wwwroot\assets\font-awesome\less\list.less" />
+    <None Include="wwwroot\assets\font-awesome\less\mixins.less" />
+    <None Include="wwwroot\assets\font-awesome\less\path.less" />
+    <None Include="wwwroot\assets\font-awesome\less\rotated-flipped.less" />
+    <None Include="wwwroot\assets\font-awesome\less\stacked.less" />
+    <None Include="wwwroot\assets\font-awesome\less\variables.less" />
+    <None Include="wwwroot\assets\font-awesome\scss\font-awesome.scss" />
+    <None Include="wwwroot\assets\font-awesome\scss\_animated.scss" />
+    <None Include="wwwroot\assets\font-awesome\scss\_bordered-pulled.scss" />
+    <None Include="wwwroot\assets\font-awesome\scss\_core.scss" />
+    <None Include="wwwroot\assets\font-awesome\scss\_fixed-width.scss" />
+    <None Include="wwwroot\assets\font-awesome\scss\_icons.scss" />
+    <None Include="wwwroot\assets\font-awesome\scss\_larger.scss" />
+    <None Include="wwwroot\assets\font-awesome\scss\_list.scss" />
+    <None Include="wwwroot\assets\font-awesome\scss\_mixins.scss" />
+    <None Include="wwwroot\assets\font-awesome\scss\_path.scss" />
+    <None Include="wwwroot\assets\font-awesome\scss\_rotated-flipped.scss" />
+    <None Include="wwwroot\assets\font-awesome\scss\_stacked.scss" />
+    <None Include="wwwroot\assets\font-awesome\scss\_variables.scss" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AspNetCore.Authentication.WeChat" Version="2.0.0" />
+    <PackageReference Include="AutoMapper" Version="8.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="BuildBundlerMinifier" Version="2.8.391" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="6.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.QQ" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\D3.Blog.Application\D3.Blog.Application.csproj" />
+    <ProjectReference Include="..\D3.Blog.Domain\D3.Blog.Domain.csproj" />
+    <ProjectReference Include="..\Infrastructure.Data\Infrastructure.csproj" />
+    <ProjectReference Include="..\Infrastructure.Identity\Infrastructure.Identity.csproj" />
+    <ProjectReference Include="..\Infrastructure\Infrastructure.Data.csproj" />
+  </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JSONSchema="" /></VisualStudio></ProjectExtensions>
+
+</Project>

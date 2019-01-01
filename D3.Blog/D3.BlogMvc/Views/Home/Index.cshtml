@@ -1,0 +1,310 @@
+﻿
+@using System.Security.Claims
+@using Infrastructure.Data.Database
+@using Infrastructure.Identity.Models
+@using Microsoft.AspNetCore.Identity
+@model D3.BlogMvc.Models.AccountModels.LoginModel
+@inject UserManager<AppBlogUser> userManager
+@inject SignInManager<AppBlogUser> signInManager
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link rel="stylesheet" asp-href-include="~/css/vender.css" />
+    <link rel="stylesheet" asp-href-include="~/css/index.min.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <!-- import CSS -->
+    <link rel="stylesheet" href="~/elementUI/index.css">
+</head>
+<body>
+    <div id="app">
+        <div class="container">
+            <header class="blog-header py-3">
+                <div class="row flex-nowrap justify-content-between align-items-center">
+                    <div class="col-4 text-left">
+                        <a class="blog-header-logo text-dark" href="#">LOGO</a>
+                    </div>
+                    <div class="col-4 d-flex justify-content-end align-items-center">
+                        <a class="fas fa-search"></a>
+
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <div class="dropdown">
+                                <a class="" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size : 1.5em; background-color : lightcoral; border-radius : 40px; width : 40px; display : block; text-align : center; line-height : 40px; cursor : pointer">
+                                    @User.Identity.Name
+                                </a>
+
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <a class="dropdown-item" href="#">
+                                        我的资料
+                                        <span class="badge badge-pill badge-info">10</span>
+                                    </a>
+                                    <a class="dropdown-item" href="#">
+                                        我的通知
+                                        <span class="badge badge-pill badge-info">6</span>
+                                    </a>
+                                    <a class="dropdown-item" href="#">
+                                        我的订阅
+                                        <span class="badge badge-pill badge-info">5</span>
+                                    </a>
+                                    <a class="dropdown-item" asp-controller="Account" asp-action="Logout">注销</a>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <a class="btn btn-sm btn-outline-secondary" style="margin-right : 10px;" class="btn btn-primary" data-toggle="modal" data-target="#Login">登录</a>
+                            <a class="btn btn-sm btn-outline-secondary" asp-controller="account" asp-action="Register">注册</a>
+                        }
+
+                    </div>
+                </div>
+            </header>
+
+            <div class="nav-scroller py-1 mb-2">
+                <nav class="nav d-flex my-nav">
+                    <a class="p-2 active" href="#" style="text-decoration: none;">首页</a>
+                    <a class="p-2 " href="#" style="text-decoration: none;">文章</a>
+                    <a class="p-2 " href="#" style="text-decoration: none;">阅读书籍</a>
+                    <a class="p-2 " href="#" style="text-decoration: none;">工具技巧</a>
+                    <a class="p-2 " asp-controller="Home" asp-action="HomePage" style="text-decoration: none;">HomePage</a>
+                    <a class="p-2 " style="text-decoration: none;" asp-controller="Customer" asp-action="Index">Customer</a>
+                </nav>
+            </div>
+
+            <div class="jumbotron p-3 p-md-5 text-white rounded bg-dark">
+                <div class="col-md-6 px-0">
+                    <h1 class="display-4 font-italic">这是一个博客</h1>
+                    <p class="lead my-3">形成乐队的多行文本，快速有效地告知新读者这篇文章内容中最有趣的内容。</p>
+                    <p class="lead mb-0"><a href="#" class="text-white font-weight-bold">继续阅读...</a></p>
+                </div>
+            </div>
+
+            <h4 class="pb-3 mb-4 font-italic border-bottom">
+                置顶帖子
+            </h4>
+            <div class="row mb-2">
+                <div class="col-md-6">
+                    <div class="card flex-md-row mb-4 shadow-sm h-md-250">
+                        <div class="card-body d-flex flex-column align-items-start">
+                            <strong class="d-inline-block mb-2 text-primary">世界</strong>
+                            <h3 class="mb-0">
+                                <a class="text-dark" href="#">精选文章</a>
+                            </h3>
+                            <div class="mb-1 text-muted">11月12日</div>
+                            <p class="card-text mb-auto">这是一张更宽的卡片，下面有支持文字作为其他内容的自然引导。</p>
+                            <a href="#">继续阅读</a>
+                        </div>
+                        <img class="card-img-right flex-auto d-none d-lg-block" data-src="holder.js/200x250?theme=thumb" alt="Card image cap" style="padding: 10px;">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card flex-md-row mb-4 shadow-sm h-md-250">
+                        <div class="card-body d-flex flex-column align-items-start">
+                            <strong class="d-inline-block mb-2 text-success">设计</strong>
+                            <h3 class="mb-0">
+                                <a class="text-dark" href="#">帖子标题</a>
+                            </h3>
+                            <div class="mb-1 text-muted">11月11日</div>
+                            <p class="card-text mb-auto">这是一张更宽的卡片，下面有支持文字作为其他内容的自然引导。</p>
+                            <a href="#">继续阅读</a>
+                        </div>
+                        <img class="card-img-right flex-auto d-none d-lg-block" data-src="holder.js/200x250?theme=thumb" alt="Card image cap" style="padding: 10px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <main role="main" class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <h4 class="pb-3 mb-4 font-italic border-bottom">
+                        热门帖子
+                    </h4>
+
+
+                    <!--帖子列表-->
+                    <transition-group name="card" tag="div">
+                        <div :key="post.id" class="my-postcard" v-for="(post,index) in posts">
+                            <div class="card flex-md-row mb-4 shadow-sm h-auto border-primary">
+                                <div class="card-body d-flex flex-column align-items-start">
+                                    <h3 class="mb-0 mb-2">
+                                        <a class="my-posttitle" href="#" style="text-decoration: none">{{post.text}}</a>
+                                    </h3>
+                                    <div class="mb-1 text-muted">
+                                        <span style="margin-right: 20px;"><i class="far fa-clock"></i>&nbsp;{{post.createtime}}</span>
+                                        <span class="text-primary" style="cursor: pointer"><i class="fas fa-user"></i>&nbsp;{{post.author}}</span>
+                                    </div>
+                                    <p class="card-text" style="font-size: 12px; color: #999; word-wrap: break-word; line-height: 20px;">这是一张更宽的卡片，下面有支持文字作为其他内容的自然引导。这是一张更宽的卡片，下面有支持文字作为其他内容的自然引导。这是一张更宽的卡片这是一张更宽的卡片这是一张更宽的卡片...</p>
+                                    <a href="#" style="text-decoration: none; cursor: pointer">继续阅读</a>
+                                </div>
+                                <img class="card-img-right flex-auto d-none d-lg-block" data-src="holder.js/230x180?theme=thumb" alt="Card image cap" style="margin-top: 15px; margin-right: 10px;">
+                            </div>
+                        </div>
+                    </transition-group>
+                    <!--加载跟多按钮-->
+                    <nav class="blog-pagination" style="text-align: center">
+                        <!--加载动画-->
+                        <div class="loadmore btn btn-outline-primary" style="width: 300px;">
+                            <div v-on:click="loadmore">
+                                <span class="more">More...</span>
+                                <div class="sk-three-bounce">
+                                    <div class="sk-child sk-bounce1"></div>
+                                    <div class="sk-child sk-bounce2"></div>
+                                    <div class="sk-child sk-bounce3"></div>
+                                </div>
+                            </div>
+                        </div><!--end 加载动画-->
+                    </nav>
+
+
+                </div><!-- /.blog-main -->
+
+                <aside class="col-md-4">
+                    <div class="p-3 mb-3 bg-light rounded">
+                        <h4 class="font-italic">关于</h4>
+                        <p class="mb-0">Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
+                    </div>
+
+                    <div class="p-3">
+                        <h4 class="font-italic">档案</h4>
+                        <ol class="list-unstyled mb-0">
+                            <li><a href="#">March 2014</a></li>
+                            <li><a href="#">February 2014</a></li>
+                            <li><a href="#">January 2014</a></li>
+                            <li><a href="#">December 2013</a></li>
+                            <li><a href="#">November 2013</a></li>
+                            <li><a href="#">October 2013</a></li>
+                            <li><a href="#">September 2013</a></li>
+                            <li><a href="#">August 2013</a></li>
+                            <li><a href="#">July 2013</a></li>
+                            <li><a href="#">June 2013</a></li>
+                            <li><a href="#">May 2013</a></li>
+                            <li><a href="#">April 2013</a></li>
+                        </ol>
+                    </div>
+
+                    <div class="p-3">
+                        <h4 class="font-italic">热情链接</h4>
+                        <ol class="list-unstyled">
+                            <li><a href="#">GitHub</a></li>
+                            <li><a href="#">Twitter</a></li>
+                            <li><a href="#">Facebook</a></li>
+                        </ol>
+                    </div>
+                </aside><!-- /.blog-sidebar -->
+
+            </div><!-- /.row -->
+
+        </main><!-- /.container -->
+        <!--model-->
+        <div class="modal fade" id="Login" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document" style="width: 300px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">登录到您的账户</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="form1" asp-controller="Account" asp-action="LoginAsync" method="post">
+                            <div class="form-group">
+                                <vc:summary /><!--验证错误信息-->
+                                <input type="email" name="email" required="" maxlength="64" minlength="7" placeholder="电子邮件" data-purpose="email" value="" class="form-control user-error" aria-invalid="true" asp-for="Email">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" name="password" minlength="6" maxlength="64" class="textinput textInput form-control user-error" placeholder="密码" id="id_password" required="" data-purpose="password" aria-invalid="true" asp-for="Password">
+                            </div>
+                            <a v-on:click="Login" class="btn btn-default" style="width: 100%;background-color: lightblue">Sign in!</a>
+                            <p style="text-align: center; width: 100%; padding: 10px;">或<a href="#" style="text-decoration:none">&nbsp;忘记密码？</a></p>
+                        </form>
+                        <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+                            <p style="text-align: center; width: 100%; font-size: 10px;">
+                                关联账户登录：
+                                @{
+                                    var loginProviders = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+                                    if (loginProviders.Count == 0)
+                                    { }
+                                    else
+                                    {
+                                        foreach (var provider in loginProviders)
+                                        {
+                                <button type="submit" class="" data-toggle="tooltip" data-placement="top" title="正在准备中" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.Name</button>
+                                        }
+                                    }
+                                }
+
+                            </p>
+                        </form>
+                      
+                    </div>
+                    <div class="modal-footer">
+                        <h5 style="text-align: center; width: 100%;">还没有帐户吗？ <a href="#">注册</a></h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="blog-footer">
+            <p>为...构建的博客模板 <a href="https://getbootstrap.com/">Bootstrap</a> by <a href="https://twitter.com/mdo"></a>.</p>
+            <p>
+                <a href="#">回到顶部</a>
+            </p>
+            
+            @if (User.Identity.IsAuthenticated)
+            {
+                <table>
+                    <tr>
+                        <td>Type</td>
+                        <td>Value</td>
+                        <td>ValueType</td>
+                        <td>Issuer</td>
+                        <td>Subject</td>
+                        <td>OriginalIssuer</td>
+                        <td>Properties</td>
+                    </tr>
+                    @foreach (var cl in User.Claims)
+                    {
+                        <tr>
+                            <td>@cl.Type</td>
+                            <td>@cl.Value</td>
+                            <td>@cl.ValueType</td>
+                            <td>@cl.Issuer</td>
+                            <td>@cl.Subject</td>
+                            <td>@cl.OriginalIssuer</td>
+                            <td>@cl.Properties</td>
+                        </tr>
+                    }
+                </table>
+                <p>@User.Claims.First(x=>x.Type==ClaimTypes.NameIdentifier)</p>
+            }
+
+        </footer>
+    </div>
+
+    <script src="~/lib/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/chat.js"></script>
+    <script src="~/js/axios/axios.min.js"></script>
+    <script src="~/js/holder/holder.min.js"></script>
+    <script type="text/javascript" asp-src-include="~/js/all.min.js"></script>
+    <script src="~/elementUI/index.js"></script>
+    <script src="~/js/home.js"></script>
+    <script>
+        //占位
+        Holder.addTheme('thumb', {
+            bg: '#55595c',
+            fg: '#eceeef',
+            text: 'ASP.NET CORE'
+        });
+    </script>
+</body>
+</html>
