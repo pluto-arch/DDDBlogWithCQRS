@@ -20,9 +20,6 @@ using Infrastructure.Identity.Models;
 
 namespace D3.BlogMvc.Controllers
 {
-
-   
-
     public class HomeController : BaseController
     {
         private readonly ICustomerService _customerService;
@@ -54,23 +51,15 @@ namespace D3.BlogMvc.Controllers
             //_logger.CustomError(errorMessage: "Data Critical Added Successfully");
             //_logger.CustomFatal(fatalMessage: "Data Error Added Successfully");
 
-            return View();
+            return Json("1212");
         }
 
-
+        [AllowAnonymous]
         public IActionResult HomePage()
         {
             return View();
         }
-
-
-
-        [Authorize(Roles = "eye")]
-        public IActionResult Author()
-        {
-            return new JsonResult("这里是受限资源，需要eye角色的用户才能访问");
-        }
-
+        
         /// <summary>
         /// 目前测试asiox发起请求
         /// </summary>
@@ -81,19 +70,6 @@ namespace D3.BlogMvc.Controllers
         {
             return Json("123");
         }
-
-
-
-        public IActionResult VueLayout()
-        {
-            return View();
-        }
-
-        public IActionResult Error(string id)
-        {
-            return Json(id);
-        }
-
-
+        
     }
 }

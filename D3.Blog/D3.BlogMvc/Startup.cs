@@ -131,7 +131,7 @@ namespace D3.BlogMvc
             {
                 router.MapRoute(
                     name: "Default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Home}/{action=HomePage}/{id?}");
                 router.MapAreaRoute(
                        name: "areas",
                        template: "{area:exists}/{controller=Home}/{action=Index}/{id?}",
