@@ -67,24 +67,53 @@ a:focus {
     margin: 40px 0;
 }
 
-/* ---------------------------------------------------
+/*--------------------
+    search-posts
+---------------------*/
+#content #search-posts {
+    width: 100%;
+    height: 46px;
+    background-color: white;
+    text-align: center;
+    line-height: 46px;
+    position: absolute;
+    z-index: 999;
+    top: 73px;
+    opacity: .8;
+    display:none;
+}
+#search-result {
+    border-bottom: 1px solid #E9E9E9;
+    padding-bottom: 5px;
+    position: relative;
+    width: 100%;
+    line-height: 40px;
+}
+    #search-result:before {
+        position: absolute;
+        top: 3px;
+        content: " ";
+        height: 40px;
+        left: 0;
+        border-left: 4px solid #4285F4;
+    }
+    /* ---------------------------------------------------
     SIDEBAR STYLE
 ----------------------------------------------------- */
-
-#sidebar {
-    width: 250px;
-    position: fixed;
-    top: 0;
-    left: -250px;
-    height: 100vh;
-    z-index: 999;
-    background: #7386D5;
-    color: #fff;
-    transition: all 0.3s;
-    overflow-y: auto;
-    overflow-x: hidden;
-    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
-}
+    #sidebar {
+        width: 250px;
+        position: fixed;
+        top: 0;
+        left: -250px;
+        height: 100vh;
+        z-index: 999;
+        background: #7386D5;
+        color: #fff;
+        transition: all 0.3s;
+        overflow-y: auto;
+        overflow-x: hidden;
+        box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+    }
 
 #sidebar.active {
     left: 0;    
@@ -159,7 +188,9 @@ a:focus {
         color: #71777c;
         font-size: 14px;
     }
-
+#usr-opt{
+    display:none;
+}
 #usr-opt li:hover a {
     color: #4285F4;
 }
@@ -531,7 +562,6 @@ a.article:hover {
     width: 100%;
     height: 40px;
     text-align: center;
-    border-radius: 20px;
     cursor: pointer;
 }
 /*end 加载动画*/

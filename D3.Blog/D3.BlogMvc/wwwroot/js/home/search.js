@@ -1,58 +1,5 @@
-﻿var datass = [
-    {
-        id: 1,
-        text: 'asp.net core',
-        content: '这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架',
-        author: 'admin',
-        createtime: '2018-10-02',
-        count1: 123,
-        count2: 231
-    },
-    {
-        id: 2,
-        text: 'asp.net core',
-        content: '这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架',
-        author: 'admin',
-        createtime: '2018-10-02',
-        count1: 123,
-        count2: 231
-    },
-    {
-        id: 3,
-        text: 'asp.net core',
-        content: '这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架',
-        author: 'admin',
-        createtime: '2018-10-02',
-        count1: 123,
-        count2: 231
-    },
-    {
-        id: 4,
-        text: 'asp.net core',
-        content: '这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架',
-        author: 'admin',
-        createtime: '2018-10-02',
-        count1: 123,
-        count2: 231
-    },
-    {
-        id: 5,
-        text: 'asp.net core',
-        content: '这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架',
-        author: 'admin',
-        createtime: '2018-10-02',
-        count1: 123,
-        count2: 231
-    }, {
-        id: 6,
-        text: 'asp.net core',
-        content: '这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架这是一个跨平台的框架',
-        author: 'admin',
-        createtime: '2018-10-02',
-        count1: 123,
-        count2: 231
-    }
-];
+﻿var datass = [];
+
 Vue.prototype.$http = axios;
 var app = new Vue({
     el: '#app',
@@ -171,10 +118,7 @@ var app = new Vue({
                 2000);
         }
         , optSearch: function () {
-            this.isSearch = !this.isSearch;           
-        }
-        , showPostDetails: function (value, event) {
-            window.location.href = "/Home/PostDetails?id=" + value;
+            this.isSearch = !this.isSearch;
         }
     },
     watch: {

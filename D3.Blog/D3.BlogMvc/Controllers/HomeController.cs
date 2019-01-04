@@ -53,7 +53,10 @@ namespace D3.BlogMvc.Controllers
 
             return Json("1212");
         }
-
+        /// <summary>
+        /// 首页
+        /// </summary>
+        /// <returns></returns>
         [AllowAnonymous]
         public IActionResult HomePage()
         {
@@ -61,15 +64,26 @@ namespace D3.BlogMvc.Controllers
         }
         
         /// <summary>
-        /// 目前测试asiox发起请求
+        /// 搜索
         /// </summary>
         /// <param name="searchtext"></param>
         /// <returns></returns>
-        [HttpGet]
-        public JsonResult Search([FromForm]string searchtext)
+        [HttpPost]
+        [AllowAnonymous]
+        public IActionResult Search([FromForm]string searchtext)
         {
-            return Json("123");
+            ViewBag.searchKeyWord=searchtext;
+            
+            return View();
         }
         
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult PostDetails([FromQuery]string id)
+        {
+            ViewBag.queryValue=id;
+            return View();
+        }
+
     }
 }

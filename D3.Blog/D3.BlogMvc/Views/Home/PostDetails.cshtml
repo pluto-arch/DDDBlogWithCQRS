@@ -27,11 +27,11 @@
     <link rel="stylesheet" href="~/fontawesome-free/css/all.css">
     <!-- Scrollbar Custom CSS -->
     <link rel="stylesheet" href="~/css/jquery/jquery.mCustomScrollbar.min.css">
+    <link rel="stylesheet" href="~/css/posts/posts.css">
     <!-- Font Awesome JS -->
     <script defer src="~/fontawesome-free/js/solid.js"></script>
     <script defer src="~/fontawesome-free/js/fontawesome.min.js"></script>
     <!--[if lt IE 9]><script src="~/lib/html5.min.js"></script><![endif]-->
-
 </head>
 
 <body>
@@ -66,7 +66,7 @@
                 }
 
                 <li class="">
-                    <a asp-action="HomePage">首页</a>
+                    <a asp-controller="Home" asp-action="HomePage">首页</a>
                 </li>
                 <li>
                     <a href="#">文章</a>
@@ -111,7 +111,7 @@
                         </a>
                         <ul id="menu" class="nav navbar-nav mr-auto menu">
                             <li class="nav-item">
-                                <a class="nav-link" asp-action="HomePage">首页</a>
+                                <a class="nav-link" asp-controller="Home" asp-action="HomePage">首页</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#">文章</a>
@@ -170,7 +170,7 @@
                                     <a class="nav-link" href="#" data-toggle="modal" data-target="#Login">登录</a>
                                 </li>
                             }
-                            <li data-flag="1" class="nav-item" style="width: 40px;display:none">
+                            <li data-flag="1" class="nav-item" style="width: 40px;">
                                 <a data-flag="1" class="nav-link" href="#" v-on:click="optSearch($event)">
                                     <span data-flag="1" class="fa fa-search" title="搜索"></span>
                                 </a>
@@ -178,82 +178,46 @@
                         </ul>
                     </div>
                 </nav>
-               
-                <div class="container" style="display: flex">                   
-                    <div id="main-content" class="bg-white" style="overflow: hidden; flex-grow: 1;">
-                        <div data-flag="1" id="search-posts-2" style="text-align:center;line-height:46px;background-color:cornflowerblue">
-                            <form data-flag="1" asp-action="Search" method="post">
-                                <input data-flag="1" type="text" placeholder="请输入搜索内容" name="searchtext" id="searchtext" style="line-height: 30px;width: 400px;border: 1px solid lightblue;padding-left:10px" />
-                                <button data-flag="1" type="submit" style="line-height: 30px;border: none;background-color: #309dda;width: 60px;border: 1px solid #309dda;">搜索</button>
-                            </form>
+                <div data-flag="1" id="search-posts">
+                    <form data-flag="1" asp-action="Search" method="post">
+                        <input data-flag="1" type="text" placeholder="请输入搜索内容" name="searchtext" id="searchtext" style="line-height: 30px;width: 400px;border: 1px solid lightblue;padding-left:10px" />
+                        <button data-flag="1" type="submit" style="line-height: 30px;border: none;background-color: #309dda;width: 60px;border: 1px solid #309dda;">搜索</button>
+                    </form>
+                </div>
+                <div class="container" style="display: flex">
+                    <div id="main-content" class="bg-white" style="overflow: hidden; flex-grow: 1;padding-bottom:10px;">
+                        <div id="post-owin" class="author-info">
+                            <div class="author-img">
+                                <a href="#"><img src="holder.js/50x50?theme=headimg" style="border-radius:50px" /></a>
+                            </div>
+                            <div class="author-name">
+                                <a href="#" style="display:block">Admin</a>
+                                <span style="color:#cac7c7">2019年01月04日&nbsp;&nbsp;阅读&nbsp;1073</span>
+                            </div>
                         </div>
-                        <div id="search-result">
-                            <span style="padding-left: 10px;padding-right: 5px;color: rgb(69, 182, 247);font-size: 20px;font-weight: 700;">@ViewBag.searchKeyWord</span>的搜索结果
-                        </div>
-                        <!--帖子列表-->
-                        <transition-group name="card" tag="div">
-                            <!--查询页面初始模型-->
-                            @for (int i = 0; i < 10; i++)
-                            {
-                                <div :key="@i" class="my-postcard">
-                                    <div class="card flex-md-row mb-2  h-auto" style="border: none; border-bottom: 1px solid #cccccc73;">
-                                        <img class="card-img-right flex-auto d-none d-lg-block" src="~/images/visual_studio.png" alt="Card image cap" style="padding: 10px;width: 280px">
-                                        <div class="card-body d-flex flex-column align-items-start" style="padding-bottom: 5px;padding-top: 0">
-                                            <h3 class="mb-0 mb-2">
-                                                <a class="my-posttitle" href="#" style="text-decoration: none">ASP.NET</a>
-                                            </h3>
-                                            <div class="mb-1 text-muted">
-                                                <i class="far fa-clock"></i>&nbsp;<span style="margin-right: 20px;">2018-12-20</span>
-                                                <i class="fas fa-user"></i>&nbsp;<span class="text-primary" style="cursor: pointer">Admin</span>
-                                            </div>
-                                            <p class="card-text" style="font-size: 12px; color: #999; word-wrap: break-word; line-height: 20px;">这是一张更宽的卡片，下面有支持文字作为其他内容的自然引导。这是一张更宽的卡片，下面有支持文字作为其他内容的自然引导。这是一张更宽的卡片这是一张更宽的卡片这是一张更宽的卡片...</p>
-                                            <div id="post-opt">
-                                                <ul>
-                                                    <li title="点赞"><i class="fas fa-thumbs-up" style="color: #ccccccb5"></i>&nbsp;<a>7</a></li>
-                                                    <li title="浏览"><i class="fas fa-eye" style="color: #ccccccb5"></i><a>&nbsp;128</a></li>
-                                                    <li title="收藏"><i class="fas fa-heart" style="color: #ccccccb5"></i><a>&nbsp;78</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                            <!--vue加载-->
-                            <div :key="post.id" class="my-postcard" v-for="(post,index) in posts">
-                                <div class="card flex-md-row mb-2  h-auto" style="border: none; border-bottom: 1px solid #cccccc73;">
-                                    <img class="card-img-right flex-auto d-none d-lg-block" src="~/images/visual_studio.png" alt="Card image cap" style="padding: 10px;width: 280px">
-                                    <div class="card-body d-flex flex-column align-items-start" style="padding-bottom: 5px;padding-top: 0">
-                                        <h3 class="mb-0 mb-2">
-                                            <a class="my-posttitle" href="#" style="text-decoration: none" v-text="post.text"></a>
-                                        </h3>
-                                        <div class="mb-1 text-muted">
-                                            <i class="far fa-clock"></i>&nbsp;<span style="margin-right: 20px;" v-text="post.createtime"></span>
-                                            <i class="fas fa-user"></i>&nbsp;<span class="text-primary" style="cursor: pointer" v-text="post.author"></span>
-                                        </div>
-                                        <p class="card-text" style="font-size: 12px; color: #999; word-wrap: break-word; line-height: 20px;">这是一张更宽的卡片，下面有支持文字作为其他内容的自然引导。这是一张更宽的卡片，下面有支持文字作为其他内容的自然引导。这是一张更宽的卡片这是一张更宽的卡片这是一张更宽的卡片...</p>
-                                        <div id="post-opt">
-                                            <ul>
-                                                <li title="点赞"><i class="fas fa-thumbs-up" style="color: #ccccccb5"></i>&nbsp;<a>7</a></li>
-                                                <li title="浏览"><i class="fas fa-eye" style="color: #ccccccb5"></i><a>&nbsp;128</a></li>
-                                                <li title="收藏"><i class="fas fa-heart" style="color: #ccccccb5"></i><a>&nbsp;78</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
+                        <!--帖子详情-->
+                        <div id="post-detail">
+                            <div class="post-header" style="text-align:center;margin-bottom:15px;">
+                                <h1>ASP.NET CORE</h1>
+                                <p style="font-size:14px;">
+                                    <span>分类：<a id="post-category" href="#">开源框架</a></span>
+                                    <span>&nbsp;阅读(211)</span>
+                                    <span>&nbsp;评论(0)</span>
+                                </p>
+                            </div>
+                            <div>
+                                <div style="visibility: hidden; overflow: hidden; position: absolute; top: 0px; height: 1px; width: auto; padding: 0px; border: 0px; margin: 0px; text-align: left; text-indent: 0px; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal;"><div id="MathJax_SVG_Hidden"></div><svg><defs id="MathJax_SVG_glyphs"><path id="MJMATHI-45" stroke-width="1" d="M492 213Q472 213 472 226Q472 230 477 250T482 285Q482 316 461 323T364 330H312Q311 328 277 192T243 52Q243 48 254 48T334 46Q428 46 458 48T518 61Q567 77 599 117T670 248Q680 270 683 272Q690 274 698 274Q718 274 718 261Q613 7 608 2Q605 0 322 0H133Q31 0 31 11Q31 13 34 25Q38 41 42 43T65 46Q92 46 125 49Q139 52 144 61Q146 66 215 342T285 622Q285 629 281 629Q273 632 228 634H197Q191 640 191 642T193 659Q197 676 203 680H757Q764 676 764 669Q764 664 751 557T737 447Q735 440 717 440H705Q698 445 698 453L701 476Q704 500 704 528Q704 558 697 578T678 609T643 625T596 632T532 634H485Q397 633 392 631Q388 629 386 622Q385 619 355 499T324 377Q347 376 372 376H398Q464 376 489 391T534 472Q538 488 540 490T557 493Q562 493 565 493T570 492T572 491T574 487T577 483L544 351Q511 218 508 216Q505 213 492 213Z"></path><path id="MJMAIN-3D" stroke-width="1" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path><path id="MJMATHI-6D" stroke-width="1" d="M21 287Q22 293 24 303T36 341T56 388T88 425T132 442T175 435T205 417T221 395T229 376L231 369Q231 367 232 367L243 378Q303 442 384 442Q401 442 415 440T441 433T460 423T475 411T485 398T493 385T497 373T500 364T502 357L510 367Q573 442 659 442Q713 442 746 415T780 336Q780 285 742 178T704 50Q705 36 709 31T724 26Q752 26 776 56T815 138Q818 149 821 151T837 153Q857 153 857 145Q857 144 853 130Q845 101 831 73T785 17T716 -10Q669 -10 648 17T627 73Q627 92 663 193T700 345Q700 404 656 404H651Q565 404 506 303L499 291L466 157Q433 26 428 16Q415 -11 385 -11Q372 -11 364 -4T353 8T350 18Q350 29 384 161L420 307Q423 322 423 345Q423 404 379 404H374Q288 404 229 303L222 291L189 157Q156 26 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 112 181Q151 335 151 342Q154 357 154 369Q154 405 129 405Q107 405 92 377T69 316T57 280Q55 278 41 278H27Q21 284 21 287Z"></path><path id="MJMATHI-63" stroke-width="1" d="M34 159Q34 268 120 355T306 442Q362 442 394 418T427 355Q427 326 408 306T360 285Q341 285 330 295T319 325T330 359T352 380T366 386H367Q367 388 361 392T340 400T306 404Q276 404 249 390Q228 381 206 359Q162 315 142 235T121 119Q121 73 147 50Q169 26 205 26H209Q321 26 394 111Q403 121 406 121Q410 121 419 112T429 98T420 83T391 55T346 25T282 0T202 -11Q127 -11 81 37T34 159Z"></path><path id="MJMAIN-32" stroke-width="1" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path><path id="MJSZ1-2211" stroke-width="1" d="M61 748Q64 750 489 750H913L954 640Q965 609 976 579T993 533T999 516H979L959 517Q936 579 886 621T777 682Q724 700 655 705T436 710H319Q183 710 183 709Q186 706 348 484T511 259Q517 250 513 244L490 216Q466 188 420 134T330 27L149 -187Q149 -188 362 -188Q388 -188 436 -188T506 -189Q679 -189 778 -162T936 -43Q946 -27 959 6H999L913 -249L489 -250Q65 -250 62 -248Q56 -246 56 -239Q56 -234 118 -161Q186 -81 245 -11L428 206Q428 207 242 462L57 717L56 728Q56 744 61 748Z"></path><path id="MJMATHI-6E" stroke-width="1" d="M21 287Q22 293 24 303T36 341T56 388T89 425T135 442Q171 442 195 424T225 390T231 369Q231 367 232 367L243 378Q304 442 382 442Q436 442 469 415T503 336T465 179T427 52Q427 26 444 26Q450 26 453 27Q482 32 505 65T540 145Q542 153 560 153Q580 153 580 145Q580 144 576 130Q568 101 554 73T508 17T439 -10Q392 -10 371 17T350 73Q350 92 386 193T423 345Q423 404 379 404H374Q288 404 229 303L222 291L189 157Q156 26 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 112 180T152 343Q153 348 153 366Q153 405 129 405Q91 405 66 305Q60 285 60 284Q58 278 41 278H27Q21 284 21 287Z"></path><path id="MJMATHI-69" stroke-width="1" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path><path id="MJMAIN-31" stroke-width="1" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path><path id="MJMATHI-61" stroke-width="1" d="M33 157Q33 258 109 349T280 441Q331 441 370 392Q386 422 416 422Q429 422 439 414T449 394Q449 381 412 234T374 68Q374 43 381 35T402 26Q411 27 422 35Q443 55 463 131Q469 151 473 152Q475 153 483 153H487Q506 153 506 144Q506 138 501 117T481 63T449 13Q436 0 417 -8Q409 -10 393 -10Q359 -10 336 5T306 36L300 51Q299 52 296 50Q294 48 292 46Q233 -10 172 -10Q117 -10 75 30T33 157ZM351 328Q351 334 346 350T323 385T277 405Q242 405 210 374T160 293Q131 214 119 129Q119 126 119 118T118 106Q118 61 136 44T179 26Q217 26 254 59T298 110Q300 114 325 217T351 328Z"></path><path id="MJMAIN-30" stroke-width="1" d="M96 585Q152 666 249 666Q297 666 345 640T423 548Q460 465 460 320Q460 165 417 83Q397 41 362 16T301 -15T250 -22Q224 -22 198 -16T137 16T82 83Q39 165 39 320Q39 494 96 585ZM321 597Q291 629 250 629Q208 629 178 597Q153 571 145 525T137 333Q137 175 145 125T181 46Q209 16 250 16Q290 16 318 46Q347 76 354 130T362 333Q362 478 354 524T321 597Z"></path></defs></svg></div><div id="wmd-preview" class="wmd-preview">
+                                    <div class="md-section-divider"></div><div class="md-section-divider"></div><hr><p data-anchor-id="tgzx">我们理解您需要更便捷更高效的工具记录思想，整理笔记、知识，并将其中承载的价值传播给他人，<strong>Cmd Markdown</strong> 是我们给出的答案 —— 我们为记录思想和分享知识提供更专业的工具。 您可以使用 Cmd Markdown：</p><blockquote data-anchor-id="wi6x" class="white-blockquote">
+                                        <ul>
+                                            <li>整理知识，学习笔记</li>
+                                            <li>发布日记，杂文，所见所想</li>
+                                            <li>撰写发布技术文稿（代码支持）</li>
+                                            <li>撰写发布学术论文（LaTeX 公式支持）</li>
+                                        </ul>
+                                    </blockquote><div class="md-section-divider"></div><h3 data-anchor-id="cgaf" id="3-高亮一段代码code">3. 高亮一段代码[^code]</h3><div class="md-section-divider"></div><pre class="prettyprint linenums prettyprinted" data-anchor-id="267m" style=""><ol class="linenums"><li class="L0"><code class="language-python"><span class="lit"></span></code></li><li class="L1"><code class="language-python"><span class="kwd">class</span><span class="pln"> </span><span class="typ">SomeClass</span><span class="pun">:</span></code></li><li class="L2"><code class="language-python"><span class="pln">    </span><span class="kwd">pass</span></code></li><li class="L3"><code class="language-python"></code></li><li class="L4"><code class="language-python"><span class="kwd">if</span><span class="pln"> __name__ </span><span class="pun">==</span><span class="pln"> </span><span class="str">'__main__'</span><span class="pun">:</span></code></li><li class="L5"><code class="language-python"><span class="pln">    </span><span class="com"># A comment</span></code></li><li class="L6"><code class="language-python"><span class="pln">    </span><span class="kwd">print</span><span class="pln"> </span><span class="str">'hello world'</span></code></li></ol></pre><div class="md-section-divider"></div><h3 data-anchor-id="vbma" id="4-高效绘制-流程图">4. 高效绘制 <a href="https://www.zybuluo.com/mdeditor?url=https://www.zybuluo.com/static/editor/md-help.markdown#7-流程图" target="_blank">流程图</a></h3><div class="md-section-divider"></div><div class="flow-diagram theme theme-white" title="点击查看大图" data-anchor-id="avlg"><svg height="419.73046875" version="1.1" width="187.984375" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;" viewBox="0 0 187.984375 419.73046875" preserveAspectRatio="xMidYMid meet"><desc style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Created with Raphaël 2.1.2</desc><defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"><path stroke-linecap="round" d="M5,0 0,2.5 5,5z" id="raphael-marker-block-obj3" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path><marker id="raphael-marker-endblock33-obj4" markerHeight="3" markerWidth="3" orient="auto" refX="1.5" refY="1.5" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"><use xlink:href="#raphael-marker-block-obj3" transform="rotate(180 1.5 1.5) scale(0.6,0.6)" stroke-width="1.6667" fill="black" stroke="none" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></use></marker></defs><rect x="0" y="0" width="52.5" height="37" r="20" rx="20" ry="20" fill="#ffffff" stroke="#000000" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);" stroke-width="2" class="flowchart" id="st" transform="matrix(1,0,0,1,56.2422,24.7461)"></rect><text x="10" y="18.5" text-anchor="start" font="10px &quot;Arial&quot;" stroke="none" fill="#000000" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: start; font: 15px Arial;" id="stt" class="flowchartt" font-size="15px" transform="matrix(1,0,0,1,56.2422,24.7461)" stroke-width="1"><tspan dy="5.5" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Start</tspan></text><rect x="0" y="0" width="121.34375" height="37" r="0" rx="0" ry="0" fill="#ffffff" stroke="#000000" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);" stroke-width="2" class="flowchart" id="op" transform="matrix(1,0,0,1,21.8203,136.4922)"></rect><text x="10" y="18.5" text-anchor="start" font="10px &quot;Arial&quot;" stroke="none" fill="#000000" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: start; font: 15px Arial;" id="opt" class="flowchartt" font-size="15px" transform="matrix(1,0,0,1,21.8203,136.4922)" stroke-width="1"><tspan dy="5.5" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Your Operation</tspan></text><path fill="#ffffff" stroke="#000000" d="M39.24609375,19.623046875L0,39.24609375L78.4921875,78.4921875L156.984375,39.24609375L78.4921875,0L0,39.24609375" stroke-width="2" id="cond" class="flowchart" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);" transform="matrix(1,0,0,1,4,227.4922)"></path><text x="44.24609375" y="39.24609375" text-anchor="start" font="10px &quot;Arial&quot;" stroke="none" fill="#000000" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: start; font: 15px Arial;" id="condt" class="flowchartt" font-size="15px" transform="matrix(1,0,0,1,4,227.4922)" stroke-width="1"><tspan dy="5.51171875" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Yes or No?</tspan></text><rect x="0" y="0" width="46.6875" height="37" r="20" rx="20" ry="20" fill="#ffffff" stroke="#000000" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);" stroke-width="2" class="flowchart" id="e" transform="matrix(1,0,0,1,59.1484,380.7305)"></rect><text x="10" y="18.5" text-anchor="start" font="10px &quot;Arial&quot;" stroke="none" fill="#000000" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: start; font: 15px Arial;" id="et" class="flowchartt" font-size="15px" transform="matrix(1,0,0,1,59.1484,380.7305)" stroke-width="1"><tspan dy="5.5" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">End</tspan></text><path fill="none" stroke="#000000" d="M82.4921875,61.74609375C82.4921875,61.74609375,82.4921875,119.5498448451981,82.4921875,133.49274183788748" stroke-width="2" marker-end="url(#raphael-marker-endblock33-obj4)" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path><path fill="none" stroke="#000000" d="M82.4921875,173.4921875C82.4921875,173.4921875,82.4921875,213.14628744125366,82.4921875,224.49262658460066" stroke-width="2" marker-end="url(#raphael-marker-endblock33-obj4)" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path><path fill="none" stroke="#000000" d="M82.4921875,305.984375C82.4921875,305.984375,82.4921875,363.7881260951981,82.4921875,377.7310230878875" stroke-width="2" marker-end="url(#raphael-marker-endblock33-obj4)" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path><text x="87.4921875" y="315.984375" text-anchor="start" font="10px &quot;Arial&quot;" stroke="none" fill="#000000" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: start; font: 15px Arial;" font-size="15px" stroke-width="1"><tspan dy="5.5" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">yes</tspan></text><path fill="none" stroke="#000000" d="M160.984375,266.73828125C160.984375,266.73828125,185.984375,266.73828125,185.984375,266.73828125C185.984375,266.73828125,185.984375,111.4921875,185.984375,111.4921875C185.984375,111.4921875,82.4921875,111.4921875,82.4921875,111.4921875C82.4921875,111.4921875,82.4921875,126.86563205718994,82.4921875,133.50143527425826" stroke-width="2" marker-end="url(#raphael-marker-endblock33-obj4)" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path><text x="165.984375" y="256.73828125" text-anchor="start" font="10px &quot;Arial&quot;" stroke="none" fill="#000000" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: start; font: 15px Arial;" font-size="15px" stroke-width="1"><tspan dy="5.50390625" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">no</tspan></text></svg></div>
                                 </div>
                             </div>
-                        </transition-group>
-
-                        <!--加载动画-->
-                        <div class="loadmore btn">
-                            <div v-on:click="loadmore">
-                                <span class="more">More...</span>
-                                <div class="sk-three-bounce">
-                                    <div class="sk-child sk-bounce1"></div>
-                                    <div class="sk-child sk-bounce2"></div>
-                                    <div class="sk-child sk-bounce3"></div>
-                                </div>
-                            </div>
-                        </div><!--end 加载动画-->
+                        </div>                       
                     </div>
                     <aside id="aside">
                         <section class="section my-shadow">
@@ -382,17 +346,25 @@
     <script src="~/js/axios/axios.min.js"></script>
     <script src="~/js/vue/vue.js"></script>
     <script src="~/js/holder/holder.min.js"></script>
-    <script src="~/js/home/search.js"></script>
+    <script src="~/js/home/index.js"></script><!--基本的js-->
+    <script src="~/js/posts/posts.js"></script>
     <script>
     //占位
-    Holder.addTheme('thumb', {
-        bg: '#68217A',
-        fg: '#FFFFFF',
-        text: 'ASP.NET CORE',
-        size: 18,
-        font: "Monaco",
-        fontweight: "normal"
-    });
+        Holder.addTheme('thumb', {
+            bg: '#68217A',
+            fg: '#FFFFFF',
+            text: 'ASP.NET CORE',
+            size: 18,
+            font: "Monaco",
+            fontweight: "normal"
+        });
+        Holder.addTheme('headimg', {
+            bg: '#68217A',
+            fg: '#FFFFFF',
+            text: 'zyl',
+            font: "Monaco",
+            fontweight: "normal"
+        });
     </script>
 
 </body>

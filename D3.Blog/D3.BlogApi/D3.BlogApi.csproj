@@ -9,10 +9,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\**" />
+    <Content Remove="wwwroot\**" />
+    <EmbeddedResource Remove="wwwroot\**" />
+    <None Remove="wwwroot\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+<<<<<<< HEAD
+=======
     <None Remove="Controllers\AccountController.cs~RF1be6f79.TMP" />
   </ItemGroup>
 
   <ItemGroup>
+>>>>>>> a3bde611932f00eef5307625977577716af4d115
     <PackageReference Include="AspNetCore.Authentication.WeChat" Version="2.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="6.0.1" />
