@@ -185,7 +185,7 @@
                     </form>
                 </div>
                 <div class="container" style="display: flex">
-                    <div id="main-content" class="bg-white" style="overflow: hidden; flex-grow: 1;">
+                    <div id="main-content" class="bg-white" style="overflow: hidden; flex-grow: 1;min-height: 800px">
                         <!--帖子列表-->
                         <transition-group name="card" tag="div">
                             <div :key="post.id" class="my-postcard" v-for="(post,index) in posts">

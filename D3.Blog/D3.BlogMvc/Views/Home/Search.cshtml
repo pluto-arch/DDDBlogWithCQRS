@@ -180,7 +180,7 @@
                 </nav>
                
                 <div class="container" style="display: flex">                   
-                    <div id="main-content" class="bg-white" style="overflow: hidden; flex-grow: 1;">
+                    <div id="main-content" class="bg-white" style="overflow: hidden; flex-grow: 1;min-height: 800px">
                         <div data-flag="1" id="search-posts-2" style="text-align:center;line-height:46px;background-color:cornflowerblue">
                             <form data-flag="1" asp-action="Search" method="post">
                                 <input data-flag="1" type="text" placeholder="请输入搜索内容" name="searchtext" id="searchtext" style="line-height: 30px;width: 400px;border: 1px solid lightblue;padding-left:10px" />
@@ -193,7 +193,7 @@
                         <!--帖子列表-->
                         <transition-group name="card" tag="div">
                             <!--查询页面初始模型-->
-                            @for (int i = 0; i < 10; i++)
+                            @for (int i = 0; i < 2; i++)
                             {
                                 <div :key="@i" class="my-postcard">
                                     <div class="card flex-md-row mb-2  h-auto" style="border: none; border-bottom: 1px solid #cccccc73;">
