@@ -1,16 +1,400 @@
-﻿
+﻿@using System.Security.Claims
+@using Infrastructure.Data.Database
+@using Infrastructure.Identity.Models
+@using Microsoft.AspNetCore.Identity
+@model D3.BlogMvc.Models.AccountModels.LoginModel
+@inject UserManager<AppBlogUser> userManager
+@inject SignInManager<AppBlogUser> signInManager
 @{
     Layout = null;
 }
 
-<!DOCTYPE html>
 
-<html>
+<!DOCTYPE html>
+<html lang="zh-CN">
+
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Search</title>
+    <meta charset="utf-8">
+    <meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1">
+    <meta name=viewport content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
+
+    <title>YL-Blog</title>
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="~/css/bootstrap/bootstrap.min.css">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="~/css/home/style.css">
+    <link rel="stylesheet" href="~/fontawesome-free/css/all.css">
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet" href="~/css/jquery/jquery.mCustomScrollbar.min.css">
+    <!-- Font Awesome JS -->
+    <script defer src="~/fontawesome-free/js/solid.js"></script>
+    <script defer src="~/fontawesome-free/js/fontawesome.min.js"></script>
+    <!--[if lt IE 9]><script src="~/lib/html5.min.js"></script><![endif]-->
+
 </head>
+
 <body>
-这里是搜索页面
+    <div id="app">
+        <!-- Sidebar  -->
+        <nav id="sidebar">
+            <div id="dismiss">
+                <i class="fas fa-arrow-left"></i>
+            </div>
+            <div class="sidebar-header">
+                <img src="https://mdbootstrap.com/img/logo/mdb-transparent.png" height="50" alt="mdb logo">
+            </div>
+            <ul id="side-menu" class="list-unstyled components">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div id="side-user">
+                        <p style="padding-top: 0px;padding-bottom: 0px; padding-left: 20px;">@User.Identity.Name</p>
+                        <ul>
+                            <li title="个人中心"><i class="far fa-user-circle"></i></li>
+                            <li title="草稿"><i class="fas fa-file-alt"></i></li>
+                            <li title="我的收藏"><i class="fas fa-star"></i></li>
+                            <li title="我的评论"><i class="fas fa-tag"></i></li>
+                            <li title="我的通知"><i class="fas fa-bell"></i></li>
+                        </ul>
+                    </div>
+
+
+                }
+                else
+                {
+                    <p>Welcome</p>
+                }
+
+                <li class="">
+                    <a asp-action="HomePage">首页</a>
+                </li>
+                <li>
+                    <a href="#">文章</a>
+                </li>
+                <li>
+                    <a href="#">工具技巧</a>
+                </li>
+                <li>
+                    <a href="#">话题心得</a>
+                </li>
+            </ul>
+
+            <ul class="list-unstyled CTAs">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <li data-flag="1" style="padding-top: 0;">
+                        <a data-flag="1" asp-controller="Account" asp-action="Logout"><i data-flag="1" class="fas fa-sign-out-alt"></i><span data-flag="1" class="faw">退出登录</span></a>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a href="#" class="download" data-toggle="modal" data-target="#Login">登录</a>
+                    </li>
+                }
+
+                <li>
+                    <a href="#" class="article">关于本站</a>
+                </li>
+            </ul>
+        </nav>
+        <div class="wrapper">
+            <!-- Page Content  -->
+            <div id="content">
+                <nav class="navbar navbar-expand-lg navbar-light bg-white">
+                    <div class="container">
+                        <a class="" id="sidebarCollapse" style="font-size: 25px;width: 60px;text-align: center;">
+                            <i class="fas fa-align-justify"></i>
+                        </a>
+                        <a class="navbar-brand mylogo" href="#">
+                            <img src="https://mdbootstrap.com/img/logo/mdb-transparent.png" height="30" alt="mdb logo">
+                        </a>
+                        <ul id="menu" class="nav navbar-nav mr-auto menu">
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="HomePage">首页</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">文章</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">工具技巧</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">话题心得</a>
+                            </li>
+                        </ul>
+                        <ul id="useropt" class="nav navbar-nav ml-auto useropt">
+                            <li id="write-post" class="nav-item" style="width: 88px;position: relative;">
+                                <a class="nav-link" href="#" style="color: #4285F4">
+                                    <i class="far fa-file-word"></i>&nbsp;写文章
+                                </a>
+                            </li>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <li data-flag="1" id="user-info" style="position: relative">
+                                    <a data-flag="1" v-on:click="dropDownOpt($event)" class="nav-link" href="#"><i data-flag="1" class="fa fa-user"></i>&nbsp;&nbsp;@User.Identity.Name&nbsp;&nbsp;<i data-flag="1" class="fa fa-caret-down"></i></a>
+                                    <ul data-flag="1" id="usr-opt" class="user-opt-list">
+                                        <li data-flag="1">
+                                            <a data-flag="1" href="#"><i data-flag="1" class="far fa-user-circle"></i><span data-flag="1" class="faw">我的主页</span></a>
+                                        </li>
+                                        <li data-flag="1">
+                                            <a data-flag="1" href="#"><i data-flag="1" class="fas fa-file-alt"></i><span data-flag="1" class="faw">草稿</span></a>
+                                        </li>
+                                        <li data-flag="1">
+                                            <a data-flag="1" href="#"><i data-flag="1" class="fas fa-star"></i><span data-flag="1" class="faw">我的收藏</span></a>
+                                        </li>
+                                        <li data-flag="1">
+                                            <a data-flag="1" href="#"><i data-flag="1" class="fas fa-tag"></i><span data-flag="1" class="faw">我的评论</span></a>
+                                        </li>
+                                        <li data-flag="1">
+                                            <a data-flag="1" href="#"><i data-flag="1" class="fas fa-bell"></i><span data-flag="1" class="faw">我的通知</span></a>
+                                        </li>
+                                        @if (User.HasClaim(ClaimTypes.Role, "Admin") || User.HasClaim(ClaimTypes.Role, "admin"))
+                                        {
+                                            <li data-flag="1">
+                                                <a data-flag="1" asp-area="Admin" asp-controller="Admin" asp-action="Index"><i data-flag="1" class="fas fa-cogs"></i><span data-flag="1" class="faw">管理</span></a>
+                                            </li>
+                                        }
+                                        else
+                                        { }
+                                        <hr data-flag="1" />
+                                        <li data-flag="1" style="padding-top: 0;">
+                                            <a data-flag="1" asp-controller="Account" asp-action="Logout"><i data-flag="1" class="fas fa-sign-out-alt"></i><span data-flag="1" class="faw">退出登录</span></a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+                            else
+                            {
+                                <li id="user-login" class="nav-item" style="width: 50px;">
+                                    <a class="nav-link" href="#" data-toggle="modal" data-target="#Login">登录</a>
+                                </li>
+                            }
+                            <li data-flag="1" class="nav-item" style="width: 40px;display:none">
+                                <a data-flag="1" class="nav-link" href="#" v-on:click="optSearch($event)">
+                                    <span data-flag="1" class="fa fa-search" title="搜索"></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+               
+                <div class="container" style="display: flex">                   
+                    <div id="main-content" class="bg-white" style="overflow: hidden; flex-grow: 1;">
+                        <div data-flag="1" id="search-posts-2" style="text-align:center;line-height:46px;background-color:cornflowerblue">
+                            <form data-flag="1" asp-action="Search" method="post">
+                                <input data-flag="1" type="text" placeholder="请输入搜索内容" name="searchtext" id="searchtext" style="line-height: 30px;width: 400px;border: 1px solid lightblue;padding-left:10px" />
+                                <button data-flag="1" type="submit" style="line-height: 30px;border: none;background-color: #309dda;width: 60px;border: 1px solid #309dda;">搜索</button>
+                            </form>
+                        </div>
+                        <div id="search-result">
+                            <span style="padding-left: 10px;padding-right: 5px;color: rgb(69, 182, 247);font-size: 20px;font-weight: 700;">@ViewBag.searchKeyWord</span>的搜索结果
+                        </div>
+                        <!--帖子列表-->
+                        <transition-group name="card" tag="div">
+                            <!--查询页面初始模型-->
+                            @for (int i = 0; i < 10; i++)
+                            {
+                                <div :key="@i" class="my-postcard">
+                                    <div class="card flex-md-row mb-2  h-auto" style="border: none; border-bottom: 1px solid #cccccc73;">
+                                        <img class="card-img-right flex-auto d-none d-lg-block" src="~/images/visual_studio.png" alt="Card image cap" style="padding: 10px;width: 280px">
+                                        <div class="card-body d-flex flex-column align-items-start" style="padding-bottom: 5px;padding-top: 0">
+                                            <h3 class="mb-0 mb-2">
+                                                <a class="my-posttitle" href="#" style="text-decoration: none">ASP.NET</a>
+                                            </h3>
+                                            <div class="mb-1 text-muted">
+                                                <i class="far fa-clock"></i>&nbsp;<span style="margin-right: 20px;">2018-12-20</span>
+                                                <i class="fas fa-user"></i>&nbsp;<span class="text-primary" style="cursor: pointer">Admin</span>
+                                            </div>
+                                            <p class="card-text" style="font-size: 12px; color: #999; word-wrap: break-word; line-height: 20px;">这是一张更宽的卡片，下面有支持文字作为其他内容的自然引导。这是一张更宽的卡片，下面有支持文字作为其他内容的自然引导。这是一张更宽的卡片这是一张更宽的卡片这是一张更宽的卡片...</p>
+                                            <div id="post-opt">
+                                                <ul>
+                                                    <li title="点赞"><i class="fas fa-thumbs-up" style="color: #ccccccb5"></i>&nbsp;<a>7</a></li>
+                                                    <li title="浏览"><i class="fas fa-eye" style="color: #ccccccb5"></i><a>&nbsp;128</a></li>
+                                                    <li title="收藏"><i class="fas fa-heart" style="color: #ccccccb5"></i><a>&nbsp;78</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            <!--vue加载-->
+                            <div :key="post.id" class="my-postcard" v-for="(post,index) in posts">
+                                <div class="card flex-md-row mb-2  h-auto" style="border: none; border-bottom: 1px solid #cccccc73;">
+                                    <img class="card-img-right flex-auto d-none d-lg-block" src="~/images/visual_studio.png" alt="Card image cap" style="padding: 10px;width: 280px">
+                                    <div class="card-body d-flex flex-column align-items-start" style="padding-bottom: 5px;padding-top: 0">
+                                        <h3 class="mb-0 mb-2">
+                                            <a class="my-posttitle" href="#" style="text-decoration: none" v-text="post.text"></a>
+                                        </h3>
+                                        <div class="mb-1 text-muted">
+                                            <i class="far fa-clock"></i>&nbsp;<span style="margin-right: 20px;" v-text="post.createtime"></span>
+                                            <i class="fas fa-user"></i>&nbsp;<span class="text-primary" style="cursor: pointer" v-text="post.author"></span>
+                                        </div>
+                                        <p class="card-text" style="font-size: 12px; color: #999; word-wrap: break-word; line-height: 20px;">这是一张更宽的卡片，下面有支持文字作为其他内容的自然引导。这是一张更宽的卡片，下面有支持文字作为其他内容的自然引导。这是一张更宽的卡片这是一张更宽的卡片这是一张更宽的卡片...</p>
+                                        <div id="post-opt">
+                                            <ul>
+                                                <li title="点赞"><i class="fas fa-thumbs-up" style="color: #ccccccb5"></i>&nbsp;<a>7</a></li>
+                                                <li title="浏览"><i class="fas fa-eye" style="color: #ccccccb5"></i><a>&nbsp;128</a></li>
+                                                <li title="收藏"><i class="fas fa-heart" style="color: #ccccccb5"></i><a>&nbsp;78</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </transition-group>
+
+                        <!--加载动画-->
+                        <div class="loadmore btn btn-outline-primary">
+                            <div v-on:click="loadmore">
+                                <span class="more">More...</span>
+                                <div class="sk-three-bounce">
+                                    <div class="sk-child sk-bounce1"></div>
+                                    <div class="sk-child sk-bounce2"></div>
+                                    <div class="sk-child sk-bounce3"></div>
+                                </div>
+                            </div>
+                        </div><!--end 加载动画-->
+                    </div>
+                    <aside id="aside">
+                        <section class="section my-shadow">
+                            <div class="title">网站公告</div>
+                            <hr />
+                            <div class="notice-list">
+                                <ul>
+                                    <li><a href="#">编写技术简历的47条原则</a><span class="notice-date">12-20</span></li>
+                                    <li><a href="#">编写技术简历的47条原则</a><span class="notice-date">12-20</span></li>
+                                    <li><a href="#">编写技术简历的47条原则</a><span class="notice-date">12-20</span></li>
+                                    <li><a href="#">编写技术简历的47条原则</a><span class="notice-date">12-20</span></li>
+                                    <li><a href="#">编写技术简历的47条原则</a><span class="notice-date">12-20</span></li>
+                                    <li><a href="#">编写技术简历的47条原则</a><span class="notice-date">12-20</span></li>
+                                    <li><a href="#">编写技术简历的47条原则</a><span class="notice-date">12-20</span></li>
+                                    <li><a href="#">编写技术简历的47条原则</a><span class="notice-date">12-20</span></li>
+                                    <li><a href="#">编写技术简历的47条原则</a><span class="notice-date">12-20</span></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <div class="section my-shadow" style="padding-bottom: 5px;">
+                            <div class="header">
+                                <div class="title">
+                                    <span>热门标签</span>
+                                    <a href="#" target="_blank" rel="" class="tag-link">查看全部</a>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="tag-content">
+                                <div class="tag-list">
+                                    <a href="#" target="_blank" rel="" class="tag ml-auto">C#(23)</a>
+                                    <a href="#" target="_blank" rel="" class="tag ml-auto">ASP.NET(25)</a>
+                                    <a href="#" target="_blank" rel="" class="tag ml-auto">MVC(8)</a>
+                                    <a href="#" target="_blank" rel="" class="tag ml-auto">GitHub(12)</a>
+                                    <a href="#" target="_blank" rel="" class="tag ml-auto">Dotnet Core(45)</a>
+                                    <a href="#" target="_blank" rel="" class="tag ml-auto">架构(2)</a>
+                                    <a href="#" target="_blank" rel="" class="tag ml-auto">产品(2)</a>
+                                    <a href="#" target="_blank" rel="" class="tag ml-auto">职业规划(6)</a>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+
+                <!--页脚-->
+                <footer class="footer">
+                    <div class="footer-header">
+                        <p>
+                            <span>Copyright</span><span>&copy;</span><span>2018&nbsp;&nbsp;</span><a href="#">阿里布布</a><span>
+                                &nbsp;&nbsp;Design By
+                                zyl
+                            </span>
+                    </div>
+                </footer>
+            </div>
+        </div>
+
+
+        <!--附带效果html-->
+        <div class="overlay"></div><!--侧边菜单覆盖物-->
+        <div class="tooltip bs-tooltip-top scroll-to-top" data-placement="left" data-toggle="tooltip" title="回到顶部">
+            <!--回到顶部-->
+            <i class="far fa-arrow-alt-circle-up fa-2x"></i>
+        </div>
+        <div class="tooltip bs-tooltip-top feedback" data-placement="left" data-toggle="tooltip" title="建议反馈">
+            <!--问题反馈和回到顶部-->
+            <i class="far fa-envelope fa-2x"></i>
+        </div>
+        <!--Modal弹窗登录-->
+        <div class="modal fade" id="Login" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document" style="width: 300px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">登录到您的账户</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="form1" asp-controller="Account" asp-action="LoginAsync" method="post">
+                            <div class="form-group">
+
+                                <input type="email" name="email" required="" maxlength="64" minlength="7" placeholder="电子邮件" data-purpose="email" value="" class="form-control user-error" aria-invalid="true" asp-for="Email">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" name="password" minlength="6" maxlength="64" class="textinput textInput form-control user-error" placeholder="密码" id="id_password" required="" data-purpose="password" aria-invalid="true" asp-for="Password">
+                            </div>
+                            <a v-on:click="Login" class="btn btn-default" style="width: 100%;background-color: lightblue">Sign in!</a>
+                            <p style="text-align: center; width: 100%; padding: 10px;">或<a href="#" style="text-decoration: none; color: #4285f4;font-size: 14px">&nbsp;忘记密码？</a></p>
+                        </form>
+                        <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+                            <p style="text-align: center; width: 100%; font-size: 10px;">
+                                关联账户登录：
+                                @{
+                                    var loginProviders = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+                                    if (loginProviders.Count == 0)
+                                    { }
+                                    else
+                                    {
+                                        foreach (var provider in loginProviders)
+                                        {
+                                            <button type="submit" class="" data-toggle="tooltip" data-placement="top" title="正在准备中" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.Name</button>
+                                        }
+                                    }
+                                }
+
+                            </p>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <h5 style="text-align: center; width: 100%;">还没有帐户吗？ <a href="#" style="color: #4285f4">注册</a></h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/js/vue/polyfill.min.js"></script>
+    <!-- jQuery CDN - Slim version (=without AJAX) -->
+    <script src="~/js/jquery/jquery-3.3.1.min.js"></script>
+    <!-- Popper.JS -->
+    <script src="~/js/bootstrap/popper.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="~/js/bootstrap/bootstrap.min.js"></script>
+    <!-- jQuery Custom Scroller CDN -->
+    <script src="~/js/jquery/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="~/js/axios/axios.min.js"></script>
+    <script src="~/js/vue/vue.js"></script>
+    <script src="~/js/holder/holder.min.js"></script>
+    <script src="~/js/home/search.js"></script>
+    <script>
+    //占位
+    Holder.addTheme('thumb', {
+        bg: '#68217A',
+        fg: '#FFFFFF',
+        text: 'ASP.NET CORE',
+        size: 18,
+        font: "Monaco",
+        fontweight: "normal"
+    });
+    </script>
+
 </body>
+
 </html>

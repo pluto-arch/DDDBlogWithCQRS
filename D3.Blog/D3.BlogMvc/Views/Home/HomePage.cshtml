@@ -170,15 +170,20 @@
                                     <a class="nav-link" href="#" data-toggle="modal" data-target="#Login">登录</a>
                                 </li>
                             }
-                            <li class="nav-item" style="width: 40px;">
-                                <a class="nav-link" href="#">
-                                    <span class="fa fa-search" title="搜索"></span>
+                            <li data-flag="1" class="nav-item" style="width: 40px;">
+                                <a data-flag="1" class="nav-link" href="#" v-on:click="optSearch($event)">
+                                    <span data-flag="1" class="fa fa-search" title="搜索"></span>
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </nav>
-
+                <div  data-flag="1" id="search-posts">
+                    <form  data-flag="1" asp-action="Search" method="post">
+                        <input  data-flag="1" type="text" placeholder="请输入搜索内容" name="searchtext" id="searchtext" style="line-height: 30px;width: 400px;border: 1px solid lightblue;padding-left:10px"/>
+                        <button  data-flag="1" type="submit" style="line-height: 30px;border: none;background-color: #309dda;width: 60px;border: 1px solid #309dda;">搜索</button>
+                    </form>
+                </div>
                 <div class="container" style="display: flex">
                     <div id="main-content" class="bg-white" style="overflow: hidden; flex-grow: 1;">
                         <!--帖子列表-->
@@ -187,12 +192,12 @@
                                 <div class="card flex-md-row mb-2  h-auto" style="border: none; border-bottom: 1px solid #cccccc73;">
                                     <img class="card-img-right flex-auto d-none d-lg-block" src="~/images/visual_studio.png" alt="Card image cap" style="padding: 10px;width: 280px">
                                     <div class="card-body d-flex flex-column align-items-start" style="padding-bottom: 5px;padding-top: 0">
-                                        <h3 class="mb-0 mb-2">
-                                            <a class="my-posttitle" href="#" style="text-decoration: none">{{post.text}}</a>
+                                        <h3 class="mb-0 mb-2" v-on:click="showPostDetails($event)">
+                                            <a class="my-posttitle" href="#" style="text-decoration: none" v-text="post.text"></a>
                                         </h3>
                                         <div class="mb-1 text-muted">
-                                            <span style="margin-right: 20px;"><i class="far fa-clock"></i>&nbsp;{{post.createtime}}</span>
-                                            <span class="text-primary" style="cursor: pointer"><i class="fas fa-user"></i>&nbsp;{{post.author}}</span>
+                                            <i class="far fa-clock"></i>&nbsp;<span style="margin-right: 20px;" v-text="post.createtime"></span>
+                                            <i class="fas fa-user"></i>&nbsp;<span class="text-primary" style="cursor: pointer" v-text="post.author"></span>
                                         </div>
                                         <p class="card-text" style="font-size: 12px; color: #999; word-wrap: break-word; line-height: 20px;">这是一张更宽的卡片，下面有支持文字作为其他内容的自然引导。这是一张更宽的卡片，下面有支持文字作为其他内容的自然引导。这是一张更宽的卡片这是一张更宽的卡片这是一张更宽的卡片...</p>
                                         <div id="post-opt">
@@ -336,8 +341,7 @@
 
     <script src="~/js/vue/polyfill.min.js"></script>
     <!-- jQuery CDN - Slim version (=without AJAX) -->
-    <script src="~/js/jquery/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-            crossorigin="anonymous"></script>
+    <script src="~/js/jquery/jquery-3.3.1.min.js"></script>
     <!-- Popper.JS -->
     <script src="~/js/bootstrap/popper.min.js"></script>
     <!-- Bootstrap JS -->
