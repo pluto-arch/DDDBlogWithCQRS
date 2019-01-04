@@ -16,8 +16,4 @@
     <ProjectReference Include="..\D3.Blog.Domain\D3.Blog.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ValidationErrorHelper\" />
-  </ItemGroup>
-
 </Project>
