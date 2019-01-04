@@ -1,0 +1,33 @@
+﻿.author-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.3rem;
+}
+    .author-info .author-img{
+        padding:10px 20px;
+    }
+#post-detail{
+    padding:0 20px;
+}
+#post-category:hover {
+    color: #4285F4;
+}
+pre {
+    background-color: #F8F8F8;
+    margin:0;
+}
+.code {
+    display: flex;
+    width:100%;
+    background-color: #F8F8F8;
+    text-align:left;
+    position:relative;
+    padding:10px;
+}
+.copy-code-btn{
+    position:absolute;
+    right:3px;
+    top:3px;
+    opacity:.4;
+    cursor:pointer;
+}

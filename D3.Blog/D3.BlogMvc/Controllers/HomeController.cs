@@ -69,6 +69,7 @@ namespace D3.BlogMvc.Controllers
         /// <param name="searchtext"></param>
         /// <returns></returns>
         [HttpPost]
+        [AllowAnonymous]
         public IActionResult Search([FromForm]string searchtext)
         {
             ViewBag.searchKeyWord=searchtext;
@@ -76,5 +77,13 @@ namespace D3.BlogMvc.Controllers
             return View();
         }
         
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult PostDetails([FromQuery]string id)
+        {
+            ViewBag.queryValue=id;
+            return View();
+        }
+
     }
 }

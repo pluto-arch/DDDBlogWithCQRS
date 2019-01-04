@@ -173,8 +173,8 @@ var app = new Vue({
         , optSearch: function () {
             this.isSearch = !this.isSearch;           
         }
-        , showPostDetails: function () {
-            alert(1212);
+        , showPostDetails: function (value, event) {
+            window.location.href = "/Home/PostDetails?id=" + value;
         }
     },
     watch: {
