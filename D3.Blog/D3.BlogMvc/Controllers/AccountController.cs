@@ -35,26 +35,24 @@ namespace D3.BlogMvc.Controllers
         
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(string returnUrl = null)
+        public async Task<IActionResult> Login(string returnUrl="/")
         {
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
             ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
+
+
+        /// <summary>
+        /// 弹窗登录
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> test()
-        {
-            AppBlogUser user=await _userManager.FindByEmailAsync("");
-            return Json("1212");
-        }
-
-
-
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> LoginAsync([FromForm]LoginModel model, string returnUrl = null)
+        public async Task<IActionResult> LoginAsync([FromForm]LoginModel model)
         {
             List<string> errormessage=new List<string>();
             if (ModelState.IsValid)
@@ -66,8 +64,6 @@ namespace D3.BlogMvc.Controllers
                     
                     await _signInManager.SignOutAsync();
                     /*await  _userManager.AddClaimAsync(user, new Claim("sbh", "12345678"));注册的时候添加，可以登陆后附加到cookie中*/
-
-
                     //第三个参数,指示在浏览器关闭后登录cookie是否应该保留的标志，true 则按照startup中配置的时间保存，否则就不保存关闭浏览器就失效。
                     var result= await _signInManager.PasswordSignInAsync(user,model.Password,model.RememberMe,false);
                     if (result.Succeeded)
@@ -105,6 +101,57 @@ namespace D3.BlogMvc.Controllers
             }
 
             return new JsonResult(errormessage);
+            
+        }
+
+        /// <summary>
+        /// 新页面登录
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> NewPageLoginAsync([FromForm]LoginModel model, string returnUrl=null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            if (ModelState.IsValid)
+            {
+                AppBlogUser user=await _userManager.FindByEmailAsync(model.Email);
+                if (user!=null)
+                {
+                    var userroles = await _userManager.GetRolesAsync(user);
+                    
+                    await _signInManager.SignOutAsync();
+                    /*await  _userManager.AddClaimAsync(user, new Claim("sbh", "12345678"));注册的时候添加，可以登陆后附加到cookie中*/
+
+                    //第三个参数,指示在浏览器关闭后登录cookie是否应该保留的标志，true 则按照startup中配置的时间保存，否则就不保存关闭浏览器就失效。
+                    var result= await _signInManager.PasswordSignInAsync(user,model.Password,model.RememberMe,false);
+                    if (result.Succeeded)
+                    {
+                        _logger.CustomInformation(user:user.UserName,other:"登录",enviornment:"Dev",host:"Dell NoteBook",informationMessage:"用户登录");                        
+                        return LocalRedirect(returnUrl);//登录成功
+                    }
+                    else if (result.IsLockedOut)
+                    {
+                        ModelState.AddModelError("locked", "被锁定，请联系管理员");
+                    }
+                    else if (result.IsNotAllowed)
+                    {
+                        ModelState.AddModelError("notallow", "不被允许访问");
+                    }
+                    else if(result.RequiresTwoFactor)
+                    {
+                        ModelState.AddModelError("TwoFactor", "需要双重认证");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("emailorpassworderror", "邮箱或密码错误，请重试！");
+                    }
+                }
+                ModelState.AddModelError("nouser","用户不存在");
+            }            
+            return View("Login",model);
             
         }
 
@@ -165,8 +212,9 @@ namespace D3.BlogMvc.Controllers
 
         [HttpGet]
         [AllowAnonymous]    
-        public IActionResult Register()
+        public IActionResult Register(string returnUrl="/")
         {
+            ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
         [HttpPost]
@@ -205,6 +253,7 @@ namespace D3.BlogMvc.Controllers
         
         public async Task<IActionResult> Logout(string returnUrl=null)
         {
+             ViewData["ReturnUrl"] = returnUrl;
             await _signInManager.SignOutAsync();
             // _logger.LogInformation("User logged out.");
             if (returnUrl != null)
@@ -224,7 +273,7 @@ namespace D3.BlogMvc.Controllers
             return new JsonResult("访问受限");
         }
 
-        private IActionResult RedirectToLocal(string returnUrl)
+        private IActionResult RedirectToLocal(string returnUrl=null)
         {
             if (Url.IsLocalUrl(returnUrl))
             {
@@ -234,12 +283,6 @@ namespace D3.BlogMvc.Controllers
             {
                 return RedirectToAction(nameof(HomeController.Index), "Home");
             }
-        }
-
-        [AllowAnonymous]
-        public IActionResult Login2()
-        {
-            return View();
         }
 
     }

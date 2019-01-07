@@ -72,16 +72,7 @@ namespace D3.BlogMvc.Controllers
         [AllowAnonymous]
         public IActionResult Search([FromForm]string searchtext)
         {
-            ViewBag.searchKeyWord=searchtext;
-            
-            return View();
-        }
-        
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult PostDetails([FromQuery]string id)
-        {
-            ViewBag.queryValue=id;
+            ViewBag.searchKeyWord=searchtext;            
             return View();
         }
 

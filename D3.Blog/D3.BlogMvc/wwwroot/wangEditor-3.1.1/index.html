@@ -1,0 +1,42 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="keywords" contect="富文本,富文本编辑器,富文本框,在线编辑器,html,web,javascript">
+    <meta name="Description" contect="wangEditor - 轻量级web富文本编辑器">
+    <title>wangEditor - 轻量级web富文本编辑器</title>
+
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+            <div>
+                <!--demo-->
+                <div style="text-align:left;">
+                    <div id="divDemo">
+                        <p>欢迎使用<b>wangEditor 富文本编辑器</b>，请输入内容...</p>
+                    </div>
+                </div>
+                <!--demo end-->
+            </div>
+            <button id="btn1">获取html</button>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+    <script src="https://cdn.bootcss.com/twitter-bootstrap/4.2.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src='wangEditor.min.js'></script>
+    <script type="text/javascript">
+        $(function () {
+            var E = window.wangEditor
+            var editor = new E('#divDemo')
+            editor.customConfig.uploadImgShowBase64 = true
+            editor.customConfig.linkImgCallback = function (url) {
+                alert("插入网络图片的回调") // url 即插入图片的地址
+            }
+            editor.create()
+            document.getElementById('btn1').addEventListener('click', function () {
+                // 读取 html
+                console.log(editor.txt.html())
+            }, false)
+        });
+    </script>
+</body>
+</html>

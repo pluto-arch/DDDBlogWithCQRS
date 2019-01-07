@@ -24,14 +24,16 @@
 </head>
 <body class="text-center" style="display: flex; justify-content: center; padding: 50px;">
     <div id="app" class="text-center m-3" style="width: 300px;">
-        <form class="form-signin" asp-action="LoginAsync" method="post">
+        <form class="form-signin" asp-action="NewPageLoginAsync" method="post" asp-route-returnUrl="@ViewData["returnUrl"]">
             <img class="mb-4" data-src="holder.js/72x72?theme=thumb" alt="" width="72" height="72">
             <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-            <vc:summary /><!--验证错误信息-->
+            @*<vc:summary />*@<!--验证错误信息-->
             <label for="inputEmail" class="sr-only">Email address</label>
             <input type="email" id="inputEmail" asp-for="Email" class="form-control" placeholder="Email address" required autofocus>
+            <span asp-validation-for="Email" class="text-danger"></span>
             <label for="inputPassword" class="sr-only">Password</label>
             <input type="password" id="inputPassword" asp-for="Password" class="form-control" placeholder="Password" required>
+            <span asp-validation-for="Password" class="text-danger"></span>
             <div class="checkbox mb-3">
                 <label>
                     <input type="checkbox" value="true" asp-for="RememberMe"> Remember me

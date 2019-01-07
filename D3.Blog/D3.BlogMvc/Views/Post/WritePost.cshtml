@@ -9,31 +9,32 @@
     Layout = null;
 }
 
-
 <!DOCTYPE html>
-<html lang="zh-CN">
 
+<html>
 <head>
     <meta charset="utf-8">
     <meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1">
     <meta name=viewport content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
 
-    <title>YL-Blog</title>
+    <title>YL-Blog-写文章</title>
 
     <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="~/css/bootstrap/bootstrap.min.css">
     <!-- Our Custom CSS -->
     <link rel="stylesheet" href="~/css/home/style.css">
+    <link rel="stylesheet" href="~/css/posts/write.css">
     <link rel="stylesheet" href="~/fontawesome-free/css/all.css">
+    <link rel="stylesheet" href="~/css/bootstrap/bootstrap-select.min.css">
     <!-- Scrollbar Custom CSS -->
     <link rel="stylesheet" href="~/css/jquery/jquery.mCustomScrollbar.min.css">
+    <link rel="stylesheet" href="~/bootstrap-tokenfield/css/bootstrap-tokenfield.min.css">
+    <link rel="stylesheet" href="~/bootstrap-tokenfield/css/tokenfield-typeahead.min.css">
     <!-- Font Awesome JS -->
     <script defer src="~/fontawesome-free/js/solid.js"></script>
     <script defer src="~/fontawesome-free/js/fontawesome.min.js"></script>
     <!--[if lt IE 9]><script src="~/lib/html5.min.js"></script><![endif]-->
-
 </head>
-
 <body>
     <div id="app">
         <!-- Sidebar  -->
@@ -57,16 +58,16 @@
                             <li title="我的通知"><i class="fas fa-bell"></i></li>
                         </ul>
                     </div>
-                    
-                    
+
+
                 }
                 else
                 {
                     <p>Welcome</p>
                 }
 
-                <li class="active">
-                    <a href="#">首页</a>
+                <li class="">
+                    <a asp-controller="Home" asp-action="HomePage">首页</a>
                 </li>
                 <li>
                     <a href="#">文章</a>
@@ -111,7 +112,7 @@
                         </a>
                         <ul id="menu" class="nav navbar-nav mr-auto menu">
                             <li class="nav-item">
-                                <a class="nav-link clickactive" href="#">首页</a>
+                                <a class="nav-link" asp-controller="Home" asp-action="HomePage">首页</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#">文章</a>
@@ -149,14 +150,14 @@
                                         <li data-flag="1">
                                             <a data-flag="1" href="#"><i data-flag="1" class="fas fa-bell"></i><span data-flag="1" class="faw">我的通知</span></a>
                                         </li>
-                                        @if (User.HasClaim(ClaimTypes.Role, "Admin")|| User.HasClaim(ClaimTypes.Role, "admin"))
+                                        @if (User.HasClaim(ClaimTypes.Role, "Admin") || User.HasClaim(ClaimTypes.Role, "admin"))
                                         {
                                             <li data-flag="1">
                                                 <a data-flag="1" asp-area="Admin" asp-controller="Admin" asp-action="Index"><i data-flag="1" class="fas fa-cogs"></i><span data-flag="1" class="faw">管理</span></a>
                                             </li>
                                         }
                                         else
-                                        {}
+                                        { }
                                         <hr data-flag="1" />
                                         <li data-flag="1" style="padding-top: 0;">
                                             <a data-flag="1" asp-controller="Account" asp-action="Logout"><i data-flag="1" class="fas fa-sign-out-alt"></i><span data-flag="1" class="faw">退出登录</span></a>
@@ -178,94 +179,68 @@
                         </ul>
                     </div>
                 </nav>
-                <div  data-flag="1" id="search-posts">
-                    <form  data-flag="1" asp-action="Search" method="post">
-                        <input  data-flag="1" type="text" placeholder="请输入搜索内容" name="searchtext" id="searchtext" style="line-height: 30px;width: 400px;border: 1px solid lightblue;padding-left:10px"/>
-                        <button  data-flag="1" type="submit" style="line-height: 30px;border: none;background-color: #309dda;width: 60px;border: 1px solid #309dda;">搜索</button>
+                <div data-flag="1" id="search-posts">
+                    <form data-flag="1" asp-action="Search" method="post">
+                        <input data-flag="1" type="text" placeholder="请输入搜索内容" name="searchtext" id="searchtext" style="line-height: 30px;width: 400px;border: 1px solid lightblue;padding-left:10px" />
+                        <button data-flag="1" type="submit" style="line-height: 30px;border: none;background-color: #309dda;width: 60px;border: 1px solid #309dda;">搜索</button>
                     </form>
                 </div>
-                <div class="container" style="display: flex">
-                    <div id="main-content" class="bg-white" style="overflow: hidden; flex-grow: 1;min-height:900px">
-                        <!--帖子列表-->
-                        <transition-group name="card" tag="div">
-                            <div :key="post.id" class="my-postcard" v-for="(post,index) in posts">
-                                <div class="card flex-md-row mb-2  h-auto" style="border: none; border-bottom: 1px solid #cccccc73;">
-                                    <img class="card-img-right flex-auto d-none d-lg-block" src="~/images/visual_studio.png" alt="Card image cap" style="padding: 10px;width: 280px">
-                                    <div class="card-body d-flex flex-column align-items-start" style="padding-bottom: 5px;padding-top: 0">
-                                        <h3 class="mb-0 mb-2" v-on:click="showPostDetails(post.id,$event)">
-                                            <a class="my-posttitle" href="#" style="text-decoration: none" v-text="post.text"></a>
-                                        </h3>
-                                        <div class="mb-1 text-muted">
-                                            <i class="far fa-clock"></i>&nbsp;<span style="margin-right: 20px;" v-text="post.createtime"></span>
-                                            <i class="fas fa-user"></i>&nbsp;<span class="text-primary" style="cursor: pointer" v-text="post.author"></span>
-                                        </div>
-                                        <p class="card-text" style="font-size: 12px; color: #999; word-wrap: break-word; line-height: 20px;">这是一张更宽的卡片，下面有支持文字作为其他内容的自然引导。这是一张更宽的卡片，下面有支持文字作为其他内容的自然引导。这是一张更宽的卡片这是一张更宽的卡片这是一张更宽的卡片...</p>
-                                        <div id="post-opt">
-                                            <ul>
-                                                <li title="点赞"><i class="fas fa-thumbs-up" style="color: #ccccccb5"></i>&nbsp;<a>7</a></li>
-                                                <li title="浏览"><i class="fas fa-eye" style="color: #ccccccb5"></i><a>&nbsp;128</a></li>
-                                                <li title="收藏"><i class="fas fa-heart" style="color: #ccccccb5"></i><a>&nbsp;78</a></li>  
-                                            </ul>
+                <div class="container" style="display: flex;padding:15px 10px;">
+                    <!--预览-->
+                    <div id="aside-content">
+                        侧边栏
+                    </div> <!--预览 end-->
+                    <div id="write-area">
+                        <form asp-controller="Post" asp-action="WritePost" method="post">
+                            <input type="text" id="txtTitle" maxlength="100" placeholder="输入文章标题">
+                            <!--富文本编辑器-->
+                            <div style="text-align:left;">
+                                <div id="divDemo">
+                                    <p>欢迎使用，请输入内容...</p>
+                                </div>
+                            </div>
+                            <!--富文本编辑器 end-->
+                            <input id="articlehtml" type="hidden" /><!--文章内容-->
+                            <div class="post-info" style="margin-top:25px;font-size:14px;position:relative">
+                                <div style="margin:15px 0;">
+                                    <div class="post-tag" style="display:flex;">
+                                        <div id="posttag" style="">
+                                            <input v-model="articleTag" type="text" class="form-control" id="tokenfield" value="" placeholder="输入文章标签(最多添加5个)" style="max-width:400px;" />
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </transition-group>
-                        
-                        <!--加载动画-->
-                        <div class="loadmore btn">
-                            <div v-on:click="loadmore">
-                                <span class="more">More...</span>
-                                <div class="sk-three-bounce">
-                                    <div class="sk-child sk-bounce1"></div>
-                                    <div class="sk-child sk-bounce2"></div>
-                                    <div class="sk-child sk-bounce3"></div>
+                                <div style="margin-bottom:25px;">
+                                    <!--取值：var value = $('#sel').val();-->
+                                    <select id="sel1" class="article-type" v-model="blogType">
+                                        <option value="">博客类型</option>
+                                        <option value="1">原创</option>
+                                        <option value="2">转载</option>
+                                        <option value="3">翻译</option>
+                                    </select>
+                                    &nbsp;&nbsp;
+                                    <select id="sel2" class="article-type" v-model="postType">
+                                        <option value="">文章类型</option>
+                                        <option value="1">前端</option>
+                                        <option value="2">后端</option>
+                                        <option value="3">移动开发</option>
+                                        <option value="4">编程语言</option>
+                                        <option value="5">程序人生</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <button id="publish" type="button" class="btn btn-outline-primary" v-on:click="publish(1,$event)">发布文章</button>
+                                    <button id="save" type="button" class="btn btn-outline-secondary" v-on:click="publish(2,$event)">保存为草稿</button>
+                                    <button id="preview" type="button" class="btn btn-outline-warning" v-on:click="publish(3,$event)">预览</button>
+                                </div>
+                                <div id="vaildate" v-show="isShowVail">
+                                    <i class="fas fa-exclamation-circle"></i>&nbsp;<span id="validate-mes" v-text="vaildataMessage"></span>
                                 </div>
                             </div>
-                        </div><!--end 加载动画-->
+                        </form>
+
                     </div>
-                    <aside id="aside">
-                        <section class="section my-shadow">
-                            <div class="title">网站公告</div>
-                            <hr />
-                            <div class="notice-list">
-                                <ul>
-                                    <li><a href="#">编写技术简历的47条原则</a><span class="notice-date">12-20</span></li>
-                                    <li><a href="#">编写技术简历的47条原则</a><span class="notice-date">12-20</span></li>
-                                    <li><a href="#">编写技术简历的47条原则</a><span class="notice-date">12-20</span></li>
-                                    <li><a href="#">编写技术简历的47条原则</a><span class="notice-date">12-20</span></li>
-                                    <li><a href="#">编写技术简历的47条原则</a><span class="notice-date">12-20</span></li>
-                                    <li><a href="#">编写技术简历的47条原则</a><span class="notice-date">12-20</span></li>
-                                    <li><a href="#">编写技术简历的47条原则</a><span class="notice-date">12-20</span></li>
-                                    <li><a href="#">编写技术简历的47条原则</a><span class="notice-date">12-20</span></li>
-                                    <li><a href="#">编写技术简历的47条原则</a><span class="notice-date">12-20</span></li>
-                                </ul>
-                            </div>
-                        </section>
-                        <div class="section my-shadow" style="padding-bottom: 5px;">
-                            <div class="header">
-                                <div class="title">
-                                    <span>热门标签</span>
-                                    <a href="#" target="_blank" rel="" class="tag-link">查看全部</a>
-                                </div>
-                            </div>
-                            <hr />
-                            <div class="tag-content">
-                                <div class="tag-list">
-                                    <a href="#" target="_blank" rel="" class="tag ml-auto">C#(23)</a>
-                                    <a href="#" target="_blank" rel="" class="tag ml-auto">ASP.NET(25)</a>
-                                    <a href="#" target="_blank" rel="" class="tag ml-auto">MVC(8)</a>
-                                    <a href="#" target="_blank" rel="" class="tag ml-auto">GitHub(12)</a>
-                                    <a href="#" target="_blank" rel="" class="tag ml-auto">Dotnet Core(45)</a>
-                                    <a href="#" target="_blank" rel="" class="tag ml-auto">架构(2)</a>
-                                    <a href="#" target="_blank" rel="" class="tag ml-auto">产品(2)</a>
-                                    <a href="#" target="_blank" rel="" class="tag ml-auto">职业规划(6)</a>
-                                </div>
-                            </div>
-                        </div>
-                    </aside>
                 </div>
-               
+
                 <!--页脚-->
                 <footer class="footer">
                     <div class="footer-header">
@@ -303,7 +278,7 @@
                     <div class="modal-body">
                         <form id="form1" asp-controller="Account" asp-action="LoginAsync" method="post">
                             <div class="form-group">
-                                
+
                                 <input type="email" name="email" required="" maxlength="64" minlength="7" placeholder="电子邮件" data-purpose="email" value="" class="form-control user-error" aria-invalid="true" asp-for="Email">
                             </div>
                             <div class="form-group">
@@ -338,7 +313,6 @@
             </div>
         </div>
     </div>
-
     <script src="~/js/vue/polyfill.min.js"></script>
     <!-- jQuery CDN - Slim version (=without AJAX) -->
     <script src="~/js/jquery/jquery-3.3.1.min.js"></script>
@@ -346,24 +320,21 @@
     <script src="~/js/bootstrap/popper.min.js"></script>
     <!-- Bootstrap JS -->
     <script src="~/js/bootstrap/bootstrap.min.js"></script>
+    <!--bootstrap 下拉框-->
+    <script src="~/js/bootstrap/bootstrap-select.min.js"></script>
     <!-- jQuery Custom Scroller CDN -->
     <script src="~/js/jquery/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src="~/js/axios/axios.min.js"></script>
+    <!--富文本编辑器-->
+    <script src="~/wangEditor-3.1.1/wangEditor.min.js"></script>
+    <!--tag 输入框-->
+    <script src="~/bootstrap-tokenfield/bootstrap-tokenfield.min.js"></script>
     <script src="~/js/vue/vue.js"></script>
-<script src="~/js/holder/holder.min.js"></script>
-<script src="~/js/home/index.js"></script>
-<script>
-    //占位
-    Holder.addTheme('thumb', {
-        bg: '#68217A',
-        fg: '#FFFFFF',
-        text: 'ASP.NET CORE',
-        size: 18,
-        font: "Monaco",
-        fontweight: "normal"
-    });
-</script>
+    <script src="~/js/holder/holder.min.js"></script>
+    @*<script src="~/js/home/index.js"></script>*@
+    <script src="~/js/posts/posts.js"></script>
+    <script type="text/javascript">
 
+    </script>
 </body>
-
 </html>

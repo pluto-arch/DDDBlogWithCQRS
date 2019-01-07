@@ -33,6 +33,7 @@
     <Folder Include="wwwroot\images\" />
     <Folder Include="wwwroot\elementUI\" />
     <Folder Include="wwwroot\js\vue\" />
+    <Folder Include="wwwroot\bootstrap-tokenfield\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -1580,6 +1581,9 @@
     <None Include="wwwroot\fontawesome-free\webfonts\fa-regular-400.woff2" />
     <None Include="wwwroot\fontawesome-free\webfonts\fa-solid-900.svg" />
     <None Include="wwwroot\fontawesome-free\webfonts\fa-solid-900.woff2" />
+    <None Include="wwwroot\wangEditor-3.1.1\wangEditor.js" />
+    <None Include="wwwroot\wangEditor-3.1.1\wangEditor.min.js" />
+    <None Include="wwwroot\wangEditor-3.1.1\wangEditor.min.js.map" />
   </ItemGroup>
 
   <ItemGroup>

@@ -66,7 +66,6 @@ var app = new Vue({
     mounted: function () {
         this.$nextTick(function () {
             this.setNavBarMenu();
-
         });
     },
     methods: {
@@ -174,7 +173,7 @@ var app = new Vue({
             this.isSearch = !this.isSearch;           
         }
         , showPostDetails: function (value, event) {
-            window.location.href = "/Home/PostDetails?id=" + value;
+            window.location.href = "/Post/PostDetails?id=" + value;
         }
     },
     watch: {
