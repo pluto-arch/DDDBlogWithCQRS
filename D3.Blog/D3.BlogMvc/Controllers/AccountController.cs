@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.InteropServices.ComTypes;
 using D3.BlogMvc.Hubs;
 using D3.BlogMvc.Models.AccountModels;
 using Infrastructure.Data.Database;
@@ -11,6 +12,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using D3.Blog.Domain.Infrastructure;
+using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -23,16 +26,30 @@ namespace D3.BlogMvc.Controllers
         private readonly RoleManager<AppBlogRole> _roleManager;
         private readonly SignInManager<AppBlogUser> _signInManager;
         private readonly Serilog.ILogger _logger;
+        private IUser _user;
 
-
-        public AccountController (UserManager<AppBlogUser> userManager, RoleManager<AppBlogRole> roleManager, SignInManager<AppBlogUser> signInManager, Serilog.ILogger logger)
+        /// <summary>
+        /// 构造函数注入
+        /// </summary>
+        /// <param name="userManager"></param>
+        /// <param name="roleManager"></param>
+        /// <param name="signInManager"></param>
+        /// <param name="logger"></param>
+        /// <param name="user"></param>
+        public AccountController (UserManager<AppBlogUser> userManager, RoleManager<AppBlogRole> roleManager, SignInManager<AppBlogUser> signInManager, Serilog.ILogger logger, IUser user)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
             _logger = logger;
+            _user = user;
         }
         
+        /// <summary>
+        /// 非弹窗登录页面
+        /// </summary>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> Login(string returnUrl = null)
@@ -42,16 +59,15 @@ namespace D3.BlogMvc.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> test()
-        {
-            AppBlogUser user=await _userManager.FindByEmailAsync("");
-            return Json("1212");
-        }
+        
 
 
-
+        /// <summary>
+        /// 登录
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> LoginAsync([FromForm]LoginModel model, string returnUrl = null)
@@ -65,7 +81,7 @@ namespace D3.BlogMvc.Controllers
                     var userroles = await _userManager.GetRolesAsync(user);
                     
                     await _signInManager.SignOutAsync();
-                    /*await  _userManager.AddClaimAsync(user, new Claim("sbh", "12345678"));注册的时候添加，可以登陆后附加到cookie中*/
+                    /*await  _userManager.AddClaimAsync(user, new Claim("sbh", "12345678"));注册的时候添加，然后存在于数据库，可以登陆后附加到cookie中*/
 
 
                     //第三个参数,指示在浏览器关闭后登录cookie是否应该保留的标志，true 则按照startup中配置的时间保存，否则就不保存关闭浏览器就失效。
@@ -162,13 +178,21 @@ namespace D3.BlogMvc.Controllers
         #endregion
 
 
-
+        /// <summary>
+        /// 注册页面
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]    
         public IActionResult Register()
         {
             return View();
         }
+        /// <summary>
+        /// 注册处理
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -202,11 +226,16 @@ namespace D3.BlogMvc.Controllers
             return new JsonResult("");
         }
 
-        
+        /// <summary>
+        /// 注销
+        /// </summary>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Logout(string returnUrl=null)
         {
+            var user = User.Identity.Name;
             await _signInManager.SignOutAsync();
-            // _logger.LogInformation("User logged out.");
+            _logger.CustomInformation(user,"","Dev","localhost","用户注销");
             if (returnUrl != null)
             {
                 return LocalRedirect(returnUrl);
@@ -218,12 +247,19 @@ namespace D3.BlogMvc.Controllers
         }
 
 
-
+        /// <summary>
+        /// 访问受限
+        /// </summary>
+        /// <returns></returns>
         public IActionResult AccessDenied()
         {
             return new JsonResult("访问受限");
         }
-
+        /// <summary>
+        /// 重定向
+        /// </summary>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
         private IActionResult RedirectToLocal(string returnUrl)
         {
             if (Url.IsLocalUrl(returnUrl))
