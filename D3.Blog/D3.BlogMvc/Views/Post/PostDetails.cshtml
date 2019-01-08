@@ -32,6 +32,11 @@
     <script defer src="~/fontawesome-free/js/solid.js"></script>
     <script defer src="~/fontawesome-free/js/fontawesome.min.js"></script>
     <!--[if lt IE 9]><script src="~/lib/html5.min.js"></script><![endif]-->
+    <style>
+        #post-detail a {
+            color: #4285f4;
+        }
+    </style>
 </head>
 
 <body>
@@ -125,7 +130,7 @@
                         </ul>
                         <ul id="useropt" class="nav navbar-nav ml-auto useropt">
                             <li id="write-post" class="nav-item" style="width: 88px;position: relative;">
-                                <a class="nav-link" href="#" style="color: #4285F4">
+                                <a class="nav-link" asp-controller="Post" asp-action="WritePost" style="color: #4285F4">
                                     <i class="far fa-file-word"></i>&nbsp;写文章
                                 </a>
                             </li>
@@ -204,11 +209,73 @@
                                     <span>&nbsp;评论(0)</span>
                                 </p>
                             </div>
-                            <div>
+                            <div id="post-fullcontent">
                                 <!--内容-->
-                                <p>欢迎使用<b>wangEditor 富文本编辑器</b>，请输入内容...</p><p><span style="text-decoration-line: underline; font-weight: bold; font-family: 宋体;">wangEditor 富文本编辑器&nbsp; &nbsp; &nbsp;</span><br></p><p><img src="data:image/png;base64,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" style="max-width:100%;"><span style="text-decoration-line: underline; font-weight: bold; font-family: 宋体;"><br></span></p>
+                                <p>GFM a-tail link <a href="https://github.com/pandao" title="&#64;pandao" class="at-link">@@pandao</a>  邮箱地址自动链接 <a href="mailto:test.test@gmail.com">test.test@gmail.com</a>  <a href="mailto:www@vip.qq.com">www@vip.qq.com</a></p>
+                                <blockquote>
+                                    <p><a href="https://github.com/pandao" title="&#64;pandao" class="at-link">@@pandao</a></p>
+                                </blockquote>
+                                <h3 id="h3--codes"><a name="多语言代码高亮 Codes" class="reference-link"></a><span class="header-link octicon octicon-link"></span>多语言代码高亮 Codes</h3><h4 id="h4--inline-code"><a name="行内代码 Inline code" class="reference-link"></a><span class="header-link octicon octicon-link"></span>行内代码 Inline code</h4><p>执行命令：<code>npm install marked</code></p>
+                                <h4 id="h4-u7F29u8FDBu98CEu683C"><a name="缩进风格" class="reference-link"></a><span class="header-link octicon octicon-link"></span>缩进风格</h4><p>即缩进四个空格，也做为实现类似 <code>&lt;pre&gt;</code> 预格式化文本 ( Preformatted Text ) 的功能。</p>
+                                <pre><code>&lt;?php
+    echo &quot;Hello world!&quot;;
+?&gt;
+</code></pre><p>预格式化文本：</p>
+                                <pre><code>| First Header  | Second Header |
+| ------------- | ------------- |
+| Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  |
+</code></pre><h4 id="h4-js-"><a name="JS代码" class="reference-link"></a><span class="header-link octicon octicon-link"></span>JS代码　</h4><pre><code class="lang-javascript">function test() {
+    console.log(&quot;Hello world!&quot;);
+}
+
+(function(){
+    var box = function() {
+        return box.fn.init();
+    };
+
+    box.prototype = box.fn = {
+        init : function(){
+            console.log(&#39;box.init()&#39;);
+
+            return this;
+        },
+
+        add : function(str) {
+            alert(&quot;add&quot;, str);
+
+            return this;
+        },
+
+        remove : function(str) {
+            alert(&quot;remove&quot;, str);
+
+            return this;
+        }
+    };
+
+    box.fn.init.prototype = box.fn;
+
+    window.box =box;
+})();
+
+var testBox = box();
+testBox.add(&quot;jQuery&quot;).remove(&quot;jQuery&quot;);
+</code></pre>
                                 <!--end 内容-->
                             </div>
+                            
+                            
+                            <!--评论-->
+                            <div id="post-comment" style="margin-top: 15px;">
+                                <p>这里时评论区域</p>
+                                <p>这里时评论区域</p>
+                                <p>这里时评论区域</p>
+                                <p>这里时评论区域</p>
+                                <p>这里时评论区域</p>
+                                <p>这里时评论区域</p>
+                            </div>
+
                         </div>
                     </div>
                     <aside id="aside">
@@ -338,7 +405,6 @@
     <script src="~/js/axios/axios.min.js"></script>
     <script src="~/js/vue/vue.js"></script>
     <script src="~/js/holder/holder.min.js"></script>
-    <script src="~/js/home/index.js"></script><!--基本的js-->
     <script src="~/js/posts/posts.js"></script>
     <script>
     //占位

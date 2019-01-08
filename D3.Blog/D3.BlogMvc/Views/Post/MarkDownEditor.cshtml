@@ -1,0 +1,342 @@
+﻿
+
+@using System.Security.Claims
+@using Infrastructure.Data.Database
+@using Infrastructure.Identity.Models
+@using Microsoft.AspNetCore.Identity
+@model D3.BlogMvc.Models.AccountModels.LoginModel
+@inject UserManager<AppBlogUser> userManager
+@inject SignInManager<AppBlogUser> signInManager
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1">
+    <meta name=viewport content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
+
+    <title>YL-Blog-写文章</title>
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="~/css/bootstrap/bootstrap.min.css">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="~/css/home/style.css">
+    <link rel="stylesheet" href="~/css/posts/write.css">
+    <link rel="stylesheet" href="~/fontawesome-free/css/all.css">
+    <link rel="stylesheet" href="~/css/bootstrap/bootstrap-select.min.css">
+    <link rel="stylesheet" href="~/lib/markdown/css/editormd.min.css" />
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet" href="~/css/jquery/jquery.mCustomScrollbar.min.css">
+    <link rel="stylesheet" href="~/bootstrap-tokenfield/css/bootstrap-tokenfield.min.css">
+    <link rel="stylesheet" href="~/bootstrap-tokenfield/css/tokenfield-typeahead.min.css">
+    <!--[if lt IE 9]><script src="~/lib/html5.min.js"></script><![endif]-->
+</head>
+<body>
+    <div id="app">
+        <!-- Sidebar  -->
+        <nav id="sidebar">
+            <div id="dismiss">
+                <i class="fas fa-arrow-left"></i>
+            </div>
+            <div class="sidebar-header">
+                <img src="https://mdbootstrap.com/img/logo/mdb-transparent.png" height="50" alt="mdb logo">
+            </div>
+            <ul id="side-menu" class="list-unstyled components">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div id="side-user">
+                        <p style="padding-top: 0px;padding-bottom: 0px; padding-left: 20px;">@User.Identity.Name</p>
+                        <ul>
+                            <li title="个人中心"><i class="far fa-user-circle"></i></li>
+                            <li title="草稿"><i class="fas fa-file-alt"></i></li>
+                            <li title="我的收藏"><i class="fas fa-star"></i></li>
+                            <li title="我的评论"><i class="fas fa-tag"></i></li>
+                            <li title="我的通知"><i class="fas fa-bell"></i></li>
+                        </ul>
+                    </div>
+                }
+                else
+                {
+                    <p>Welcome</p>
+                }
+
+                <li class="">
+                    <a asp-controller="Home" asp-action="HomePage">首页</a>
+                </li>
+                <li>
+                    <a href="#">文章</a>
+                </li>
+                <li>
+                    <a href="#">工具技巧</a>
+                </li>
+                <li>
+                    <a href="#">话题心得</a>
+                </li>
+            </ul>
+
+            <ul class="list-unstyled CTAs">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <li data-flag="1" style="padding-top: 0;">
+                        <a data-flag="1" asp-controller="Account" asp-action="Logout"><i data-flag="1" class="fas fa-sign-out-alt"></i><span data-flag="1" class="faw">退出登录</span></a>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a href="#" class="download" data-toggle="modal" data-target="#Login">登录</a>
+                    </li>
+                }
+
+                <li>
+                    <a asp-controller="Post" asp-action="WritePost" class="article"><i class="far fa-file-word"></i>&nbsp;写文章</a>
+                </li>
+            </ul>
+        </nav>
+        <div class="wrapper">
+            <!-- Page Content  -->
+            <div id="content">
+                <nav class="navbar navbar-expand-lg navbar-light bg-white" style="margin-bottom:0">
+                    <div class="container-fluid">
+                        <a class="" id="sidebarCollapse" style="font-size: 25px;width: 60px;text-align: center;">
+                            <i class="fas fa-align-justify"></i>
+                        </a>
+                        <a class="navbar-brand mylogo" href="#">
+                            <img src="https://mdbootstrap.com/img/logo/mdb-transparent.png" height="30" alt="mdb logo">
+                        </a>
+                        <ul id="menu" class="nav navbar-nav mr-auto menu">
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Home" asp-action="HomePage">首页</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">文章</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">工具技巧</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">话题心得</a>
+                            </li>
+                        </ul>
+                        <ul id="useropt" class="nav navbar-nav ml-auto useropt">
+                            <li id="write-post" class="nav-item" style="width: 120px;position: relative;">
+                                <a class="nav-link" asp-controller="Post" asp-action="WritePost" style="color: #4285F4">
+                                    &nbsp;富文本编辑器
+                                </a>
+                            </li>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <li data-flag="1" id="user-info" style="position: relative">
+                                    <a data-flag="1" v-on:click="dropDownOpt($event)" class="nav-link" href="#"><i data-flag="1" class="fa fa-user"></i>&nbsp;&nbsp;@User.Identity.Name&nbsp;&nbsp;<i data-flag="1" class="fa fa-caret-down"></i></a>
+                                    <ul data-flag="1" id="usr-opt" class="user-opt-list" style="z-index: 9999">
+                                        <li data-flag="1">
+                                            <a data-flag="1" href="#"><i data-flag="1" class="far fa-user-circle"></i><span data-flag="1" class="faw">我的主页</span></a>
+                                        </li>
+                                        <li data-flag="1">
+                                            <a data-flag="1" href="#"><i data-flag="1" class="fas fa-file-alt"></i><span data-flag="1" class="faw">草稿</span></a>
+                                        </li>
+                                        <li data-flag="1">
+                                            <a data-flag="1" href="#"><i data-flag="1" class="fas fa-star"></i><span data-flag="1" class="faw">我的收藏</span></a>
+                                        </li>
+                                        <li data-flag="1">
+                                            <a data-flag="1" href="#"><i data-flag="1" class="fas fa-tag"></i><span data-flag="1" class="faw">我的评论</span></a>
+                                        </li>
+                                        <li data-flag="1">
+                                            <a data-flag="1" href="#"><i data-flag="1" class="fas fa-bell"></i><span data-flag="1" class="faw">我的通知</span></a>
+                                        </li>
+                                        @if (User.HasClaim(ClaimTypes.Role, "Admin") || User.HasClaim(ClaimTypes.Role, "admin"))
+                                        {
+                                            <li data-flag="1">
+                                                <a data-flag="1" asp-area="Admin" asp-controller="Admin" asp-action="Index"><i data-flag="1" class="fas fa-cogs"></i><span data-flag="1" class="faw">管理</span></a>
+                                            </li>
+                                        }
+                                        else
+                                        { }
+                                        <hr data-flag="1" />
+                                        <li data-flag="1" style="padding-top: 0;">
+                                            <a data-flag="1" asp-controller="Account" asp-action="Logout"><i data-flag="1" class="fas fa-sign-out-alt"></i><span data-flag="1" class="faw">退出登录</span></a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+                            else
+                            {
+                                <li id="user-login" class="nav-item" style="width: 50px;">
+                                    <a class="nav-link" href="#" data-toggle="modal" data-target="#Login">登录</a>
+                                </li>
+                            }
+                          
+                        </ul>
+                    </div>
+                </nav>
+                <div class="container-fluid" style="display: flex;">
+                    <div id="write-area">
+                        <form id="formPost" asp-controller="Post" asp-action="WritePost" method="post">
+                            <input type="text" id="txtTitle" maxlength="100" placeholder="输入文章标题">
+                            <!--编辑器-->
+                            <div style="text-align:left;display: none">
+                                <div id="divDemo">
+                                    <p>欢迎使用，请输入内容...</p>
+                                </div>
+                            </div>
+                            <div id="test-editormd">
+                                <textarea style="display: none;"></textarea>
+                            </div>
+                            <!--编辑器 end-->
+                            <input id="articlehtml" type="hidden" /><!--文章内容-->
+                            <div class="post-info" style="margin-top:25px;font-size:14px;">
+                                <div style="margin: 15px 0;">
+                                    <div id="editormd" style="display: none">
+                                        <textarea style="display:none;">### Hello Editor.md !</textarea>
+                                    </div>
+                                    <div class="post-tag" style="display: flex;">
+                                        <div id="posttag" style="">
+                                            <input type="text" class="form-control" id="tokenfield" value="" placeholder="输入文章标签(最多添加5个)" style="max-width: 400px;" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="margin-bottom:25px;">
+                                    <!--取值：var value = $('#sel').val();-->
+                                    <select id="sel1" class="article-type">
+                                        <option value="">博客类型</option>
+                                        <option value="1">原创</option>
+                                        <option value="2">转载</option>
+                                        <option value="3">翻译</option>
+                                    </select>
+                                    &nbsp;&nbsp;
+                                    <select id="sel2" class="article-type">
+                                        <option value="">文章类型</option>
+                                        <option value="1">前端</option>
+                                        <option value="2">后端</option>
+                                        <option value="3">移动开发</option>
+                                        <option value="4">编程语言</option>
+                                        <option value="5">程序人生</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <button id="publish" type="button" class="btn btn-outline-primary" v-on:click="publish(1,$event)">发布文章</button>
+                                    <button id="save" type="button" class="btn btn-outline-secondary" v-on:click="publish(2,$event)">保存为草稿</button>
+                                    <button id="preview" type="button" class="btn btn-outline-warning" v-on:click="publish(3,$event)">预览</button>
+                                </div>
+                                <div id="vaildate" v-show="isShowVail">
+                                    <i class="fas fa-exclamation-circle"></i>&nbsp;<span id="validate-mes" v-text="vaildataMessage"></span>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+
+                <!--页脚-->
+                <footer class="footer">
+                    <div class="footer-header">
+                        <p>
+                            <span>Copyright</span><span>&copy;</span><span>2018&nbsp;&nbsp;</span><a href="#">阿里布布</a><span>
+                                &nbsp;&nbsp;Design By
+                                zyl
+                            </span>
+                    </div>
+                </footer>
+            </div>
+        </div>
+
+
+        <!--附带效果html-->
+        <div class="overlay"></div><!--侧边菜单覆盖物-->
+        <div class="tooltip bs-tooltip-top scroll-to-top" data-placement="left" data-toggle="tooltip" title="回到顶部">
+            <!--回到顶部-->
+            <i class="far fa-arrow-alt-circle-up fa-2x"></i>
+        </div>
+        <div class="tooltip bs-tooltip-top feedback" data-placement="left" data-toggle="tooltip" title="建议反馈">
+            <!--问题反馈和回到顶部-->
+            <i class="far fa-envelope fa-2x"></i>
+        </div>
+        <!--Modal弹窗登录-->
+        <div class="modal fade" id="Login" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document" style="width: 300px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">登录到您的账户</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="form1" asp-controller="Account" asp-action="LoginAsync" method="post">
+                            <div class="form-group">
+
+                                <input type="email" name="email" required="" maxlength="64" minlength="7" placeholder="电子邮件" data-purpose="email" value="" class="form-control user-error" aria-invalid="true" asp-for="Email">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" name="password" minlength="6" maxlength="64" class="textinput textInput form-control user-error" placeholder="密码" id="id_password" required="" data-purpose="password" aria-invalid="true" asp-for="Password">
+                            </div>
+                            <a v-on:click="Login" class="btn btn-default" style="width: 100%;background-color: lightblue">Sign in!</a>
+                            <p style="text-align: center; width: 100%; padding: 10px;">或<a href="#" style="text-decoration: none; color: #4285f4;font-size: 14px">&nbsp;忘记密码？</a></p>
+                        </form>
+                        <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+                            <p style="text-align: center; width: 100%; font-size: 10px;">
+                                关联账户登录：
+                                @{
+                                    var loginProviders = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+                                    if (loginProviders.Count == 0)
+                                    { }
+                                    else
+                                    {
+                                        foreach (var provider in loginProviders)
+                                        {
+                                            <button type="submit" class="" data-toggle="tooltip" data-placement="top" title="正在准备中" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.Name</button>
+                                        }
+                                    }
+                                }
+
+                            </p>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <h5 style="text-align: center; width: 100%;">还没有帐户吗？ <a href="#" style="color: #4285f4">注册</a></h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/js/vue/polyfill.min.js"></script>
+    <!-- jQuery CDN - Slim version (=without AJAX) -->
+    <script src="~/js/jquery/jquery-3.3.1.min.js"></script>
+    <!-- Popper.JS -->
+    <script src="~/js/bootstrap/popper.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="~/js/bootstrap/bootstrap.min.js"></script>
+    <!--bootstrap 下拉框-->
+    <script src="~/js/bootstrap/bootstrap-select.min.js"></script>
+    <!-- jQuery Custom Scroller CDN -->
+    <script src="~/js/jquery/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="~/js/axios/axios.min.js"></script>
+    <!--富文本编辑器-->
+    <script src="~/wangEditor-3.1.1/wangEditor.min.js"></script>
+    <!--tag 输入框-->
+    <script src="~/bootstrap-tokenfield/bootstrap-tokenfield.min.js"></script>
+    <script src="~/js/vue/vue.js"></script>
+    <script src="~/js/holder/holder.min.js"></script>
+    <script src="~/lib/markdown/editormd.min.js"></script>
+    <script src="~/js/posts/writepost.js"></script>
+    <script type="text/javascript">
+        
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

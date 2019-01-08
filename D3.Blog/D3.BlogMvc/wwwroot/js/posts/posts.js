@@ -12,29 +12,15 @@ var app = new Vue({
         blogType: "",
         postType: "",
         vaildataMessage: "",
-        isShowVail: false,
-        editor: Object
+        isShowVail: false
     },
     mounted: function () {
         this.$nextTick(function () {
             this.setNavBarMenu();
-            this.setBaseCtl();
         });
     },
     methods: {
-        setBaseCtl: function () {
-            var v = this;
-            /* 富文本编辑器 */
-            var E = window.wangEditor;
-            var editor = new E('#divDemo');
-            editor.customConfig.uploadImgShowBase64 = true;
-            editor.customConfig.linkImgCallback = function (url) {
-                alert("插入网络图片的回调") // url 即插入图片的地址
-            }
-            editor.create();
-            v.editor = editor;
-        }
-        , setNavBarMenu: function () {
+        setNavBarMenu: function () {
             var v = this;
             $('#usr-opt').hide();
             $('body').click(function (event) {
@@ -42,7 +28,7 @@ var app = new Vue({
                     v.isDown = false;
                     v.isSearch = false;
                 }
-            });
+            });//点击其余地方收起
 
             $(window).scroll(function () {
                 var topp = $(document).scrollTop();
@@ -55,13 +41,13 @@ var app = new Vue({
                 } else {
                     $('.scroll-to-top').hide();
                 }
-            });
+            });//回到顶部
             $('.scroll-to-top').click(function () {
                 $('html ,body').animate({ scrollTop: 0 }, 300);
                 return false;
             });
 
-            $('[data-toggle="tooltip"]').tooltip()
+            $('[data-toggle="tooltip"]').tooltip();
             $('#dismiss, .overlay').on('click', function () {
                 $('#sidebar').removeClass('active');
                 $('.overlay').removeClass('active');
@@ -85,7 +71,14 @@ var app = new Vue({
                 $('#side-menu li').each(function () {
                     this.className = this == f ? 'active' : ''
                 });
-            });
+            });//侧边菜单
+
+            $('#aside-content .write-aside').click(function() {
+                var clickel = this;
+                $('#aside-content .write-aside').removeClass('checked');
+                $(clickel).addClass('checked');
+            });//写博客页面侧边菜单
+
         }
         , Login: function () {
             var v = this;
@@ -117,8 +110,9 @@ var app = new Vue({
             if (v.editor.txt.text() == "") {
                 v.isShowVail = true;
                 v.vaildataMessage = "请输入内容";
-                setTimeout(function () { v.isShowVail=false},1000)
+                setTimeout(function() { v.isShowVail = false }, 1000);
             }
+            console.log(v.mdeditor.getHTML());
             switch (flag) {
                 case 1:
                     //发布

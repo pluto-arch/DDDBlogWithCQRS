@@ -26,13 +26,11 @@
     <link rel="stylesheet" href="~/css/posts/write.css">
     <link rel="stylesheet" href="~/fontawesome-free/css/all.css">
     <link rel="stylesheet" href="~/css/bootstrap/bootstrap-select.min.css">
+    <link rel="stylesheet" href="~/lib/markdown/css/editormd.min.css" />
     <!-- Scrollbar Custom CSS -->
     <link rel="stylesheet" href="~/css/jquery/jquery.mCustomScrollbar.min.css">
     <link rel="stylesheet" href="~/bootstrap-tokenfield/css/bootstrap-tokenfield.min.css">
     <link rel="stylesheet" href="~/bootstrap-tokenfield/css/tokenfield-typeahead.min.css">
-    <!-- Font Awesome JS -->
-    <script defer src="~/fontawesome-free/js/solid.js"></script>
-    <script defer src="~/fontawesome-free/js/fontawesome.min.js"></script>
     <!--[if lt IE 9]><script src="~/lib/html5.min.js"></script><![endif]-->
 </head>
 <body>
@@ -58,8 +56,6 @@
                             <li title="我的通知"><i class="fas fa-bell"></i></li>
                         </ul>
                     </div>
-
-
                 }
                 else
                 {
@@ -94,16 +90,13 @@
                     </li>
                 }
 
-                <li>
-                    <a asp-controller="Post" asp-action="WritePost" class="article"><i class="far fa-file-word"></i>&nbsp;写文章</a>
-                </li>
             </ul>
         </nav>
         <div class="wrapper">
             <!-- Page Content  -->
             <div id="content">
-                <nav class="navbar navbar-expand-lg navbar-light bg-white">
-                    <div class="container">
+                <nav class="navbar navbar-expand-lg navbar-light bg-white" style="margin-bottom: 10px">
+                    <div class="container-fluid">
                         <a class="" id="sidebarCollapse" style="font-size: 25px;width: 60px;text-align: center;">
                             <i class="fas fa-align-justify"></i>
                         </a>
@@ -125,16 +118,11 @@
                             </li>
                         </ul>
                         <ul id="useropt" class="nav navbar-nav ml-auto useropt">
-                            <li id="write-post" class="nav-item" style="width: 88px;position: relative;">
-                                <a class="nav-link" asp-controller="Post" asp-action="WritePost" style="color: #4285F4">
-                                    <i class="far fa-file-word"></i>&nbsp;写文章
-                                </a>
-                            </li>
                             @if (User.Identity.IsAuthenticated)
                             {
                                 <li data-flag="1" id="user-info" style="position: relative">
                                     <a data-flag="1" v-on:click="dropDownOpt($event)" class="nav-link" href="#"><i data-flag="1" class="fa fa-user"></i>&nbsp;&nbsp;@User.Identity.Name&nbsp;&nbsp;<i data-flag="1" class="fa fa-caret-down"></i></a>
-                                    <ul data-flag="1" id="usr-opt" class="user-opt-list">
+                                    <ul data-flag="1" id="usr-opt" class="user-opt-list" style="z-index: 9999">
                                         <li data-flag="1">
                                             <a data-flag="1" href="#"><i data-flag="1" class="far fa-user-circle"></i><span data-flag="1" class="faw">我的主页</span></a>
                                         </li>
@@ -171,11 +159,7 @@
                                     <a class="nav-link" href="#" data-toggle="modal" data-target="#Login">登录</a>
                                 </li>
                             }
-                            <li data-flag="1" class="nav-item" style="width: 40px;">
-                                <a data-flag="1" class="nav-link" href="#" v-on:click="optSearch($event)">
-                                    <span data-flag="1" class="fa fa-search" title="搜索"></span>
-                                </a>
-                            </li>
+                          
                         </ul>
                     </div>
                 </nav>
@@ -185,13 +169,20 @@
                         <button data-flag="1" type="submit" style="line-height: 30px;border: none;background-color: #309dda;width: 60px;border: 1px solid #309dda;">搜索</button>
                     </form>
                 </div>
-                <div class="container" style="display: flex;padding:15px 10px;">
-                    <!--预览-->
+                <div class="container-fluid" style="display: flex; padding: 0 25px;">
                     <div id="aside-content">
-                        侧边栏
-                    </div> <!--预览 end-->
+                        <ul>
+                            <li class="write-aside checked"><a href="#">富文本编辑器</a></li>
+                            <li class="write-aside"><a asp-controller="Post" asp-action="MarkDownEditor">MarkDown编辑器</a></li>
+                        </ul>
+                        <hr />
+                        <ul>
+                            <li class="write-aside"><a href="#">文章管理</a></li>
+                            <li class="write-aside"><a href="#">评论管理</a></li>
+                        </ul>
+                    </div>
                     <div id="write-area">
-                        <form asp-controller="Post" asp-action="WritePost" method="post">
+                        <form id="formPost" asp-controller="Post" asp-action="WritePost" method="post">
                             <input type="text" id="txtTitle" maxlength="100" placeholder="输入文章标题">
                             <!--富文本编辑器-->
                             <div style="text-align:left;">
@@ -199,26 +190,32 @@
                                     <p>欢迎使用，请输入内容...</p>
                                 </div>
                             </div>
+                            <div id="test-editormd" style="display: none">
+                                <textarea style="display: none;"></textarea>
+                            </div>
                             <!--富文本编辑器 end-->
                             <input id="articlehtml" type="hidden" /><!--文章内容-->
                             <div class="post-info" style="margin-top:25px;font-size:14px;position:relative">
-                                <div style="margin:15px 0;">
-                                    <div class="post-tag" style="display:flex;">
+                                <div style="margin: 15px 0;">
+                                    <div id="editormd" style="display: none">
+                                        <textarea style="display:none;">### Hello Editor.md !</textarea>
+                                    </div>
+                                    <div class="post-tag" style="display: flex;">
                                         <div id="posttag" style="">
-                                            <input v-model="articleTag" type="text" class="form-control" id="tokenfield" value="" placeholder="输入文章标签(最多添加5个)" style="max-width:400px;" />
+                                            <input type="text" class="form-control" id="tokenfield" value="" placeholder="输入文章标签(最多添加5个)" style="max-width: 400px;" />
                                         </div>
                                     </div>
                                 </div>
                                 <div style="margin-bottom:25px;">
                                     <!--取值：var value = $('#sel').val();-->
-                                    <select id="sel1" class="article-type" v-model="blogType">
+                                    <select id="sel1" class="article-type">
                                         <option value="">博客类型</option>
                                         <option value="1">原创</option>
                                         <option value="2">转载</option>
                                         <option value="3">翻译</option>
                                     </select>
                                     &nbsp;&nbsp;
-                                    <select id="sel2" class="article-type" v-model="postType">
+                                    <select id="sel2" class="article-type">
                                         <option value="">文章类型</option>
                                         <option value="1">前端</option>
                                         <option value="2">后端</option>
@@ -331,8 +328,8 @@
     <script src="~/bootstrap-tokenfield/bootstrap-tokenfield.min.js"></script>
     <script src="~/js/vue/vue.js"></script>
     <script src="~/js/holder/holder.min.js"></script>
-    @*<script src="~/js/home/index.js"></script>*@
-    <script src="~/js/posts/posts.js"></script>
+    <script src="~/lib/markdown/editormd.min.js"></script>
+    <script src="~/js/posts/writepost.js"></script>
     <script type="text/javascript">
 
     </script>

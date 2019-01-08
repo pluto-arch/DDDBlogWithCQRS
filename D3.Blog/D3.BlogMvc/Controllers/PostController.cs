@@ -40,7 +40,7 @@ namespace D3.BlogMvc.Controllers
         }
 
         /// <summary>
-        /// 写文章页面
+        /// 写文章页面 富文本编辑器
         /// </summary>
         /// <returns></returns>
         [Authorize]
@@ -59,7 +59,19 @@ namespace D3.BlogMvc.Controllers
         { 
             return Json("ok");
         }
-                
+
+
+        /// <summary>
+        /// 写文章页面，markdown编辑器
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize]
+        public IActionResult MarkDownEditor()
+        {
+            return View();
+        }
+
 
 
         /// <summary>

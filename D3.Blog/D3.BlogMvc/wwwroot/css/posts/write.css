@@ -1,8 +1,7 @@
 ﻿#aside-content {
-    width: 200px;
+    width: 220px;
     background-color: white;
     margin-right: 5px;
-    padding: 10px;
 }
 #write-area {
     width: 100%;
@@ -75,4 +74,32 @@
 }
 .hide{
     opacity:0;
+}
+
+#aside-content ul {
+    padding: 0;
+    margin: 0;
+}
+#aside-content ul li {
+    list-style: none;
+    line-height: 30px;
+    text-align: left;
+    padding: 10px;
+}
+    #aside-content ul li:hover {
+        background-color: #3ba8f5;
+    }
+#aside-content .checked {
+    background-color: #3ba8f5;
+}
+.w-e-menu{
+    z-index: 2 !important;
+}
+.w-e-text-container{
+    z-index: 1 !important;
+}
+@media(max-width:990px) {
+    #aside-content {
+        display: none;
+    }
 }
