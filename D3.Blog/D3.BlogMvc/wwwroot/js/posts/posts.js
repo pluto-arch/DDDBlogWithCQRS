@@ -79,6 +79,9 @@ var app = new Vue({
                 $(clickel).addClass('checked');
             });//写博客页面侧边菜单
 
+            $('#tokenfield').tokenfield({ minWidth:400});//标签输入
+
+
         }
         , Login: function () {
             var v = this;
