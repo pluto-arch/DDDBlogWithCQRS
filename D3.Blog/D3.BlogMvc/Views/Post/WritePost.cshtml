@@ -2,7 +2,7 @@
 @using Infrastructure.Data.Database
 @using Infrastructure.Identity.Models
 @using Microsoft.AspNetCore.Identity
-@model D3.BlogMvc.Models.AccountModels.LoginModel
+@model D3.BlogMvc.Models.Search
 @inject UserManager<AppBlogUser> userManager
 @inject SignInManager<AppBlogUser> signInManager
 @{
@@ -159,7 +159,7 @@
                                     <a class="nav-link" href="#" data-toggle="modal" data-target="#Login">登录</a>
                                 </li>
                             }
-                          
+
                         </ul>
                     </div>
                 </nav>
@@ -183,7 +183,7 @@
                     </div>
                     <div id="write-area">
                         <form id="formPost" asp-controller="Post" asp-action="WritePost" method="post">
-                            <input type="text" id="txtTitle" maxlength="100" placeholder="输入文章标题">
+                            <input type="text" id="txtTitle" maxlength="100" placeholder="输入文章标题" asp-for="Title">
                             <!--富文本编辑器-->
                             <div style="text-align:left;">
                                 <div id="divDemo">
@@ -194,44 +194,42 @@
                                 <textarea style="display: none;"></textarea>
                             </div>
                             <!--富文本编辑器 end-->
-                            <input id="articlehtml" type="hidden" /><!--文章内容-->
+                            <input id="articlehtml" type="hidden" asp-for="Content" /><!--文章内容-->
                             <div class="post-info" style="margin-top:25px;font-size:14px;position:relative">
                                 <div style="margin: 15px 0;">
-                                    <div id="editormd" style="display: none">
-                                        <textarea style="display:none;">### Hello Editor.md !</textarea>
-                                    </div>
                                     <div class="post-tag" style="display: flex;">
-                                        <div id="posttag" style="">
-                                            <input type="text" class="form-control" id="tokenfield" value="" placeholder="输入文章标签(最多添加5个)" />
+                                        <div id="posttag">
+                                            <input asp-for="PostTag" type="text" class="form-control" id="tokenfield" value="" placeholder="输入文章标签" /><span style="font-size: 10px;color: #ccc;">最多5个，每输入一个按回车键添加</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div style="margin-bottom:25px;">
                                     <!--取值：var value = $('#sel').val();-->
-                                    <select id="sel1" class="article-type">
+                                    <select id="sel1" class="article-type" asp-for="BlogType">
                                         <option value="">博客类型</option>
-                                        <option value="1">原创</option>
-                                        <option value="2">转载</option>
-                                        <option value="3">翻译</option>
+                                        <option value="原创">原创</option>
+                                        <option value="转载">转载</option>
+                                        <option value="翻译">翻译</option>
                                     </select>
                                     &nbsp;&nbsp;
-                                    <select id="sel2" class="article-type">
+                                    <select id="sel2" class="article-type" asp-for="PostType">
                                         <option value="">文章类型</option>
-                                        <option value="1">前端</option>
-                                        <option value="2">后端</option>
-                                        <option value="3">移动开发</option>
-                                        <option value="4">编程语言</option>
-                                        <option value="5">程序人生</option>
+                                        <option value="前端">前端</option>
+                                        <option value="后端">后端</option>
+                                        <option value="移动开发">移动开发</option>
+                                        <option value="编程语言">编程语言</option>
+                                        <option value="程序人生">程序人生</option>
                                     </select>
                                 </div>
-                                <div>
-                                    <button id="publish" type="button" class="btn btn-outline-primary" v-on:click="publish(1,$event)">发布文章</button>
-                                    <button id="save" type="button" class="btn btn-outline-secondary" v-on:click="publish(2,$event)">保存为草稿</button>
+                                <div style="display: flex">
+                                    <button id="publish" type="button" class="btn btn-outline-primary" v-on:click="publish(1,$event)">发布文章</button>&nbsp;
+                                    <button id="save" type="button" class="btn btn-outline-secondary" v-on:click="publish(2,$event)">保存为草稿</button>&nbsp;
                                     <button id="preview" type="button" class="btn btn-outline-warning" v-on:click="publish(3,$event)">预览</button>
+                                    <div id="vaildate" v-show="isShowVail">
+                                        <i class="fas fa-exclamation-circle"></i>&nbsp;<span id="validate-mes" v-text="vaildataMessage"></span>
+                                    </div>
                                 </div>
-                                <div id="vaildate" v-show="isShowVail">
-                                    <i class="fas fa-exclamation-circle"></i>&nbsp;<span id="validate-mes" v-text="vaildataMessage"></span>
-                                </div>
+
                             </div>
                         </form>
 
@@ -261,53 +259,6 @@
         <div class="tooltip bs-tooltip-top feedback" data-placement="left" data-toggle="tooltip" title="建议反馈">
             <!--问题反馈和回到顶部-->
             <i class="far fa-envelope fa-2x"></i>
-        </div>
-        <!--Modal弹窗登录-->
-        <div class="modal fade" id="Login" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document" style="width: 300px;">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">登录到您的账户</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="form1" asp-controller="Account" asp-action="LoginAsync" method="post">
-                            <div class="form-group">
-
-                                <input type="email" name="email" required="" maxlength="64" minlength="7" placeholder="电子邮件" data-purpose="email" value="" class="form-control user-error" aria-invalid="true" asp-for="Email">
-                            </div>
-                            <div class="form-group">
-                                <input type="password" name="password" minlength="6" maxlength="64" class="textinput textInput form-control user-error" placeholder="密码" id="id_password" required="" data-purpose="password" aria-invalid="true" asp-for="Password">
-                            </div>
-                            <a v-on:click="Login" class="btn btn-default" style="width: 100%;background-color: lightblue">Sign in!</a>
-                            <p style="text-align: center; width: 100%; padding: 10px;">或<a href="#" style="text-decoration: none; color: #4285f4;font-size: 14px">&nbsp;忘记密码？</a></p>
-                        </form>
-                        <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
-                            <p style="text-align: center; width: 100%; font-size: 10px;">
-                                关联账户登录：
-                                @{
-                                    var loginProviders = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-                                    if (loginProviders.Count == 0)
-                                    { }
-                                    else
-                                    {
-                                        foreach (var provider in loginProviders)
-                                        {
-                                            <button type="submit" class="" data-toggle="tooltip" data-placement="top" title="正在准备中" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.Name</button>
-                                        }
-                                    }
-                                }
-
-                            </p>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <h5 style="text-align: center; width: 100%;">还没有帐户吗？ <a href="#" style="color: #4285f4">注册</a></h5>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
     <script src="~/js/vue/polyfill.min.js"></script>

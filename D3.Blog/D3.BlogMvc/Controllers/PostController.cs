@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using D3.Blog.Application.Interface;
 using D3.Blog.Application.ViewModels;
 using D3.Blog.Domain.Core.Notifications;
+using D3.BlogMvc.Models;
 using Infrastructure.Logging;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
@@ -46,6 +47,7 @@ namespace D3.BlogMvc.Controllers
         [Authorize]
         public IActionResult WritePost()
         {
+
             return View();
         }
         /// <summary>
@@ -55,8 +57,9 @@ namespace D3.BlogMvc.Controllers
         /// <returns></returns>
         [HttpPost]
         [Authorize]
-        public IActionResult WritePost([FromForm]string articleModel)
-        { 
+        public IActionResult WritePost([FromForm]Search articleModel)
+        {
+
             return Json("ok");
         }
 
@@ -72,6 +75,13 @@ namespace D3.BlogMvc.Controllers
             return View();
         }
 
+
+        [HttpGet]
+        [AllowAnonymous]
+        public JsonResult GetData()
+        {
+            return Json("ok");
+        }
 
 
         /// <summary>

@@ -62,13 +62,13 @@
     border-radius:4px;
 }
 #vaildate {
-    position: fixed;
+    align-items: center;
+    justify-content: center;
     bottom: 120px;
     text-align: center;
-    left: 50%;
-    background-color: #f7d063d6;
-    line-height: 60px;
-    width: 150px;
+    color: red;
+    width: 250px;
+    line-height: 36px;
     border-radius: 5px;
     opacity:1;
 }
@@ -103,3 +103,4 @@
         display: none;
     }
 }
+

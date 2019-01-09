@@ -96,7 +96,7 @@ namespace D3.Blog.Domain.Entitys
         /// <summary>
         /// 类别id
         /// </summary>
-        public int ArticleCategoryId { get; set; }
+        public int? ArticleCategoryId { get; set; }
         public ArticleCategory ArticleCategory { get; set; }
         #endregion
         

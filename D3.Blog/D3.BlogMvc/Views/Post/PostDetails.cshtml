@@ -25,6 +25,7 @@
     <!-- Our Custom CSS -->
     <link rel="stylesheet" href="~/css/home/style.css">
     <link rel="stylesheet" href="~/fontawesome-free/css/all.css">
+    <link rel="stylesheet" href="~/lib/markdown/css/editormd.preview.css">
     <!-- Scrollbar Custom CSS -->
     <link rel="stylesheet" href="~/css/jquery/jquery.mCustomScrollbar.min.css">
     <link rel="stylesheet" href="~/css/posts/posts.css">
@@ -209,63 +210,17 @@
                                     <span>&nbsp;评论(0)</span>
                                 </p>
                             </div>
+                            <hr />
                             <div id="post-fullcontent">
+                                <p>欢迎使用，请输入内容...</p><div id="title_area"><h1>习近平以创新点燃科技强国引擎</h1><div>央视网2019年01月09日 07:19</div></div><div id="text_area"><div><p><em>联播+</em>&nbsp;1月8日，国家科学技术奖励大会举行。当天的《新闻联播》播出了这样一幕，热烈的掌声中，习近平向获得2018年度国家最高科学技术奖的两位院士颁发奖章、证书，同他们热情握手表示祝贺。这紧紧的一握和真诚的祝贺背后，深蕴着习近平总书记的科技情怀和科技强国梦。</p></div><p>“我国科技发展的方向就是创新、创新、再创新。”党的十八大以来，习总书记就科技强国发表了一系列振奋人心的讲话，“创新”一词频频出现。</p><p>从“科技创新、制度创新要协同发挥作用，两个轮子一起转”到“创新驱动实质上是人才驱动”，习总书记再三强调“科技创新”、“制度创新”、“人才创新”的重要性，激发了更多科技工作者的创新创造热情，为新时代科技事业发展指明方向</p><pre><code>&lt;!DOCTYPE html&gt;<br>&lt;html&gt;<br>    &lt;head&gt;<br>        &lt;mate charest="utf-8" /&gt;<br>        &lt;meta name="keywords" content="Editor.md, Markdown, Editor" /&gt;<br>        &lt;title&gt;Hello world!&lt;/title&gt;<br>        &lt;style type="text/css"&gt;<br>            body{font-size:14px;color:#444;font-family: "Microsoft Yahei", Tahoma, "Hiragino Sans GB", Arial;background:#fff;}<br>            ul{list-style: none;}<br>            img{border:none;vertical-align: middle;}<br>        &lt;/style&gt;<br>    &lt;/head&gt;<br>    &lt;body&gt;<br>        &lt;h1 class="text-xxl"&gt;Hello world!&lt;/h1&gt;<br>        &lt;p class="text-green"&gt;Plain text&lt;/p&gt;<br>    &lt;/body&gt;<br>&lt;/html&gt;</code></pre><p><br></p></div>
                                 <!--内容-->
-                                <p>GFM a-tail link <a href="https://github.com/pandao" title="&#64;pandao" class="at-link">@@pandao</a>  邮箱地址自动链接 <a href="mailto:test.test@gmail.com">test.test@gmail.com</a>  <a href="mailto:www@vip.qq.com">www@vip.qq.com</a></p>
-                                <blockquote>
-                                    <p><a href="https://github.com/pandao" title="&#64;pandao" class="at-link">@@pandao</a></p>
-                                </blockquote>
-                                <h3 id="h3--codes"><a name="多语言代码高亮 Codes" class="reference-link"></a><span class="header-link octicon octicon-link"></span>多语言代码高亮 Codes</h3><h4 id="h4--inline-code"><a name="行内代码 Inline code" class="reference-link"></a><span class="header-link octicon octicon-link"></span>行内代码 Inline code</h4><p>执行命令：<code>npm install marked</code></p>
-                                <h4 id="h4-u7F29u8FDBu98CEu683C"><a name="缩进风格" class="reference-link"></a><span class="header-link octicon octicon-link"></span>缩进风格</h4><p>即缩进四个空格，也做为实现类似 <code>&lt;pre&gt;</code> 预格式化文本 ( Preformatted Text ) 的功能。</p>
-                                <pre><code>&lt;?php
-    echo &quot;Hello world!&quot;;
-?&gt;
-</code></pre><p>预格式化文本：</p>
-                                <pre><code>| First Header  | Second Header |
-| ------------- | ------------- |
-| Content Cell  | Content Cell  |
-| Content Cell  | Content Cell  |
-</code></pre><h4 id="h4-js-"><a name="JS代码" class="reference-link"></a><span class="header-link octicon octicon-link"></span>JS代码　</h4><pre><code class="lang-javascript">function test() {
-    console.log(&quot;Hello world!&quot;);
-}
-
-(function(){
-    var box = function() {
-        return box.fn.init();
-    };
-
-    box.prototype = box.fn = {
-        init : function(){
-            console.log(&#39;box.init()&#39;);
-
-            return this;
-        },
-
-        add : function(str) {
-            alert(&quot;add&quot;, str);
-
-            return this;
-        },
-
-        remove : function(str) {
-            alert(&quot;remove&quot;, str);
-
-            return this;
-        }
-    };
-
-    box.fn.init.prototype = box.fn;
-
-    window.box =box;
-})();
-
-var testBox = box();
-testBox.add(&quot;jQuery&quot;).remove(&quot;jQuery&quot;);
-</code></pre>
+                                <div id="test-editormd">
+                                    <textarea style="display: none;"></textarea>
+                                </div>
                                 <!--end 内容-->
                             </div>
-                            
-                            
+
+
                             <!--评论-->
                             <div id="post-comment" style="margin-top: 15px;">
                                 <p>这里时评论区域</p>
@@ -405,9 +360,17 @@ testBox.add(&quot;jQuery&quot;).remove(&quot;jQuery&quot;);
     <script src="~/js/axios/axios.min.js"></script>
     <script src="~/js/vue/vue.js"></script>
     <script src="~/js/holder/holder.min.js"></script>
+    <script src="~/lib/markdown/lib/marked.min.js"></script>
+    <script src="~/lib/markdown/lib/prettify.min.js"></script>
+    <script src="~/lib/markdown/lib/raphael.min.js"></script>
+    <script src="~/lib/markdown/lib/underscore.min.js"></script>
+    <script src="~/lib/markdown/lib/sequence-diagram.min.js"></script>
+    <script src="~/lib/markdown/lib/flowchart.min.js"></script>
+    <script src="~/lib/markdown/lib/jquery.flowchart.min.js"></script>
+    <script src="~/lib/markdown/editormd.min.js"></script>
     <script src="~/js/posts/posts.js"></script>
     <script>
-    //占位
+        //占位
         Holder.addTheme('thumb', {
             bg: '#68217A',
             fg: '#FFFFFF',

@@ -50,7 +50,7 @@ namespace Infrastructure.Data.DataConfig
 
             builder.Property(x => x.IsPublish).HasDefaultValue(false);
 
-            builder.Property(e => e.ArticleCategoryId).HasColumnName("CategoryID");
+            builder.Property(e => e.ArticleCategoryId).HasColumnName("CategoryID").IsRequired(false);
 
             builder.HasOne(d => d.ArticleCategory)
                 .WithMany(p => p.Article)

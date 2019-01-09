@@ -104,8 +104,9 @@ namespace D3.BlogMvc
             loggerFactory.AddSerilog();
             if (env.IsDevelopment())
             {
-                //app.UseDeveloperExceptionPage();
-                app.UseExceptionHandler("/Exception/Index");
+                //开发环境异常
+                app.UseDeveloperExceptionPage();
+//                app.UseExceptionHandler("/Exception/Index");
             }
             else
             {            
@@ -116,7 +117,6 @@ namespace D3.BlogMvc
 
             app.UseStaticFiles();
             app.UseStatusCodePagesWithRedirects("/Exception/ErrorStatusCode/{0}");//http 错误状态码页面
-            //app.UseStatusCodePages();
             app.UseHttpsRedirection();
 
             app.UseAuthentication();

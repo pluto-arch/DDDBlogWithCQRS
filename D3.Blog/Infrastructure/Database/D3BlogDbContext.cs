@@ -19,6 +19,8 @@ namespace Infrastructure.Data.Database
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new CustomerEFMapping());
+            builder.ApplyConfiguration(new ArticleCategoryMap());
+            builder.ApplyConfiguration(new ArticleMap());
             base.OnModelCreating(builder);
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

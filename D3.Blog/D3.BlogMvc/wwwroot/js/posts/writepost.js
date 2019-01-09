@@ -40,8 +40,8 @@ var app = new Vue({
                 {
                     width: "100%",
                     height: 640,
-                    saveHTMLToTextarea: true,
-                    path: "../../lib/markdown/lib/"
+                    path: "../../lib/markdown/lib/",
+                    saveHTMLToTextarea: true
                 });
             v.mdeditor = testEditor;
         }
@@ -104,7 +104,7 @@ var app = new Vue({
                 $(clickel).addClass('checked');
             });//写博客页面侧边菜单
 
-            $('#tokenfield').tokenfield({ minWidth: 400 });//标签输入
+            $('#tokenfield').tokenfield({ minWidth: 250 });//标签输入
 
         }
         , Login: function () {
@@ -134,23 +134,85 @@ var app = new Vue({
         }
         , publish: function (flag, event) {
             var v = this;
-            if (v.editor.txt.text() == "") {
-                v.isShowVail = true;
-                v.vaildataMessage = "请输入内容";
-                setTimeout(function () { v.isShowVail = false }, 1000);
-            }
-            console.log(v.mdeditor.getHTML());
+            console.log(v.mdeditor.getHTML());//md编辑器的内容
+            console.log(v.editor.txt.html());//富文本编辑器的内容
             switch (flag) {
                 case 1:
                     //发布
+                    v.publishArticle(1);
                     break;
                 case 2:
                     //保存
+                    v.publishArticle(2);
                     break;
                 case 3:
                     //预览
                     break;
             }
+        }
+        , publishArticle: function (flag) {
+            var v = this;
+            var isSubmit = v.setAndVaildata();
+            if (isSubmit) {
+                v.$http.post('/Post/WritePost', $('#formPost').serialize())
+                    .then(res => {
+                        if (res.data.length > 0) {
+                            console.log(res.data);
+                            alert(res.data);
+                        } else {
+                            window.location.reload();//登录成功，刷新当前页面
+                        }
+                    }).catch(error => {
+                        console.log(error);
+                    });
+            } else {
+                
+            }
+        }
+        , setAndVaildata: function () {
+            var v = this;
+            var isVail = true;
+            var style = $('#test-editormd').css('display');
+            var txtcontent_fu = v.editor.txt.html();//富文本编辑器内容
+            var txtcontent_md = v.mdeditor.getPreviewedHTML();//md编辑器内容
+            if (style == 'none') {
+                //使用的是富文本编辑器
+                if (txtcontent_fu.trim() != "") {
+                    $('#articlehtml').val(txtcontent_fu);
+                } else {
+                    v.isShowVail = true;
+                    v.vaildataMessage = "请输入文章内容";
+                    setTimeout(function () { v.isShowVail = false }, 1000);
+                    isVail = false;
+                }
+            } else {
+                //使用的是md编辑器
+                if (txtcontent_md.trim() != "") {
+                    $('#articlehtml').val(txtcontent_md);
+                } else {
+                    v.isShowVail = true;
+                    v.vaildataMessage = "请输入文章内容";
+                    setTimeout(function () { v.isShowVail = false }, 2000);
+                    isVail = false;
+                }
+
+            }
+            var value = $('#sel1').val();
+            var value2 = $('#sel2').val();
+            if (value == "" ||
+                value2 == "") {
+                v.isShowVail = true;
+                v.vaildataMessage = "选择博客类型或者文章类型";
+                setTimeout(function () { v.isShowVail = false }, 2000);
+                isVail = false;
+            }
+            if ($('#txtTitle').val() == "") {
+                v.isShowVail = true;
+                v.vaildataMessage = "标题不能为空";
+                setTimeout(function () { v.isShowVail = false }, 2000);
+                isVail = false;
+            }
+            return isVail;
         }
     },
     watch: {

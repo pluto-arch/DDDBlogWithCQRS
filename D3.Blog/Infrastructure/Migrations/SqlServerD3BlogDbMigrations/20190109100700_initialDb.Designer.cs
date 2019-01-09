@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations.SqlServerD3BlogDbMigrations
 {
     [DbContext(typeof(D3BlogDbContext))]
-    [Migration("20181227061145_InitialBlogTable")]
-    partial class InitialBlogTable
+    [Migration("20190109100700_initialDb")]
+    partial class initialDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,45 +31,79 @@ namespace Infrastructure.Data.Migrations.SqlServerD3BlogDbMigrations
 
                     b.Property<int>("AddUserId");
 
-                    b.Property<int>("ArticleCategoryId");
+                    b.Property<int?>("ArticleCategoryId")
+                        .HasColumnName("CategoryID");
 
-                    b.Property<string>("Author");
+                    b.Property<string>("Author")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .IsUnicode(true);
 
-                    b.Property<int>("CollectedCount");
+                    b.Property<int>("CollectedCount")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(0);
 
-                    b.Property<string>("Content");
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .IsUnicode(true);
 
-                    b.Property<string>("ImageUrl");
+                    b.Property<string>("ImageUrl")
+                        .HasMaxLength(300)
+                        .IsUnicode(true);
 
-                    b.Property<bool>("IsPublish");
+                    b.Property<bool>("IsPublish")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(false);
 
-                    b.Property<bool>("IsRed");
+                    b.Property<bool>("IsRed")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(false);
 
-                    b.Property<bool>("IsSlide");
+                    b.Property<bool>("IsSlide")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(false);
 
-                    b.Property<bool>("IsTop");
+                    b.Property<bool>("IsTop")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(false);
 
                     b.Property<DateTime?>("ModifyTime");
 
                     b.Property<int?>("ModifyUserId");
 
-                    b.Property<int>("PromitCount");
+                    b.Property<int>("PromitCount")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(0);
 
-                    b.Property<string>("SeoDescription");
+                    b.Property<string>("SeoDescription")
+                        .HasMaxLength(250)
+                        .IsUnicode(true);
 
-                    b.Property<string>("SeoKeyword");
+                    b.Property<string>("SeoKeyword")
+                        .HasMaxLength(100)
+                        .IsUnicode(true);
 
-                    b.Property<string>("SeoTitle");
+                    b.Property<string>("SeoTitle")
+                        .HasMaxLength(100)
+                        .IsUnicode(true);
 
                     b.Property<int>("Sort");
 
-                    b.Property<string>("Source");
+                    b.Property<string>("Source")
+                        .HasMaxLength(100)
+                        .IsUnicode(true);
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .IsUnicode(false);
 
                     b.Property<int?>("VerifyUserId");
 
-                    b.Property<int>("ViewCount");
+                    b.Property<int>("ViewCount")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(0);
 
                     b.HasKey("Id");
 
@@ -84,21 +118,32 @@ namespace Infrastructure.Data.Migrations.SqlServerD3BlogDbMigrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Icon");
+                    b.Property<string>("Icon")
+                        .HasMaxLength(50)
+                        .IsUnicode(true);
 
                     b.Property<bool>("IsDelete");
 
                     b.Property<int?>("ParentId");
 
-                    b.Property<string>("SeoDes");
+                    b.Property<string>("SeoDes")
+                        .HasMaxLength(200)
+                        .IsUnicode(true);
 
-                    b.Property<string>("SeoKeywords");
+                    b.Property<string>("SeoKeywords")
+                        .HasMaxLength(120)
+                        .IsUnicode(true);
 
-                    b.Property<string>("SeoTitle");
+                    b.Property<string>("SeoTitle")
+                        .HasMaxLength(120)
+                        .IsUnicode(true);
 
                     b.Property<int>("Sort");
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .IsUnicode(true);
 
                     b.HasKey("Id");
 
@@ -135,7 +180,8 @@ namespace Infrastructure.Data.Migrations.SqlServerD3BlogDbMigrations
                     b.HasOne("D3.Blog.Domain.Entitys.ArticleCategory", "ArticleCategory")
                         .WithMany("Article")
                         .HasForeignKey("ArticleCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("FK_Products_Categories")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 #pragma warning restore 612, 618
         }

@@ -1,5 +1,4 @@
-﻿
-Vue.prototype.$http = axios;
+﻿Vue.prototype.$http = axios;
 var app = new Vue({
     el: '#app',
     data: {
@@ -12,11 +11,29 @@ var app = new Vue({
         blogType: "",
         postType: "",
         vaildataMessage: "",
-        isShowVail: false
+        isShowVail: false,
+        conn:""
     },
     mounted: function () {
-        this.$nextTick(function () {
+        this.$nextTick(function() {
             this.setNavBarMenu();
+
+            var v = this;
+//            v.$http.get('/Post/GetData')
+//                .then(res => {
+//                    console.log(res.data);
+//                }).catch(error => {
+//                    console.log(error);
+//                });
+
+            editormd.markdownToHTML("test-editormd", {
+                htmlDecode: "style,script,iframe",
+                emoji: true,
+                taskList: true,
+                tex: true,  // 默认不解析
+                flowChart: true,  // 默认不解析
+                sequenceDiagram: true  // 默认不解析
+            });
         });
     },
     methods: {
@@ -79,7 +96,7 @@ var app = new Vue({
                 $(clickel).addClass('checked');
             });//写博客页面侧边菜单
 
-            $('#tokenfield').tokenfield({ minWidth:400});//标签输入
+//            $('#tokenfield').tokenfield({ minWidth:400});//标签输入
 
 
         }

@@ -6,13 +6,19 @@ using System.Threading.Tasks;
 namespace D3.BlogMvc.Models
 {
     /// <summary>
-    /// 搜索
+    /// 测试
     /// </summary>
     public class Search
     {
         /// <summary>
         /// 搜索文本
         /// </summary>
-        public string SearchText { get; set; }
+        public string Title { get; set; }
+
+        public string Content { get; set; }
+        public string BlogType { get; set; }
+        public string PostType { get; set; }
+        public string PostTag { get; set; }
+        public string Contentmd { get; set; }
     }
 }
