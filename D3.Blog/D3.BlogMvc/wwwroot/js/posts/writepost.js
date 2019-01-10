@@ -25,6 +25,8 @@ var app = new Vue({
     methods: {
         setBaseCtl: function () {
             var v = this;
+            toastr.options.positionClass = 'toast-bottom-center';//信息提示
+
             /* 富文本编辑器 */
             var E = window.wangEditor;
             var editor = new E('#divDemo');
@@ -157,13 +159,14 @@ var app = new Vue({
                 v.$http.post('/Post/WritePost', $('#formPost').serialize())
                     .then(res => {
                         if (res.data.length > 0) {
-                            console.log(res.data);
-                            alert(res.data);
+                           //有错误
+                            toastr.warning('出现错误，请稍后重试');
                         } else {
-                            window.location.reload();//登录成功，刷新当前页面
+                           //无错误
+                            toastr.info('发布成功');
                         }
                     }).catch(error => {
-                        console.log(error);
+                        toastr.warning('出现错误，请稍后重试');
                     });
             } else {
                 
@@ -180,9 +183,7 @@ var app = new Vue({
                 if (txtcontent_fu.trim() != "") {
                     $('#articlehtml').val(txtcontent_fu);
                 } else {
-                    v.isShowVail = true;
-                    v.vaildataMessage = "请输入文章内容";
-                    setTimeout(function () { v.isShowVail = false }, 1000);
+                    toastr.warning('请输入文章内容');
                     isVail = false;
                 }
             } else {
@@ -190,9 +191,7 @@ var app = new Vue({
                 if (txtcontent_md.trim() != "") {
                     $('#articlehtml').val(txtcontent_md);
                 } else {
-                    v.isShowVail = true;
-                    v.vaildataMessage = "请输入文章内容";
-                    setTimeout(function () { v.isShowVail = false }, 2000);
+                    toastr.warning('请输入文章内容');
                     isVail = false;
                 }
 
@@ -201,15 +200,11 @@ var app = new Vue({
             var value2 = $('#sel2').val();
             if (value == "" ||
                 value2 == "") {
-                v.isShowVail = true;
-                v.vaildataMessage = "选择博客类型或者文章类型";
-                setTimeout(function () { v.isShowVail = false }, 2000);
+                toastr.warning('选择博客类型或者文章类型');
                 isVail = false;
             }
             if ($('#txtTitle').val() == "") {
-                v.isShowVail = true;
-                v.vaildataMessage = "标题不能为空";
-                setTimeout(function () { v.isShowVail = false }, 2000);
+                toastr.warning('标题不能为空');
                 isVail = false;
             }
             return isVail;

@@ -10,7 +10,9 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 using D3.Blog.Application.Interface;
 using D3.Blog.Application.ViewModels;
+using D3.Blog.Application.ViewModels.Article;
 using D3.Blog.Domain.Core.Notifications;
+using D3.Blog.Domain.Enums;
 using D3.BlogMvc.Models;
 using Infrastructure.Logging;
 using Microsoft.Net.Http.Headers;
@@ -26,6 +28,9 @@ namespace D3.BlogMvc.Controllers
     /// </summary>
     public class PostController : BaseController
     {
+
+        private readonly IArticleService _articleService;
+
         /// <summary>
         /// 构造函数注入
         /// </summary>
@@ -34,10 +39,10 @@ namespace D3.BlogMvc.Controllers
         /// <param name="signInManager"></param>
         /// <param name="logger"></param>
         /// <param name="notifications"></param>
-        public PostController(UserManager<AppBlogUser> userManager, RoleManager<AppBlogRole> roleManager, SignInManager<AppBlogUser> signInManager, Serilog.ILogger logger, INotificationHandler<DomainNotification> notifications)
+        public PostController(IArticleService articleService,UserManager<AppBlogUser> userManager, RoleManager<AppBlogRole> roleManager, SignInManager<AppBlogUser> signInManager, Serilog.ILogger logger, INotificationHandler<DomainNotification> notifications)
             : base(userManager, roleManager, signInManager, logger, notifications)
         {
-
+            _articleService = articleService;
         }
 
         /// <summary>
@@ -57,10 +62,18 @@ namespace D3.BlogMvc.Controllers
         /// <returns></returns>
         [HttpPost]
         [Authorize]
-        public IActionResult WritePost([FromForm]Search articleModel)
+        public JsonResult WritePost([FromForm]Search articleModel)
         {
-
-            return Json("ok");
+            NewArticleModel mo=new NewArticleModel();
+            mo.BlogType = articleModel.BlogType;
+            mo.ArticleType = ArticleSource.Original;
+            mo.ContentHtml = articleModel.Content;
+            mo.Title = articleModel.Title;
+            mo.CreateTime=DateTime.Now;
+            mo.Tags = articleModel.PostTag;
+            _articleService.Add(mo);
+            var error = _notifications.GetNotifications().Select(n => n.Value);//通知结果
+            return new JsonResult(error);
         }
 
 
@@ -98,6 +111,9 @@ namespace D3.BlogMvc.Controllers
         }
 
 
-
+        public bool IsValidOperation()
+        {
+            return (!_notifications.HasNotifications());
+        }
     }
 }

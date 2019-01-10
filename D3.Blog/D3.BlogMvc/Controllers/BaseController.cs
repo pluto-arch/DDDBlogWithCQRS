@@ -14,7 +14,7 @@ namespace D3.BlogMvc.Controllers
         public readonly RoleManager<AppBlogRole>   _roleManager;
         public readonly SignInManager<AppBlogUser> _signInManager;
         public readonly Serilog.ILogger            _logger;
-        public readonly INotificationHandler<DomainNotification> _notifications;
+        public readonly DomainNotificationHandler _notifications;
 
         public BaseController(UserManager<AppBlogUser> userManager, RoleManager<AppBlogRole> roleManager, SignInManager<AppBlogUser> signInManager, ILogger logger, INotificationHandler<DomainNotification> notifications)
         {
@@ -22,7 +22,7 @@ namespace D3.BlogMvc.Controllers
             _roleManager = roleManager;
             _signInManager = signInManager;
             _logger = logger;
-            _notifications = notifications;
+            _notifications = (DomainNotificationHandler)notifications;
         }
 
 

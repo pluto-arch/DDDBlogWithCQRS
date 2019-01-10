@@ -5,6 +5,8 @@ using D3.Blog.Domain.Commands.Articles;
 using D3.Blog.Domain.Core.BUS;
 using D3.Blog.Domain.Core.Notifications;
 using D3.Blog.Domain.Entitys;
+using D3.Blog.Domain.Enums;
+using D3.Blog.Domain.Events.ArticleEvent;
 using D3.Blog.Domain.Infrastructure;
 using D3.Blog.Domain.Infrastructure.IRepositorys;
 using MediatR;
@@ -20,9 +22,15 @@ namespace D3.Blog.Domain.CommandHandlers.Articles
     {
         private readonly IArticleRepository _articleRepository;
         private readonly IMediatorHandler    _bus;
-//        private IUser _user;
+        private IUser _user;
+        /// <summary>
+        /// 日志
+        /// </summary>
+        public readonly Serilog.ILogger  _logger;
+
         public ArticleCommandHandle(
-//            IUser user,
+            Serilog.ILogger  logger,
+            IUser user,
             IArticleRepository articleRepository,
             IUnitOfWork uow, 
             IMediatorHandler bus, 
@@ -30,7 +38,8 @@ namespace D3.Blog.Domain.CommandHandlers.Articles
         {
             _articleRepository = articleRepository;
             _bus = bus;
-//            _user = user;
+            _user = user;
+            _logger = logger;
         }
 
         /// <summary>
@@ -47,32 +56,33 @@ namespace D3.Blog.Domain.CommandHandlers.Articles
                 return Unit.Task;
             }
 
-            var article = new Article
+            try
             {
-                Title = request.Title,
-                AddTime = DateTime.Now,
-                AddUserId = 1,
-                Author = request.Author,
-                ArticleCategoryId = request.CategoryId,
-                Content = request.Content,
-                ImageUrl = request.ImageUrl,
-                Source = request.Source,
-                SeoTitle = request.SeoTitle,
-                SeoKeyword = request.SeoKeyword,
-                SeoDescription = request.SeoDescription
-            };
-
-            _articleRepository.Insert(article);
-            if (Commit())
-            {
-                //提交成功，发布领域事件
-//                _bus.RaiseEvent(new CustomerRegisteredEvent(customer.Id, customer.Name, customer.Email, customer.BirthDate));
-                var res = "";
+                var article = new Article();
+                article.Title = request.Title;
+                article.AddTime = request.AddTime;
+                article.AddUserId = _user.Id;
+                article.Author = request.Author;
+                if (request.CategoryId!=null)
+                {
+                    article.ArticleCategoryId = request.CategoryId;
+                }
+                article.Content = request.Content;
+                article.Source = "原创";
+                _articleRepository.Insert(article);
+                if (Commit())
+                {
+                    //提交成功，发布领域事件
+                    _bus.RaiseEvent(new ArticleAddOrEditEvent(article.Id));
+                    var res = "";
+                }
             }
-
+            catch (Exception e)
+            {
+                _bus.RaiseEvent(new DomainNotification(request.MessageType,e.Message));
+                _logger.Error(e,$"发生错误：{e.Message}");
+            }
             return Unit.Task;
-
-            throw new System.NotImplementedException();
         }
     }
 }

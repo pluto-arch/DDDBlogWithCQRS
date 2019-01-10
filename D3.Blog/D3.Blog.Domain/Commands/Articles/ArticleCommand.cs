@@ -1,6 +1,7 @@
 ﻿using System;
 using D3.Blog.Domain.Core.Commands;
 using D3.Blog.Domain.Entitys;
+using D3.Blog.Domain.Enums;
 
 namespace D3.Blog.Domain.Commands.Articles
 {
@@ -10,10 +11,6 @@ namespace D3.Blog.Domain.Commands.Articles
         /// 标题
         /// </summary>
         public string Title { get; set; }
-        /// <summary>
-        /// 配图连接
-        /// </summary>
-        public string ImageUrl { get; set; }
         /// <summary>
         /// 内容
         /// </summary>
@@ -39,21 +36,9 @@ namespace D3.Blog.Domain.Commands.Articles
         /// </summary>
         public string Author { get; set; }
         /// <summary>
-        /// 来源
+        /// 来源：原创/转载/翻译
         /// </summary>
-        public string Source { get; set; }
-        /// <summary>
-        /// seo标题
-        /// </summary>
-        public string SeoTitle { get; set; }
-        /// <summary>
-        /// seo关键字
-        /// </summary>
-        public string SeoKeyword { get; set; }
-        /// <summary>
-        /// seo描述
-        /// </summary>
-        public string SeoDescription { get; set; }
+        public ArticleSource Source { get; set; }
         /// <summary>
         /// 添加人id
         /// </summary>
@@ -70,32 +55,12 @@ namespace D3.Blog.Domain.Commands.Articles
         /// 修改时间
         /// </summary>
         public DateTime? ModifyTime { get; set; }
-        /// <summary>
-        /// 是否置顶，默认false
-        /// </summary>
-        public bool IsTop { get; set; }
-        /// <summary>
-        /// 是否轮播显示，默认false
-        /// </summary>
-        public bool IsSlide { get; set; }
-        /// <summary>
-        /// 是否热门，默认false
-        /// </summary>
-        public bool IsRed { get; set; }
-        /// <summary>
-        /// 是否发布(审核通过)，默认false
-        /// </summary>
-        public bool IsPublish { get; set; }
-        /// <summary>
-        /// 审核人id
-        /// </summary>
-        public int? VerifyUserId { get; set; }
 
         #region 导航属性
         /// <summary>
         /// 类别id
         /// </summary>
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
         public virtual ArticleCategory ArticleCategory { get; set; }
         #endregion
     }

@@ -8,14 +8,19 @@ using AutoMapper;
 using D3.Blog.Application.Infrastructure;
 using D3.Blog.Application.Interface;
 using D3.Blog.Application.Services;
+using D3.Blog.Application.Services.Articles;
 using D3.Blog.Application.Services.Customer;
+using D3.Blog.Domain.CommandHandlers.Articles;
 using D3.Blog.Domain.CommandHandlers.Customer;
+using D3.Blog.Domain.Commands.Articles;
 using D3.Blog.Domain.Commands.Customer;
 using D3.Blog.Domain.Core.BUS;
 using D3.Blog.Domain.Core.Events;
 using D3.Blog.Domain.Core.Notifications;
 using D3.Blog.Domain.EventHandlers;
+using D3.Blog.Domain.EventHandlers.ArticleEventHandler;
 using D3.Blog.Domain.Events;
+using D3.Blog.Domain.Events.ArticleEvent;
 using D3.Blog.Domain.Infrastructure.IRepositorys;
 using Infrastructure.Data.Bus;
 using Infrastructure.Data.Database;
@@ -59,6 +64,7 @@ namespace D3.BlogMvc.InitialSetup
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
             services.AddScoped<IRequestHandler<RegisterNewCustomerCommand>, CustomerCommandHandler>();
             services.AddScoped<IRequestHandler<UpdateCustomerCommand>, CustomerCommandHandler>();
+            services.AddScoped<IRequestHandler<AddNewArticleCommand>, ArticleCommandHandle>();
             #endregion
 
 
@@ -66,6 +72,7 @@ namespace D3.BlogMvc.InitialSetup
             services.AddScoped<INotificationHandler<DomainNotification>, DomainNotificationHandler>();
             services.AddScoped<INotificationHandler<CustomerRegisteredEvent>, CustomerEventHandler>();
             services.AddScoped<INotificationHandler<CustomerUpdatedEvent>, CustomerEventHandler>();
+            services.AddScoped<INotificationHandler<ArticleAddOrEditEvent>, ArticleEventHandler>();
             #endregion
             
 
@@ -79,7 +86,10 @@ namespace D3.BlogMvc.InitialSetup
             #region 仓储和服务
             services.AddScoped(typeof(IRepository<>),typeof(Repository<>));
             services.AddScoped<ICustomerRepository,CustomerRepository>();
+            services.AddScoped<IArticleRepository,ArticleRepository>();
+
             services.AddScoped<ICustomerService,CustomerService>();
+            services.AddScoped<IArticleService,ArticleService>();
             #endregion
 
 

@@ -1,7 +1,11 @@
 ﻿using AutoMapper;
 using D3.Blog.Application.ViewModels;
+using D3.Blog.Application.ViewModels.Article;
+using D3.Blog.Domain.Commands.Articles;
 using D3.Blog.Domain.Commands.Customer;
 using D3.Blog.Domain.Entitys;
+using D3.Blog.Domain.Enums;
+using D3.Blog.Domain.Infrastructure;
 
 namespace D3.Blog.Application.AutoMapper
 {
@@ -24,7 +28,11 @@ namespace D3.Blog.Application.AutoMapper
             CreateMap<CustomerViewModel, UpdateCustomerCommand>()
                .ConstructUsing(c => new UpdateCustomerCommand(c.Id,c.Name, c.Email,c.BirthDate));
 
-            
+            //文章新增
+            CreateMap<NewArticleModel, AddNewArticleCommand>()
+                .ConstructUsing(c =>
+                    new AddNewArticleCommand(c.Title, c.ContentHtml, "admin", null,c.ArticleType));
+
         }
     }
 }

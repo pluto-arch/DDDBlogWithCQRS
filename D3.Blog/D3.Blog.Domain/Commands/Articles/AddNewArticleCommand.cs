@@ -1,4 +1,5 @@
 ﻿using D3.Blog.Domain.Entitys;
+using D3.Blog.Domain.Enums;
 
 namespace D3.Blog.Domain.Commands.Articles
 {
@@ -11,17 +12,12 @@ namespace D3.Blog.Domain.Commands.Articles
         /// 构造函数，传入新文章数据
         /// </summary>
         public AddNewArticleCommand(
-            string title,string content,string author,int articleCategoryId,string source="",string seoTitle="",
-            string seoKeyword="",string seoDes="",string imgurl="")
+            string title,string content,string author,int? articleCategoryId,ArticleSource source)
         {
             Title = title;
             Author = author;
             Content = content;
             Source = source;
-            SeoTitle = seoTitle;
-            SeoKeyword = seoKeyword;
-            SeoDescription = seoDes;
-            ImageUrl = imgurl;
             CategoryId = articleCategoryId;
         }
         /// <summary>

@@ -30,6 +30,7 @@
     <link rel="stylesheet" href="~/css/bootstrap/bootstrap-select.min.css">
     <link rel="stylesheet" href="~/lib/markdown/css/editormd.min.css" />
     <link rel="stylesheet" href="~/lib/markdown/css/editormd.preview.css">
+    <link href="~/lib/toastr/toastr.min.css" rel="stylesheet" />
     <!-- Scrollbar Custom CSS -->
     <link rel="stylesheet" href="~/css/jquery/jquery.mCustomScrollbar.min.css">
     <link rel="stylesheet" href="~/bootstrap-tokenfield/css/bootstrap-tokenfield.min.css">
@@ -219,9 +220,6 @@
                                     <button id="publish" type="button" class="btn btn-outline-primary" v-on:click="publish(1,$event)">发布文章</button>&nbsp;
                                     <button id="save" type="button" class="btn btn-outline-secondary" v-on:click="publish(2,$event)">保存为草稿</button>&nbsp;
                                     <button id="preview" type="button" class="btn btn-outline-warning" v-on:click="publish(3,$event)">预览</button>
-                                    <div id="vaildate" v-show="isShowVail">
-                                        <i class="fas fa-exclamation-circle"></i>&nbsp;<span id="validate-mes" v-text="vaildataMessage"></span>
-                                    </div>
                                 </div>
 
                             </div>
@@ -274,6 +272,7 @@
     <script src="~/js/vue/vue.js"></script>
     <script src="~/js/holder/holder.min.js"></script>
     <script src="~/lib/markdown/editormd.min.js"></script>
+    <script src="~/lib/toastr/toastr.min.js"></script>
     <script src="~/js/posts/writepost.js"></script>
 </body>
 </html>
