@@ -31,7 +31,7 @@ namespace D3.Blog.Application.AutoMapper
             //文章新增
             CreateMap<NewArticleModel, AddNewArticleCommand>()
                 .ConstructUsing(c =>
-                    new AddNewArticleCommand(c.Title, c.ContentHtml, "admin", null,c.ArticleType));
+                    new AddNewArticleCommand(c.Title, c.ContentMd,c.ContentHtml,c.CreateTime,c.Author, null,c.BlogType,c.Status));
 
         }
     }

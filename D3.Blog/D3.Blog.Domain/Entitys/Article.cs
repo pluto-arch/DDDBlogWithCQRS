@@ -1,4 +1,5 @@
 ﻿using System;
+using D3.Blog.Domain.Enums;
 
 namespace D3.Blog.Domain.Entitys
 {
@@ -16,9 +17,13 @@ namespace D3.Blog.Domain.Entitys
         /// </summary>
         public string ImageUrl { get; set; }
         /// <summary>
-        /// 内容
+        /// 内容markdown格式 md编辑器
         /// </summary>
-        public string Content { get; set; }
+        public string ContentMd { get; set; }
+        /// <summary>
+        /// 内容html格式 富文本编辑器
+        /// </summary>
+        public string ContentHtml { get; set; }
         /// <summary>
         /// 浏览次数
         /// </summary>
@@ -32,17 +37,20 @@ namespace D3.Blog.Domain.Entitys
         /// </summary>
         public int PromitCount { get; set; }
         /// <summary>
-        /// 排序号
-        /// </summary>
-        public int Sort { get; set; }
-        /// <summary>
         /// 作者(不一定是appbloguser)
         /// </summary>
         public string Author { get; set; }
         /// <summary>
         /// 来源
         /// </summary>
-        public string Source { get; set; }
+        public Nullable<ArticleSource> Source { get; set; }
+        /// <summary>
+        /// 文章状态
+        /// </summary>
+        public ArticleStatus Status { get; set; }
+
+
+        #region SEO相关
         /// <summary>
         /// seo标题
         /// </summary>
@@ -55,8 +63,10 @@ namespace D3.Blog.Domain.Entitys
         /// seo描述
         /// </summary>
         public string SeoDescription { get; set; }
+        #endregion
+       
         /// <summary>
-        /// 添加人id
+        /// 添加人id，一般是当前操作用户
         /// </summary>
         public int AddUserId { get; set; }
         /// <summary>

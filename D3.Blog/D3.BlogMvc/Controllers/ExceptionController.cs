@@ -59,12 +59,10 @@ namespace D3.BlogMvc.Controllers
                 file = Path.Combine(Directory.GetCurrentDirectory(), 
                                     "wwwroot", "statuscodepage", "404NotFound.html");
             }
-
-
             return new PhysicalFileResult(file,new MediaTypeHeaderValue("text/html"));
-
-            // return Json(id);
+            
         }
+        
 
     }
 }

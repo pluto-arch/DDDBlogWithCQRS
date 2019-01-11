@@ -1,4 +1,5 @@
-﻿using D3.Blog.Application.ViewModels.Article;
+﻿using System.Threading.Tasks;
+using D3.Blog.Application.ViewModels.Article;
 
 namespace D3.Blog.Application.Interface
 {
@@ -22,7 +23,14 @@ namespace D3.Blog.Application.Interface
 
 
         //-----------------------------------------------
-        
+
+        /// <summary>
+        /// 根据id获取
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<ArticleViewModel> GetById(int id);
+
 
     }
 }

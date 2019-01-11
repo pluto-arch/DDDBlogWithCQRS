@@ -178,6 +178,7 @@ var app = new Vue({
             var style = $('#test-editormd').css('display');
             var txtcontent_fu = v.editor.txt.html();//富文本编辑器内容
             var txtcontent_md = v.mdeditor.getPreviewedHTML();//md编辑器内容
+            var txtmd = v.mdeditor.getMarkdown();//获取markdown内容
             if (style == 'none') {
                 //使用的是富文本编辑器
                 if (txtcontent_fu.trim() != "") {

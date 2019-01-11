@@ -1,4 +1,5 @@
 ﻿using D3.Blog.Domain.Entitys;
+using D3.Blog.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -20,9 +21,11 @@ namespace Infrastructure.Data.DataConfig
 
             builder.Property(e => e.Title).HasMaxLength(300).IsUnicode(false).IsRequired();
 
-            builder.Property(x => x.Content).HasColumnType("text").IsUnicode().IsRequired();
+            builder.Property(x => x.ContentMd).HasColumnType("text").IsUnicode().IsRequired();
 
-            builder.Property(x => x.Author).HasMaxLength(120).IsUnicode().IsRequired();
+            builder.Property(x => x.ContentHtml).HasColumnType("text").IsUnicode().IsRequired();
+
+            builder.Property(x => x.Author).HasMaxLength(120).IsUnicode();
 
             builder.Property(x => x.Source).HasMaxLength(100).IsUnicode();
 
@@ -49,6 +52,10 @@ namespace Infrastructure.Data.DataConfig
             builder.Property(x => x.IsRed).HasDefaultValue(false);
 
             builder.Property(x => x.IsPublish).HasDefaultValue(false);
+
+            builder.Property(x => x.Source).IsRequired(false);
+
+            builder.Property(x => x.Status).HasDefaultValue(ArticleStatus.Verify);
 
             builder.Property(e => e.ArticleCategoryId).HasColumnName("CategoryID").IsRequired(false);
 

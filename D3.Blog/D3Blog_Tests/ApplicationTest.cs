@@ -147,9 +147,9 @@ namespace D3Blog_Tests
             var bus = serviceProvider.GetRequiredService<IMediatorHandler>();//获取实例
             var articleRep = serviceProvider.GetRequiredService<IArticleRepository>();//获取实例
             //AddNewArticleCommand
-            var addcmd = new AddNewArticleCommand("asp","<p>this is asp</p>","张玉龙",1,"自创","asp","asp","asp","../../1.jpg");//获取实例
+//            var addcmd = new AddNewArticleCommand("asp","<p>this is asp</p>","张玉龙",1,"自创","asp","asp","asp","../../1.jpg");//获取实例
 
-            bus.SendCommand(addcmd).Wait();
+//            bus.SendCommand(addcmd).Wait();
             var articles=articleRep.FindAll().Include(x=>x.ArticleCategory).ToList();
 
             Assert.True(articles.Count>0);

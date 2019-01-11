@@ -12,18 +12,28 @@
         /// <summary>
         /// 转载
         /// </summary>
-        transport=2,
+        Transport=2,
         /// <summary>
         /// 翻译
         /// </summary>
-        translate=3,
+        Translate=3,
     }
     /// <summary>
     /// 文章状态
     /// </summary>
     public enum ArticleStatus
     {
-        publish=0, //发布
-        savedraft=1 //保存为草稿
+        /// <summary>
+        /// 已经发布
+        /// </summary>
+        Publish=0, 
+        /// <summary>
+        /// 保存为草稿
+        /// </summary>
+        Savedraft=1,
+        /// <summary>
+        /// 审核中
+        /// </summary>
+        Verify=3,
     }
 }

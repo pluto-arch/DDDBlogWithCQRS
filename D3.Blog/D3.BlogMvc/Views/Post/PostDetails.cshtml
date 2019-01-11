@@ -2,7 +2,7 @@
 @using Infrastructure.Data.Database
 @using Infrastructure.Identity.Models
 @using Microsoft.AspNetCore.Identity
-@model D3.BlogMvc.Models.AccountModels.LoginModel
+@model Tuple<D3.BlogMvc.Models.AccountModels.LoginModel,D3.Blog.Application.ViewModels.Article.ArticleViewModel>
 @inject UserManager<AppBlogUser> userManager
 @inject SignInManager<AppBlogUser> signInManager
 @{
@@ -197,40 +197,114 @@
                                 <a href="#"><img src="holder.js/50x50?theme=headimg" style="border-radius:50px" /></a>
                             </div>
                             <div class="author-name">
-                                <a href="#" style="display:block">Admin</a>
-                                <span style="color:#cac7c7">2019年01月04日&nbsp;&nbsp;阅读&nbsp;1073</span>
+                                <a href="#" style="display:block">@Model.Item2.Author</a>
+                                <span style="color:#cac7c7">@Model.Item2.CreateTime.ToString("yyyy-MM-dd")&nbsp;&nbsp;阅读&nbsp;@Model.Item2.ViewCount</span>
                             </div>
                         </div>
                         <!--帖子详情-->
                         <div id="post-detail">
                             <div class="post-header" style="text-align:center;margin-bottom:15px;">
-                                <h1>ASP.NET CORE</h1>
+                                <h1>@Model.Item2.Title</h1>
                                 <p style="font-size:14px;">
                                     <span>分类：<a id="post-category" href="#">开源框架</a></span>
-                                    <span>&nbsp;评论(0)</span>
+                                    <span>&nbsp;评论(@Model.Item2.CommonCount)</span>
                                 </p>
                             </div>
                             <hr />
                             <div id="post-fullcontent">
-                                <p>欢迎使用，请输入内容...</p><div id="title_area"><h1>习近平以创新点燃科技强国引擎</h1><div>央视网2019年01月09日 07:19</div></div><div id="text_area"><div><p><em>联播+</em>&nbsp;1月8日，国家科学技术奖励大会举行。当天的《新闻联播》播出了这样一幕，热烈的掌声中，习近平向获得2018年度国家最高科学技术奖的两位院士颁发奖章、证书，同他们热情握手表示祝贺。这紧紧的一握和真诚的祝贺背后，深蕴着习近平总书记的科技情怀和科技强国梦。</p></div><p>“我国科技发展的方向就是创新、创新、再创新。”党的十八大以来，习总书记就科技强国发表了一系列振奋人心的讲话，“创新”一词频频出现。</p><p>从“科技创新、制度创新要协同发挥作用，两个轮子一起转”到“创新驱动实质上是人才驱动”，习总书记再三强调“科技创新”、“制度创新”、“人才创新”的重要性，激发了更多科技工作者的创新创造热情，为新时代科技事业发展指明方向</p><pre><code>&lt;!DOCTYPE html&gt;<br>&lt;html&gt;<br>    &lt;head&gt;<br>        &lt;mate charest="utf-8" /&gt;<br>        &lt;meta name="keywords" content="Editor.md, Markdown, Editor" /&gt;<br>        &lt;title&gt;Hello world!&lt;/title&gt;<br>        &lt;style type="text/css"&gt;<br>            body{font-size:14px;color:#444;font-family: "Microsoft Yahei", Tahoma, "Hiragino Sans GB", Arial;background:#fff;}<br>            ul{list-style: none;}<br>            img{border:none;vertical-align: middle;}<br>        &lt;/style&gt;<br>    &lt;/head&gt;<br>    &lt;body&gt;<br>        &lt;h1 class="text-xxl"&gt;Hello world!&lt;/h1&gt;<br>        &lt;p class="text-green"&gt;Plain text&lt;/p&gt;<br>    &lt;/body&gt;<br>&lt;/html&gt;</code></pre><p><br></p></div>
+                               
                                 <!--内容-->
                                 <div id="test-editormd">
-                                    <textarea style="display: none;"></textarea>
+                                    <textarea style="display: none;">
+
+@if (@Model.Item2.ContentMd.Trim()=="")
+{
+    @Model.Item2.ContentHtml
+}
+else
+{
+    @Model.Item2.ContentMd
+}
+</textarea>
                                 </div>
                                 <!--end 内容-->
                             </div>
-
+                            
+                            <!--发表评论-->
+                            <div id="publish-common" style="width: 100%; background-color: #FAFBFC;padding: 5px 2px">
+                                <form method="post" asp-controller="Post" asp-action="" style="display:flex ">
+                                    <div>
+                                        <i class="fas fa-user-circle fa-3x" style="color: #d6d6d6"></i>
+                                    </div>
+                                    <div style=" width: 100%;">
+                                        <input type="text" class="form-control" style="line-height: 36px; margin-left: 10px;" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                                    </div>
+                                </form>
+                            </div>
 
                             <!--评论-->
                             <div id="post-comment" style="margin-top: 15px;">
-                                <p>这里时评论区域</p>
-                                <p>这里时评论区域</p>
-                                <p>这里时评论区域</p>
-                                <p>这里时评论区域</p>
-                                <p>这里时评论区域</p>
-                                <p>这里时评论区域</p>
-                            </div>
+                                <div class="common-list" style="padding: 0 30px;">
+                                    <div class="common" style="display: flex;">
+                                        <div style="margin-right: 10px;">
+                                            <img src="holder.js/32x32?theme=headimg" style="border-radius: 32px;">
+                                        </div>
+                                        <div clsss="common-body" style="width: 100%">
+                                            <div class="parent-common" style="width: 100%; padding-bottom: 5px;border-bottom: 1px solid #b1d2e2">
+                                                <span style="font-size: 13px;color:#aba6a6">吾爱真理更爱葛巾</span>
+                                                <div style="color: #66696b;font-size: 14px;">
+                                                    小鱼哥，请问能把我也拉进群吗，我想跟你们混，我的微信wxy2013623
+                                                    <div class="toolbar" style="margin-bottom: 10px">
+                                                        <span style="margin-right: 20px;">2019-02-02</span>
+                                                        <span style="margin-right: 20px;" title="支持"><i class="far fa-thumbs-up"></i></span>
+                                                        <span><i class="fas fa-comment"></i>&nbsp;回复</span>
+                                                    </div>
+                                                </div>
+                                                <!--子评论-->
+                                                <div class="child-common" style="color: #66696b;font-size: 14px; display: flex; background-color: #FBFBFB; width: 100%;padding: 5px">
+                                                    <div style="margin-right: 10px;">
+                                                        <img src="holder.js/32x32?theme=headimg" style="border-radius: 32px;">
+                                                    </div>
+                                                    <div class="parent-common" style="width: 100%">
+                                                        <span style="font-size: 13px;color:#aba6a6">admin</span>
+                                                        <div style="color: #66696b;font-size: 14px;">
+                                                            回复<span style="color: #4285f4">吾爱真理更爱葛巾</span>文中有微信哦
+                                                            <div class="toolbar">
+                                                                <span style="margin-right: 20px;">2019-02-02</span>
+                                                                <span style="margin-right: 20px;" title="支持"><i class="far fa-thumbs-up"></i></span>
+                                                                <span><i class="fas fa-comment"></i>&nbsp;回复</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!--子评论-->
+                                                <div class="child-common" style="color: #66696b;font-size: 14px; display: flex; background-color: #FBFBFB; width: 100%;padding: 5px">
+                                                    <div style="margin-right: 10px;">
+                                                        <img src="holder.js/32x32?theme=headimg" style="border-radius: 32px;">
+                                                    </div>
+                                                    <div class="parent-common" style="width: 100%">
+                                                        <span style="font-size: 13px;color:#aba6a6">admin</span>
+                                                        <div style="color: #66696b;font-size: 14px;">
+                                                            回复<span style="color: #4285f4">吾爱真理更爱葛巾</span>文中有微信哦
+                                                            <div class="toolbar">
+                                                                <span style="margin-right: 20px;">2019-02-02</span>
+                                                                <span style="margin-right: 20px;" title="支持"><i class="far fa-thumbs-up"></i></span>
+                                                                <span><i class="fas fa-comment"></i>&nbsp;回复</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
 
+                                            </div>
+                                        </div>
+                                    </div>
+                                  
+                                </div>
+                            </div>
+                            <!--加载更多评论-->
+                            <div clsss="loadmorecommon" style="line-height: 35px; width: 100%; text-align: center;color: #4285f4">
+                                加载更多 >
+                            </div>
                         </div>
                     </div>
                     <aside id="aside">
@@ -313,10 +387,10 @@
                         <form id="form1" asp-controller="Account" asp-action="LoginAsync" method="post">
                             <div class="form-group">
 
-                                <input type="email" name="email" required="" maxlength="64" minlength="7" placeholder="电子邮件" data-purpose="email" value="" class="form-control user-error" aria-invalid="true" asp-for="Email">
+                                <input type="email" name="email" required="" maxlength="64" minlength="7" placeholder="电子邮件" data-purpose="email" value="" class="form-control user-error" aria-invalid="true" asp-for="Item1.Email">
                             </div>
                             <div class="form-group">
-                                <input type="password" name="password" minlength="6" maxlength="64" class="textinput textInput form-control user-error" placeholder="密码" id="id_password" required="" data-purpose="password" aria-invalid="true" asp-for="Password">
+                                <input type="password" name="password" minlength="6" maxlength="64" class="textinput textInput form-control user-error" placeholder="密码" id="id_password" required="" data-purpose="password" aria-invalid="true" asp-for="Item1.Password">
                             </div>
                             <a v-on:click="Login" class="btn btn-default" style="width: 100%;background-color: lightblue">Sign in!</a>
                             <p style="text-align: center; width: 100%; padding: 10px;">或<a href="#" style="text-decoration: none; color: #4285f4;font-size: 14px">&nbsp;忘记密码？</a></p>
@@ -382,7 +456,7 @@
         Holder.addTheme('headimg', {
             bg: '#68217A',
             fg: '#FFFFFF',
-            text: 'zyl',
+            text: '@User.Identity.Name',
             font: "Monaco",
             fontweight: "normal"
         });

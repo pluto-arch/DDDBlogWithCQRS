@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using D3.Blog.Application.ViewModels;
+using D3.Blog.Application.ViewModels.Article;
 using D3.Blog.Domain.Entitys;
 
 namespace D3.Blog.Application.AutoMapper
@@ -18,6 +19,11 @@ namespace D3.Blog.Application.AutoMapper
             //如果两个模型字段一样 可以直接采用
             //CreateMap<Customer, CustomerViewModel>();
             CreateMap<Customer, CustomerViewModel>();
+
+
+            //article转ArticleViewModel
+            CreateMap<Article, ArticleViewModel>()
+                .ConstructUsing(c => new ArticleViewModel(c.Id,c.Title,c.ContentMd,c.ContentHtml,c.Author,"",c.Source,"",c.Status,c.AddTime,c.ViewCount,c.CollectedCount));
         }
     }
 }

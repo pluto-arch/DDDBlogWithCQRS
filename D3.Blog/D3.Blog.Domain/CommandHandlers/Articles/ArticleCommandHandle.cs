@@ -63,12 +63,29 @@ namespace D3.Blog.Domain.CommandHandlers.Articles
                 article.AddTime = request.AddTime;
                 article.AddUserId = _user.Id;
                 article.Author = request.Author;
-                if (request.CategoryId!=null)
+                if (request.ArticleCategoryId!=null)
                 {
-                    article.ArticleCategoryId = request.CategoryId;
+                    article.ArticleCategoryId = request.ArticleCategoryId;
                 }
-                article.Content = request.Content;
-                article.Source = "原创";
+
+                if (request.ContentMd==null)
+                {
+                    article.ContentMd = "";
+                }
+                else
+                {
+                    article.ContentMd = request.ContentMd;
+                }
+
+                if (request.ContentHtml==null)
+                {
+                    article.ContentHtml = "";
+                }
+                else
+                {
+                    article.ContentHtml = request.ContentHtml;
+                }
+                article.Source = request.Source;
                 _articleRepository.Insert(article);
                 if (Commit())
                 {

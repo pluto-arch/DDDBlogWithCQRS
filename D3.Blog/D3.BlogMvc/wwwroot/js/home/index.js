@@ -173,6 +173,7 @@ var app = new Vue({
             this.isSearch = !this.isSearch;           
         }
         , showPostDetails: function (value, event) {
+            value = 10;
             window.location.href = "/Post/PostDetails?id=" + value;
         }
     },

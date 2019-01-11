@@ -4,14 +4,16 @@ using Infrastructure.Data.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Data.Migrations.SqlServerD3BlogDbMigrations
 {
     [DbContext(typeof(D3BlogDbContext))]
-    partial class D3BlogDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190111065240_alertTBArticle")]
+    partial class alertTBArticle
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

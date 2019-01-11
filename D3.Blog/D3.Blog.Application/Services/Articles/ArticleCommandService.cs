@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using AutoMapper;
 using D3.Blog.Application.Interface;
 using D3.Blog.Application.ViewModels.Article;
@@ -75,6 +76,28 @@ namespace D3.Blog.Application.Services.Articles
         public void Update(NewArticleModel updatemodel)
         {
             throw new System.NotImplementedException();
+        }
+
+        /********************************************************/
+
+
+        /// <summary>
+        /// 根据id查找记录
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<ArticleViewModel> GetById(int id)
+        {
+            try
+            {
+                var a= await _articleRepository.FindByIdAsync(id);
+                return _mapper.Map<ArticleViewModel>(a);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e,$"发生错误：{e.Message}");
+                return null;
+            }
         }
     }
 }

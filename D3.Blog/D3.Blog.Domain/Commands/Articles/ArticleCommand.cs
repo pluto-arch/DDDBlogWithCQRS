@@ -12,9 +12,17 @@ namespace D3.Blog.Domain.Commands.Articles
         /// </summary>
         public string Title { get; set; }
         /// <summary>
-        /// 内容
+        /// 配图连接
         /// </summary>
-        public string Content { get; set; }
+        public string ImageUrl { get; set; }
+        /// <summary>
+        /// 内容markdown格式 md编辑器
+        /// </summary>
+        public string ContentMd { get; set; }
+        /// <summary>
+        /// 内容html格式 富文本编辑器
+        /// </summary>
+        public string ContentHtml { get; set; }
         /// <summary>
         /// 浏览次数
         /// </summary>
@@ -28,19 +36,36 @@ namespace D3.Blog.Domain.Commands.Articles
         /// </summary>
         public int PromitCount { get; set; }
         /// <summary>
-        /// 排序号
-        /// </summary>
-        public int Sort { get; set; }
-        /// <summary>
         /// 作者(不一定是appbloguser)
         /// </summary>
         public string Author { get; set; }
         /// <summary>
-        /// 来源：原创/转载/翻译
+        /// 来源
         /// </summary>
         public ArticleSource Source { get; set; }
         /// <summary>
-        /// 添加人id
+        /// 文章状态
+        /// </summary>
+        public ArticleStatus Status { get; set; }
+
+
+        #region SEO相关
+        /// <summary>
+        /// seo标题
+        /// </summary>
+        public string SeoTitle { get; set; }
+        /// <summary>
+        /// seo关键字
+        /// </summary>
+        public string SeoKeyword { get; set; }
+        /// <summary>
+        /// seo描述
+        /// </summary>
+        public string SeoDescription { get; set; }
+        #endregion
+       
+        /// <summary>
+        /// 添加人id，一般是当前操作用户
         /// </summary>
         public int AddUserId { get; set; }
         /// <summary>
@@ -55,13 +80,33 @@ namespace D3.Blog.Domain.Commands.Articles
         /// 修改时间
         /// </summary>
         public DateTime? ModifyTime { get; set; }
+        /// <summary>
+        /// 是否置顶，默认false
+        /// </summary>
+        public bool IsTop { get; set; }
+        /// <summary>
+        /// 是否轮播显示，默认false
+        /// </summary>
+        public bool IsSlide { get; set; }
+        /// <summary>
+        /// 是否热门，默认false
+        /// </summary>
+        public bool IsRed { get; set; }
+        /// <summary>
+        /// 是否发布(审核通过)，默认false
+        /// </summary>
+        public bool IsPublish { get; set; }
+        /// <summary>
+        /// 审核人id
+        /// </summary>
+        public int? VerifyUserId { get; set; }
 
         #region 导航属性
         /// <summary>
         /// 类别id
         /// </summary>
-        public int? CategoryId { get; set; }
-        public virtual ArticleCategory ArticleCategory { get; set; }
+        public int? ArticleCategoryId { get; set; }
+        public ArticleCategory ArticleCategory { get; set; }
         #endregion
     }
 }
