@@ -39,6 +39,12 @@ namespace D3.Blog.Domain.Commands.Articles
         /// 作者(不一定是appbloguser)
         /// </summary>
         public string Author { get; set; }
+
+        /// <summary>
+        /// 非原创时的外部链接
+        /// </summary>
+        public string ExternalUrl { get; set; }
+
         /// <summary>
         /// 来源
         /// </summary>

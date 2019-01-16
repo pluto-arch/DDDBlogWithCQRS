@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using D3.Blog.Application.Interface;
 using D3.Blog.Application.ViewModels.Article;
 using D3.Blog.Domain.Commands.Articles;
 using D3.Blog.Domain.Core.BUS;
+using D3.Blog.Domain.Entitys;
+using D3.Blog.Domain.Enums;
 using D3.Blog.Domain.Infrastructure.IRepositorys;
 using Infrastructure.Data.Repository.EventSourcing;
 
@@ -92,6 +97,51 @@ namespace D3.Blog.Application.Services.Articles
             {
                 var a= await _articleRepository.FindByIdAsync(id);
                 return _mapper.Map<ArticleViewModel>(a);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e,$"发生错误：{e.Message}");
+                return null;
+            }
+        }
+
+        public ArticleViewModel GetByFilter(Expression<Func<Article, bool>> expression)
+        {
+            try
+            {
+                var a = _articleRepository.FindByClause(expression);
+                return _mapper.Map<Article,ArticleViewModel>(a);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e,$"发生错误：{e.Message}");
+                return null;
+            }
+        }
+
+        public IEnumerable<ArticleViewModel> GetList<TKey>(Expression<Func<Article, bool>> expression, Expression<Func<Article, TKey>> orderby)
+        {
+            try
+            {
+                var allArticles = _articleRepository.FindListByClause<TKey>(expression,orderby).ToList();
+
+
+                var result = (from a in allArticles
+                    select new ArticleViewModel(
+                        a.Id,
+                        a.Title,
+                        a.ContentMd,
+                        a.ContentHtml,
+                        a.Author,
+                        "",
+                        a.Source,
+                        "",
+                        ArticleStatus.Savedraft,
+                        a.AddTime,
+                        a.ViewCount,
+                        a.PromitCount
+                        )).ToList();
+                return result;
             }
             catch (Exception e)
             {

@@ -23,6 +23,7 @@ using Newtonsoft.Json;
 using Microsoft.AspNetCore.Identity;
 using Infrastructure.Data.Database;
 using Infrastructure.Identity.Models;
+using Remotion.Linq.Parsing.Structure.IntermediateModel;
 
 namespace D3.BlogMvc.Controllers
 {
@@ -60,15 +61,24 @@ namespace D3.BlogMvc.Controllers
 
             return View();
         }
+        
         /// <summary>
         /// 保存文章
         /// </summary>
-        /// <param name="articleModel">文章内容</param>
+        /// <param name="articleModel"></param>
+        /// <param name="flag">1:发布，2:保存，其余默认保存</param>
         /// <returns></returns>
         [HttpPost]
         [Authorize]
-        public JsonResult WritePost([FromForm]Search articleModel)
+        public JsonResult WritePost([FromForm]Search articleModel,[FromQuery]string flag="2")
         {
+           
+            var a = _articleService.GetByFilter(x => x.Title.Equals(articleModel.Title));
+            if (a!=null)
+            {
+                return new JsonResult("文章标题已存在，请重新输入"); 
+            }
+
             NewArticleModel mo=new NewArticleModel();
             mo.BlogType = articleModel.BlogType;
             mo.ArticleType = articleModel.PostType;
@@ -77,6 +87,21 @@ namespace D3.BlogMvc.Controllers
             mo.Title = articleModel.Title;
             mo.CreateTime=DateTime.Now;
             mo.Tags = articleModel.PostTag;
+            mo.ExternalUrl = articleModel.ZZUrl;
+            switch (flag)
+            {
+                case "1":
+                    //发布，状态变审核
+                    mo.Status = ArticleStatus.Verify;
+                    break;
+                case "2":
+                    //只保存
+                    mo.Status = ArticleStatus.Savedraft;
+                    break;
+                default:
+                    mo.Status = ArticleStatus.Savedraft;
+                    break;
+            }
             if (articleModel.BlogType==ArticleSource.Original)
             {
                 if (_user!=null)
@@ -84,9 +109,9 @@ namespace D3.BlogMvc.Controllers
                     mo.Author =_user.Name;
                 }
             }
-            else
+            else 
             {
-                mo.Author = "";
+                mo.Author = articleModel.ExUrl;
             }
             _articleService.Add(mo);
             var error = _notifications.GetNotifications().Select(n => n.Value);//通知结果
@@ -136,6 +161,25 @@ namespace D3.BlogMvc.Controllers
             }
           
         }
+
+        /// <summary>
+        /// 个人文章管理
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize]
+        public IActionResult ArticleManager([FromQuery]string flag="1")
+        {
+            ViewBag.Title = "文章管理";
+            ViewBag.flag = flag;
+            IEnumerable<ArticleViewModel> result=new List<ArticleViewModel>();
+            if (_user!=null)
+            {
+                result = _articleService.GetList<DateTime>(x => x.AddUserId == _user.Id,x=>x.AddTime);
+            }
+            return View(result);
+        }
+
 
 
         public bool IsValidOperation()

@@ -21,5 +21,8 @@ namespace D3.BlogMvc.Models
         public string PostType { get; set; }
         public string PostTag { get; set; }
         public string Contentmd { get; set; }
+        public string ZZUrl { get; set; }
+
+        public string ExUrl { get; set; }
     }
 }

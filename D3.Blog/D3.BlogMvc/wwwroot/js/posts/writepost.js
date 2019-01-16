@@ -14,7 +14,8 @@ var app = new Vue({
         vaildataMessage: "",
         isShowVail: false,
         editor: Object,
-        mdeditor: Object
+        mdeditor: Object,
+        iszz: false //是否转载
     },
     mounted: function () {
         this.$nextTick(function () {
@@ -46,6 +47,16 @@ var app = new Vue({
                     saveHTMLToTextarea: true
                 });
             v.mdeditor = testEditor;
+            
+            /* 选择改变事件(转载链接) */
+            $("#sel1").change(function () {
+                var opt = $("#sel1").val();
+                if (opt.trim() == "转载") {
+                    v.iszz = true;
+                } else {
+                    v.iszz = false;
+                }
+            });
         }
         , setNavBarMenu: function () {
             var v = this;
@@ -156,11 +167,12 @@ var app = new Vue({
             var v = this;
             var isSubmit = v.setAndVaildata();
             if (isSubmit) {
-                v.$http.post('/Post/WritePost', $('#formPost').serialize())
+                v.$http.post('/Post/WritePost?flag='+flag, $('#formPost').serialize())
                     .then(res => {
                         if (res.data.length > 0) {
                            //有错误
-                            toastr.warning('出现错误，请稍后重试');
+                            console.log(res);
+                            toastr.warning('出现错误：' + res.data);
                         } else {
                            //无错误
                             toastr.info('发布成功');

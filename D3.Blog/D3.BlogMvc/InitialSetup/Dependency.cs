@@ -84,7 +84,7 @@ namespace D3.BlogMvc.InitialSetup
 
 
             #region 仓储和服务
-            services.AddScoped(typeof(IRepository<>),typeof(Repository<>));
+//            services.AddScoped(typeof(IRepository<>),typeof(Repository<>));
             services.AddScoped<ICustomerRepository,CustomerRepository>();
             services.AddScoped<IArticleRepository,ArticleRepository>();
 

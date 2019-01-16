@@ -41,9 +41,15 @@ namespace D3.Blog.Domain.Entitys
         /// </summary>
         public string Author { get; set; }
         /// <summary>
-        /// 来源
+        /// 来源 1原创，2转载，3翻译
         /// </summary>
         public Nullable<ArticleSource> Source { get; set; }
+
+        /// <summary>
+        /// 非原创文章的外部url链接
+        /// </summary>
+        public string ExternalUrl { get; set; }
+
         /// <summary>
         /// 文章状态
         /// </summary>

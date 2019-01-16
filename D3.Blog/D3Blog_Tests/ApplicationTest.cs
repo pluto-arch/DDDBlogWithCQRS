@@ -199,7 +199,7 @@ namespace D3Blog_Tests
             AutoMapperConfig.RegisterMappings();
 
             #region ²Ö´¢ºÍ·þÎñ
-            services.AddScoped(typeof(IRepository<>),typeof(Repository<>));
+//            services.AddScoped(typeof(IRepository<>),typeof(Repository<>));
             services.AddScoped<ICustomerRepository,CustomerRepository>();
             services.AddScoped<ICustomerService,CustomerService>();
             services.AddScoped<IArticleRepository,ArticleRepository>();

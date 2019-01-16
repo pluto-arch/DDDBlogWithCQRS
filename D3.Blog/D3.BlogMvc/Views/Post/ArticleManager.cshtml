@@ -1,8 +1,9 @@
 ﻿@using System.Security.Claims
+@using D3.Blog.Domain.Enums
 @using Infrastructure.Data.Database
 @using Infrastructure.Identity.Models
 @using Microsoft.AspNetCore.Identity
-@model D3.BlogMvc.Models.Search
+@model IEnumerable<D3.Blog.Application.ViewModels.Article.ArticleViewModel>
 @inject UserManager<AppBlogUser> userManager
 @inject SignInManager<AppBlogUser> signInManager
 @{
@@ -17,7 +18,7 @@
     <meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1">
     <meta name=viewport content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
 
-    <title>YL-Blog-写文章</title>
+    <title>YL-Blog-@ViewBag.Title</title>
 
     <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="~/css/bootstrap/bootstrap.min.css">
@@ -33,6 +34,66 @@
     <link rel="stylesheet" href="~/bootstrap-tokenfield/css/bootstrap-tokenfield.min.css">
     <link rel="stylesheet" href="~/bootstrap-tokenfield/css/tokenfield-typeahead.min.css">
     <!--[if lt IE 9]><script src="~/lib/html5.min.js"></script><![endif]-->
+    <style>
+        #quick-search > ul,li {
+            padding: 0;
+            margin: 0;
+        }
+        #quick-search ul {
+            display: flex;
+            line-height: 30px;
+            padding: 0 10px;
+            margin: 5px 5px;
+        }
+            #quick-search ul li {
+                list-style: none;
+                margin-right: 20px;
+                border-bottom: 2px solid white;
+            }
+                #quick-search ul .active {
+                    border-bottom: 2px solid #309dda;
+                }
+                #quick-search ul li:hover {
+                    border-bottom: 2px solid #309dda;
+                    cursor: pointer;
+                }
+        #blogtype1:before {
+            content: '';
+            display: block;
+            left: -4px;
+            top: 6px;
+            width: 8px;
+            height: 8px;
+            position: absolute;
+            transform: rotate(45deg);
+            background-color: #5bea37;
+        }
+        #blogtype2:before {
+            content: '';
+            display: block;
+            left: -4px;
+            top: 6px;
+            width: 8px;
+            height: 8px;
+            position: absolute;
+            transform: rotate(45deg);
+            background-color: #3ba8f5;
+        }
+        #blogtype3:before {
+            content: '';
+            display: block;
+            left: -4px;
+            top: 6px;
+            width: 8px;
+            height: 8px;
+            position: absolute;
+            transform: rotate(45deg);
+            background-color: #f9cd2f;
+        }
+        .info {
+            margin-left: 30px;
+        }
+    </style>
 </head>
 <body>
     <div id="app">
@@ -97,7 +158,7 @@
             <!-- Page Content  -->
             <div id="content">
                 <nav class="navbar navbar-expand-lg navbar-light bg-white" style="margin-bottom: 10px">
-                    <div class="container-fluid">
+                    <div class="container">
                         <a class="" id="sidebarCollapse" style="font-size: 25px;width: 60px;text-align: center;">
                             <i class="fas fa-align-justify"></i>
                         </a>
@@ -170,70 +231,138 @@
                         <button data-flag="1" type="submit" style="line-height: 30px;border: none;background-color: #309dda;width: 60px;border: 1px solid #309dda;">搜索</button>
                     </form>
                 </div>
-                <div class="container-fluid" style="display: flex; padding: 0 25px;">
+                <div class="container" style="display: flex; padding: 0 25px;">
                     <div id="aside-content">
                         <ul>
-                            <li class="write-aside checked"><a href="#">富文本编辑器</a></li>
+                            <li class="write-aside"><a href="#">富文本编辑器</a></li>
                             <li class="write-aside"><a asp-controller="Post" asp-action="MarkDownEditor">MarkDown编辑器</a></li>
                         </ul>
                         <hr />
                         <ul>
-                            <li class="write-aside"><a asp-controller="Post" asp-action="ArticleManager">文章管理</a></li>
+                            <li class="write-aside checked"><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="1">文章管理</a></li>
                             <li class="write-aside"><a href="#">评论管理</a></li>
                         </ul>
                     </div>
                     <div id="write-area">
-                        <form id="formPost" asp-controller="Post" asp-action="WritePost" method="post">
-                            <input type="text" id="txtTitle" maxlength="100" placeholder="输入文章标题" asp-for="Title">
-                            <!--富文本编辑器-->
-                            <div style="text-align:left;">
-                                <div id="divDemo">
-                                    <p>欢迎使用，请输入内容...</p>
+                        <div id="quick-search">
+                            <ul>
+                                @{
+                                    switch (ViewBag.flag)
+                                    {
+                                        case "1":
+                                            <li class="active"><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="1">全部</a></li>
+                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="2">已发布</a></li>
+                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="3">审核中</a></li>
+                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="4">草稿箱</a></li>
+                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="5">回收站</a></li>
+                                            break;
+                                        case "2":
+                                            <li ><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="1">全部</a></li>
+                                            <li class="active"><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="2">已发布</a></li>
+                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="3">审核中</a></li>
+                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="4">草稿箱</a></li>
+                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="5">回收站</a></li>
+                                            break;
+                                        case "3":
+                                            <li ><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="1">全部</a></li>
+                                            <li ><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="2">已发布</a></li>
+                                            <li class="active"><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="3">审核中</a></li>
+                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="4">草稿箱</a></li>
+                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="5">回收站</a></li>
+                                            break;
+                                        case "4":
+                                            <li ><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="1">全部</a></li>
+                                            <li ><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="2">已发布</a></li>
+                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="3">审核中</a></li>
+                                            <li class="active"><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="4">草稿箱</a></li>
+                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="5">回收站</a></li>
+                                            break;
+                                        case "5":
+                                            <li ><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="1">全部</a></li>
+                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="2">已发布</a></li>
+                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="3">审核中</a></li>
+                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="4">草稿箱</a></li>
+                                            <li class="active"><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="5">回收站</a></li>
+                                            break;
+                                    }
+
+                                }
+                            </ul>
+                        </div>
+                        <div style="margin: 5px 0px 10px; padding: 0 5px; line-height: 60px; background-color: #F2F5F7;">搜索</div>
+                        
+                        @foreach(var item in Model)
+                        {
+                            <div id="post-lists" style="padding: 1rem 0;">
+                                <div style="display: flex">
+                                    <h5 style="margin: 0; color: #656565;cursor: pointer"><a target="_blank" title="编辑">@item.Title</a></h5>
+                                    @if (item.BlogType == ArticleSource.Original)
+                                    {
+                                        <span id="blogtype1" style="position: relative;padding-left: 9px;color: white;font-size: 10px;padding-top: 0;background-color: #5bea37;line-height: 20px;height: 20px;margin: 0;margin-left: 10px;width: 42px; margin-right: 50px;cursor: pointer">原创</span>
+                                    }
+                                    else if (item.BlogType == ArticleSource.Transport)
+                                    {
+                                        <span id="blogtype2" style="position: relative;padding-left: 9px;color: white;font-size: 10px;padding-top: 0;background-color: #3ba8f5;line-height: 20px;height: 20px;margin: 0;margin-left: 10px;width: 42px; margin-right: 50px;cursor: pointer">转载</span>
+                                    }
+                                    else
+                                    {
+                                        <span id="blogtype3" style="position: relative;padding-left: 9px;color: white;font-size: 10px;padding-top: 0;background-color: #f9cd2f;line-height: 20px;height: 20px;margin: 0;margin-left: 10px;width: 42px; margin-right: 50px;cursor: pointer">翻译</span>
+                                    }
+
+
                                 </div>
-                            </div>
-                            <div id="test-editormd" style="display: none">
-                                <textarea style="display: none;"></textarea>
-                            </div>
-                            <!--富文本编辑器 end-->
-                            <input id="articlehtml" type="hidden" asp-for="Content" /><!--文章内容-->
-                            <div class="post-info" style="margin-top:25px;font-size:14px;position:relative">
-                                <div style="margin: 15px 0;">
-                                    <div class="post-tag" style="display: flex;">
-                                        <div id="posttag">
-                                            <input asp-for="PostTag" type="text" class="form-control" id="tokenfield" value="" placeholder="输入文章标签" /><span style="font-size: 10px;color: #ccc;">最多5个，每输入一个按回车键添加</span>
-                                        </div>
+                                <div style="border-bottom: 1px dotted #ddd; display: flex; position: relative; cursor: pointer; padding-bottom: 5px;">
+                                    <div style="display: flex">
+                                        <p>@item.CreateTime.ToString("yyyy-MM-dd HH:mm")</p>
+                                        <p class="info">阅读：@item.ViewCount</p>
+                                        <p class="info">评论：@item.CommonCount</p>
+                                    </div>
+                                    <div style="position: absolute; right: 5px; cursor: pointer;font-size: 15px;">
+                                        <span style="color: #3ba8f5">查看</span> 
+                                        <span style="color: #cccccc">|</span> 
+                                        <span class="text-success">编辑</span>
+                                        <span style="color: #cccccc">|</span> 
+                                        <span style="color: orange">删除</span>
                                     </div>
                                 </div>
-                                <div style="margin-bottom:25px;display: flex">
-                                    <!--取值：var value = $('#sel').val();-->
-                                    <select id="sel1" class="article-type" asp-for="BlogType">
-                                        <option value="">博客类型</option>
-                                        <option value="原创">原创</option>
-                                        <option value="转载">转载</option>
-                                        <option value="翻译">翻译</option>
-                                    </select>
-                                    &nbsp;&nbsp;
-                                    <select id="sel2" class="article-type" asp-for="PostType">
-                                        <option value="">文章类型</option>
-                                        <option value="前端">前端</option>
-                                        <option value="后端">后端</option>
-                                        <option value="移动开发">移动开发</option>
-                                        <option value="编程语言">编程语言</option>
-                                        <option value="程序人生">程序人生</option>
-                                    </select>
-                                    &nbsp;&nbsp;
-                                    <input type="text" id="txtUrl" class="form-control" style="width: 350px;" placeholder="请注明转载链接" asp-for="ZZUrl" v-show="iszz" required="required">
-                                    <input type="text" id="txtAuthor" class="form-control" style="width: 250px;" placeholder="请注明原作者" asp-for="ExUrl" v-show="iszz" required="required">
-                                </div>
-                                <div style="display: flex">
-                                    <button id="publish" type="button" class="btn btn-outline-primary" v-on:click="publish(1,$event)">发布文章</button>&nbsp;
-                                    <button id="save" type="button" class="btn btn-outline-secondary" v-on:click="publish(2,$event)">保存为草稿</button>&nbsp;
-                                    <button id="preview" type="button" class="btn btn-outline-warning" v-on:click="publish(3,$event)">预览</button>
-                                </div>
-
                             </div>
-                        </form>
-
+                        }
+                        
+                        
+                        <div id="pages">
+                            <div>
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination" id="mypage">
+                                        <li class="page-item">
+                                            <a class="page-link" href="#" aria-label="Previous">
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+                                        @{
+                                            var pages = Model.Count() % 2 == 0 ? Model.Count() / 2 : Model.Count() / 2 + 1;
+                                            for (int i = 1; i <= pages; i++)
+                                            {
+                                                if (i==1)
+                                                {
+                                                    <li class="page-item my-page active"><a class="page-link">@i</a></li>
+                                                }
+                                                else
+                                                {
+                                                    <li class="page-item my-page"><a class="page-link">@i</a></li>
+                                                }
+                                                
+                                            }
+                                        }
+                                        <li class="page-item">
+                                            <a class="page-link" href="#" aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                        
                     </div>
                 </div>
 
@@ -274,15 +403,12 @@
     <!-- jQuery Custom Scroller CDN -->
     <script src="~/js/jquery/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src="~/js/axios/axios.min.js"></script>
-    <!--富文本编辑器-->
-    <script src="~/wangEditor-3.1.1/wangEditor.min.js"></script>
     <!--tag 输入框-->
     <script src="~/bootstrap-tokenfield/bootstrap-tokenfield.min.js"></script>
     <script src="~/js/vue/vue.js"></script>
     <script src="~/js/holder/holder.min.js"></script>
-    <script src="~/lib/markdown/editormd.min.js"></script>
     <script src="~/lib/toastr/toastr.min.js"></script>
-    <script src="~/js/posts/writepost.js"></script>
+    <script src="~/js/posts/manager.js"></script>
     <script type="text/javascript">
 
     </script>

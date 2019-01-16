@@ -37,6 +37,9 @@ namespace Infrastructure.Data.DataConfig
 
             builder.Property(x => x.ImageUrl).HasMaxLength(300).IsUnicode();
 
+
+            builder.Property(x => x.ExternalUrl).HasMaxLength(300).IsRequired(false);
+
             //-----------上：一般新增必用，下边一般修改比用---------
 
             builder.Property(x => x.CollectedCount).HasDefaultValue(0);
@@ -55,7 +58,7 @@ namespace Infrastructure.Data.DataConfig
 
             builder.Property(x => x.Source).IsRequired(false);
 
-            builder.Property(x => x.Status).HasDefaultValue(ArticleStatus.Verify);
+            builder.Property(x => x.Status).HasDefaultValue(ArticleStatus.Savedraft);
 
             builder.Property(e => e.ArticleCategoryId).HasColumnName("CategoryID").IsRequired(false);
 

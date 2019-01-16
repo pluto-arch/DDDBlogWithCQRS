@@ -31,7 +31,7 @@ namespace D3.Blog.Domain.Infrastructure
         /// <param name="predicate">条件表达式树</param>
         /// <param name="orderBy">排序</param>
         /// <returns>泛型实体集合</returns>
-        IQueryable<T> FindListByClause(Expression<Func<T, bool>> predicate, string orderBy);
+        IQueryable<T> FindListByClause<TKey>(Expression<Func<T, bool>> predicate, Expression<Func<T, TKey>> orderby);
 
         /// <summary>
         /// 根据条件查询数据

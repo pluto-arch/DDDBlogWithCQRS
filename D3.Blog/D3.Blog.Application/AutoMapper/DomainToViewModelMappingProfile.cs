@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using AutoMapper;
 using D3.Blog.Application.ViewModels;
 using D3.Blog.Application.ViewModels.Article;
 using D3.Blog.Domain.Entitys;
@@ -21,9 +22,15 @@ namespace D3.Blog.Application.AutoMapper
             CreateMap<Customer, CustomerViewModel>();
 
 
-            //article转ArticleViewModel
+            //article转ArticleViewModel,单个
             CreateMap<Article, ArticleViewModel>()
                 .ConstructUsing(c => new ArticleViewModel(c.Id,c.Title,c.ContentMd,c.ContentHtml,c.Author,"",c.Source,"",c.Status,c.AddTime,c.ViewCount,c.CollectedCount));
+
+
+            
+            //list形式
+            CreateMap<List<Article>, List<ArticleViewModel>>();
+
         }
     }
 }

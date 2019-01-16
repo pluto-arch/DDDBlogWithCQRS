@@ -20,7 +20,8 @@ namespace D3.Blog.Domain.Commands.Articles
             string author,
             int? articleCategoryId,
             ArticleSource source,
-            ArticleStatus status)
+            ArticleStatus status,
+            string externalUrl)
         {
             Title = title;
             Author = author;
@@ -30,6 +31,7 @@ namespace D3.Blog.Domain.Commands.Articles
             Source = source;
             Status = status;
             ArticleCategoryId = articleCategoryId;
+            ExternalUrl = externalUrl;
         }
         /// <summary>
         /// 验证数据

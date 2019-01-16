@@ -59,39 +59,35 @@ namespace D3.Blog.Domain.CommandHandlers.Articles
             try
             {
                 var article = new Article();
+
                 article.Title = request.Title;
+
                 article.AddTime = request.AddTime;
+
                 article.AddUserId = _user.Id;
-                article.Author = request.Author;
+
+                article.Author = request.Author??"";
+
+                article.ExternalUrl = request.ExternalUrl??"";
+
                 if (request.ArticleCategoryId!=null)
                 {
                     article.ArticleCategoryId = request.ArticleCategoryId;
                 }
 
-                if (request.ContentMd==null)
-                {
-                    article.ContentMd = "";
-                }
-                else
-                {
-                    article.ContentMd = request.ContentMd;
-                }
+                article.ContentMd = request.ContentMd ?? "";
 
-                if (request.ContentHtml==null)
-                {
-                    article.ContentHtml = "";
-                }
-                else
-                {
-                    article.ContentHtml = request.ContentHtml;
-                }
+                article.ContentHtml = request.ContentHtml ?? "";
+
                 article.Source = request.Source;
+
+                article.Status = request.Status;
+                
                 _articleRepository.Insert(article);
                 if (Commit())
                 {
                     //提交成功，发布领域事件
                     _bus.RaiseEvent(new ArticleAddOrEditEvent(article.Id));
-                    var res = "";
                 }
             }
             catch (Exception e)
