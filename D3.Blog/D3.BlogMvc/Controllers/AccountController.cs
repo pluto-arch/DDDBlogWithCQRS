@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using D3.BlogMvc.Hubs;
 using D3.BlogMvc.Models.AccountModels;
 using Infrastructure.Data.Database;
@@ -37,7 +38,7 @@ namespace D3.BlogMvc.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login(string returnUrl="/")
         {
-            // Clear the existing external cookie to ensure a clean login process
+            ViewBag.title = "博客-登录";
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
             ViewData["ReturnUrl"] = returnUrl;
             return View();
@@ -99,9 +100,7 @@ namespace D3.BlogMvc.Controllers
                     errormessage.Add(p.ErrorMessage);
                 }
             }
-
             return new JsonResult(errormessage);
-            
         }
 
         /// <summary>
@@ -114,6 +113,7 @@ namespace D3.BlogMvc.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> NewPageLoginAsync([FromForm]LoginModel model, string returnUrl=null)
         {
+            ViewBag.title = "博客-登录";
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
@@ -214,25 +214,40 @@ namespace D3.BlogMvc.Controllers
         [AllowAnonymous]    
         public IActionResult Register(string returnUrl="/")
         {
+            ViewBag.title = "博客-注册";
             ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
+
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegisterAsync([FromForm]RegisterModel model)
         {
+            List<string> errormessage=new List<string>();
+            if (!ModelState.IsValid)
+            {
+                foreach (var s in ModelState.Values)
+                {
+                    foreach (var p in s.Errors)
+                    {
+                        errormessage.Add(p.ErrorMessage);
+                    }
+                }
+                return new JsonResult(errormessage);
+            }
             var user=await _userManager.FindByEmailAsync(model.Email);
             if (user!=null)
             {
-                ModelState.AddModelError("","邮箱已被使用");
-                return View("Register", model);
+                errormessage.Add("邮箱已被使用");
+                return new JsonResult(errormessage);
             }
             var user2 = await _userManager.FindByNameAsync(model.Name);
             if (user2!=null)
             {
-                ModelState.AddModelError("","用户名已被使用");
-                return View("Register", model);
+                errormessage.Add("用户名已被使用");
+                return new JsonResult(errormessage);
             }
 
             var  newuser=new AppBlogUser
@@ -243,11 +258,14 @@ namespace D3.BlogMvc.Controllers
             IdentityResult issuccess= await _userManager.CreateAsync(newuser, model.Password);
             if (issuccess.Succeeded)
             {
-                return Json("success");
+                await _signInManager.PasswordSignInAsync(newuser,model.Password,false,false);
+                return new JsonResult(errormessage);
             }
-
-
-            return new JsonResult("");
+            foreach (var s in issuccess.Errors)
+            {
+                errormessage.Add(s.Description);
+            }
+            return new JsonResult(errormessage);
         }
 
         

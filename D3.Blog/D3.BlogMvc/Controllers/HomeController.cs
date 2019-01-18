@@ -53,6 +53,8 @@ namespace D3.BlogMvc.Controllers
 
             return Json("1212");
         }
+
+
         /// <summary>
         /// 首页
         /// </summary>
@@ -60,6 +62,7 @@ namespace D3.BlogMvc.Controllers
         [AllowAnonymous]
         public IActionResult HomePage()
         {
+            ViewBag.title = "YLBlog-首页";
             return View();
         }
         
@@ -72,6 +75,7 @@ namespace D3.BlogMvc.Controllers
         [AllowAnonymous]
         public IActionResult Search([FromForm]string searchtext)
         {
+            ViewBag.title = "YLBlog-搜索结果";
             ViewBag.searchKeyWord=searchtext;            
             return View();
         }

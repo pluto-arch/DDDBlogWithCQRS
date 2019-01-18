@@ -11,7 +11,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Logging\jwjcdee5.y25~" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Castle.Core" Version="4.3.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.2.0" />
     <PackageReference Include="Serilog" Version="2.7.1" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="2.0.2" />
     <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="5.1.2" />

@@ -83,6 +83,6 @@ pre code {
 }
 
 /* ul ol 样式 */
-ul, ol {
+#post-detail ul, ol {
     margin: 10px 0 10px 20px;
 }

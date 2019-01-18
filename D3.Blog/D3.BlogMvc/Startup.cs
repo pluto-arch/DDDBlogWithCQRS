@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Linq;
+using System.Reflection;
+using AspectCore.Configuration;
+using AspectCore.Extensions.DependencyInjection;
 using D3.BlogMvc.Hubs;
 using D3.BlogMvc.InitialSetup;
 using Infrastructure.Data.Database;
@@ -18,6 +22,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using AspectCore.DynamicProxy;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Autofac.Extras.DynamicProxy;
+using D3.Blog.Application.Interface;
+using D3.Blog.Application.Services.Articles;
+using D3.Blog.Application.Services.Customer;
+using D3.Blog.Domain.Infrastructure.IRepositorys;
+using Infrastructure.AOP;
+using Infrastructure.Data.Repository.Repositorys;
 
 namespace D3.BlogMvc
 {
@@ -33,13 +47,14 @@ namespace D3.BlogMvc
         /// </summary>
         public IConfiguration Configuration { get; }
 
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+//            services.ConfigureDependencies(); //配置依赖注入  
 
-
-            services.ConfigureDependencies(); //配置依赖注入  
             services.ConfigureSeriLog(Configuration);//配置serilog
+
             services.AddAutoMapperSetup();
+
             #region IDentity
             services.AddDbContext<AppIdentityDbContext>(
                 options =>options.UseSqlServer(Configuration.GetConnectionString("ID_DBCONN")));
@@ -94,8 +109,27 @@ namespace D3.BlogMvc
                          });
             #endregion
 
+            services.AddMemoryCache();
             services.AddMvc();
             services.AddSignalR();
+
+
+
+            
+            #region Autofac
+            var builder = new ContainerBuilder();
+            builder.Populate(services);//将原生的注入填充进去
+            builder.RegisterType<BlogLogAOP>();//可以直接替换其他拦截器！一定要把拦截器进行注册
+            builder.RegisterType<BlogCacheAOP>();
+            builder.ConfigureDependenciesAutofac();
+
+
+            var applicationContainer = builder.Build();//构建新容器
+            #endregion
+
+            
+
+            return new AutofacServiceProvider(applicationContainer);//新容器
         }
 
         

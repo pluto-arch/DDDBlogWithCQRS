@@ -1,4 +1,5 @@
 ﻿using System;
+using Autofac;
 using AutoMapper;
 using D3.Blog.Application.AutoMapper;
 using Microsoft.Extensions.DependencyInjection;

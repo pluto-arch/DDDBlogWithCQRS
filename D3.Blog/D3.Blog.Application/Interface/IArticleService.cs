@@ -4,6 +4,8 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using D3.Blog.Application.ViewModels.Article;
 using D3.Blog.Domain.Entitys;
+using Infrastructure.AOP;
+using Serilog.Core;
 
 namespace D3.Blog.Application.Interface
 {

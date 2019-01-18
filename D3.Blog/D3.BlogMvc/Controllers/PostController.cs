@@ -146,7 +146,7 @@ namespace D3.BlogMvc.Controllers
         /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> PostDetails([FromQuery]string id)
+        public async Task<IActionResult> PostDetails([FromRoute]string id)
         {
             ViewBag.queryValue=id;
             var model= await _articleService.GetById(int.Parse(id));
@@ -156,7 +156,7 @@ namespace D3.BlogMvc.Controllers
             }
             else
             {  
-                Tuple<LoginModel,ArticleViewModel> tmodel=new Tuple<LoginModel, ArticleViewModel>(new LoginModel(), model);
+                Tuple<LoginModel,RegisterModel,ArticleViewModel> tmodel=new Tuple<LoginModel, RegisterModel,ArticleViewModel>(new LoginModel(),new RegisterModel(), model);
                 return View(tmodel);
             }
           
@@ -168,14 +168,19 @@ namespace D3.BlogMvc.Controllers
         /// <returns></returns>
         [HttpGet]
         [Authorize]
-        public IActionResult ArticleManager([FromQuery]string flag="1")
+        public IActionResult ArticleManager([FromQuery]string flag="1",[FromQuery]int pageindex=1)
         {
+            int pagesize = 2;//页大小
             ViewBag.Title = "文章管理";
             ViewBag.flag = flag;
+
+            ViewBag.pageindex = pageindex;
+
             IEnumerable<ArticleViewModel> result=new List<ArticleViewModel>();
             if (_user!=null)
             {
                 result = _articleService.GetList<DateTime>(x => x.AddUserId == _user.Id,x=>x.AddTime);
+                
             }
             return View(result);
         }

@@ -15,7 +15,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Login</title>
+    <title>@ViewBag.title</title>
     <link rel="stylesheet" asp-href-include="~/css/all.min.css" />
     <link rel="stylesheet" asp-href-include="~/css/index.min.css" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
@@ -37,6 +37,9 @@
             <div class="checkbox mb-3">
                 <label>
                     <input type="checkbox" value="true" class="form-check-input" asp-for="RememberMe" style="margin-top: 7px;"><span style="font-size: 15px;">记住我</span>
+                </label>
+                &nbsp;&nbsp;&nbsp;<label style="font-size: 10px;">
+                    <span>还没有账号？<a asp-controller="Account" asp-action="Register" asp-route-returnUrl="@ViewData["returnUrl"]" style="color: #0000ff">点击注册</a></span>
                 </label>
             </div>
             <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>

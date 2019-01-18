@@ -11,6 +11,7 @@ using D3.Blog.Domain.Core.BUS;
 using D3.Blog.Domain.Entitys;
 using D3.Blog.Domain.Enums;
 using D3.Blog.Domain.Infrastructure.IRepositorys;
+using Infrastructure.Cache;
 using Infrastructure.Data.Repository.EventSourcing;
 
 namespace D3.Blog.Application.Services.Articles
@@ -119,6 +120,7 @@ namespace D3.Blog.Application.Services.Articles
             }
         }
 
+//        [Caching(AbsoluteExpiration = 10)]//增加缓存特性
         public IEnumerable<ArticleViewModel> GetList<TKey>(Expression<Func<Article, bool>> expression, Expression<Func<Article, TKey>> orderby)
         {
             try

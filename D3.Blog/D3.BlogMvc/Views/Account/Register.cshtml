@@ -9,59 +9,67 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Register</title>
+    <title>博客-注册</title>
     <link rel="stylesheet" asp-href-include="~/css/all.min.css" />
     <link rel="stylesheet" asp-href-include="~/css/index.min.css" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <!-- import CSS -->
     <link rel="stylesheet" href="~/elementUI/index.css">
+    <link href="~/lib/toastr/toastr.min.css" rel="stylesheet" />
     <style>
         li {
             list-style: none;
         }
+        .control-label {
+            width: 150px;
+        }
     </style>
 </head>
-<body class="text-center" style="display: flex; justify-content: center; padding: 50px;">
-<div id="app" style="width: 500px">
-    <h4>欢迎注册</h4>
-    <hr />
-    <div class="row">
-        <div class="col-md-12">
-            <form id="form1" asp-action="RegisterAsync">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <vc:summary />
-                <div class="form-group" style="display: flex; justify-content: space-between">
-                    <label asp-for="Name" class=""></label>
-                    <input asp-for="Name" class="form-control" style="width: 250px" />
-                    <span asp-validation-for="Name" class="text-danger" style="width: 200px"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Email" class="control-label"></label>
-                    <input asp-for="Email" class="form-control" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Password" class="control-label"></label>
-                    <input asp-for="Password" class="form-control" />
-                    <span asp-validation-for="Password" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <button onclick="Login" class="btn btn-default">注册</button>
-                </div>
-            </form>
+<body class="text-center" style="padding: 50px;display: flex">
+<div style="width: 50%; height: 100%; background-color: aqua;">
+    a
+</div>
+<div>
+    <div id="app" style="width: 300px; display: flex; flex-direction: column; align-items: center; justify-content: center">
+        <h4>欢迎注册</h4>
+        <hr/>
+        <div class="row" style="">
+            <div class="col-md-12">
+                <form id="form1" asp-action="RegisterAsync" asp-route-returnUrl="@ViewData["returnUrl"]">
+                    <div class="form-group" style="display: flex;">
+                        <label asp-for="Name" class="control-label">昵称</label>
+                        <input asp-for="Name" class="form-control"/>
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group" style="display: flex;">
+                        <label asp-for="Email" class="control-label">邮箱</label>
+                        <input asp-for="Email" class="form-control"/>
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group" style="display: flex;">
+                        <label asp-for="Password" class="control-label">密码</label>
+                        <input asp-for="Password" class="form-control"/>
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <button onclick="Login" class="btn btn-default">注册</button>
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
 
-    <div>
-        <a asp-controller="Home" asp-action="Index">返回首页</a>
+        <div>
+            <a asp-controller="Home" asp-action="Index">返回首页</a>
+        </div>
     </div>
 </div>
 
+
 <script src="~/lib/signalr/dist/browser/signalr.js"></script>
-    <script src="~/js/axios/axios.min.js"></script>
-    <script src="https://cdn.bootcss.com/holder/2.9.4/holder.min.js"></script>
-    <script type="text/javascript" asp-src-include="~/js/all.min.js"></script>
-    <script src="~/elementUI/index.js"></script>
+<script src="~/js/axios/axios.min.js"></script>
+<script src="https://cdn.bootcss.com/holder/2.9.4/holder.min.js"></script>
+<script type="text/javascript" asp-src-include="~/js/all.min.js"></script>
+<script src="~/lib/toastr/toastr.min.js"></script>
 <script>
     function Login() {
         $.ajax({
@@ -69,11 +77,12 @@
             type: 'POST',
             contentType: "application/x-www-form-urlencoded; charset=utf-8",
             data: $("#form1").serialize(),
-            success: function (result) {
-                alert(result);
+            success: function(result) {
+                toastr.info('注册成功,即将跳转到首页！');
+                window.location.href = "/";
             },
-            error: function (res) {
-                alert(res);
+            error: function(res) {
+                toastr.warning('出现错误，请稍后重试。' + res);
             }
         });
     }
