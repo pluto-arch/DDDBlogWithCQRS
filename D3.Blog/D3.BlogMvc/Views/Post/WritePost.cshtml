@@ -17,7 +17,7 @@
     <meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1">
     <meta name=viewport content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
 
-    <title>YL-Blog-写文章</title>
+    <title>@ViewBag.title</title>
 
     <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="~/css/bootstrap/bootstrap.min.css">
@@ -36,134 +36,11 @@
 </head>
 <body>
     <div id="app">
-        <!-- Sidebar  -->
-        <nav id="sidebar">
-            <div id="dismiss">
-                <i class="fas fa-arrow-left"></i>
-            </div>
-            <div class="sidebar-header">
-                <img src="https://mdbootstrap.com/img/logo/mdb-transparent.png" height="50" alt="mdb logo">
-            </div>
-            <ul id="side-menu" class="list-unstyled components">
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <div id="side-user">
-                        <p style="padding-top: 0px;padding-bottom: 0px; padding-left: 20px;">@User.Identity.Name</p>
-                        <ul>
-                            <li title="个人中心"><i class="far fa-user-circle"></i></li>
-                            <li title="草稿"><i class="fas fa-file-alt"></i></li>
-                            <li title="我的收藏"><i class="fas fa-star"></i></li>
-                            <li title="我的评论"><i class="fas fa-tag"></i></li>
-                            <li title="我的通知"><i class="fas fa-bell"></i></li>
-                        </ul>
-                    </div>
-                }
-                else
-                {
-                    <p>Welcome</p>
-                }
-
-                <li class="">
-                    <a asp-controller="Home" asp-action="HomePage">首页</a>
-                </li>
-                <li>
-                    <a href="#">文章</a>
-                </li>
-                <li>
-                    <a href="#">工具技巧</a>
-                </li>
-                <li>
-                    <a href="#">话题心得</a>
-                </li>
-            </ul>
-
-            <ul class="list-unstyled CTAs">
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <li data-flag="1" style="padding-top: 0;">
-                        <a data-flag="1" asp-controller="Account" asp-action="Logout"><i data-flag="1" class="fas fa-sign-out-alt"></i><span data-flag="1" class="faw">退出登录</span></a>
-                    </li>
-                }
-                else
-                {
-                    <li>
-                        <a href="#" class="download" data-toggle="modal" data-target="#Login">登录</a>
-                    </li>
-                }
-
-            </ul>
-        </nav>
+        @await Html.PartialAsync("_sidebarMenu")@*侧边导航*@
         <div class="wrapper">
             <!-- Page Content  -->
             <div id="content">
-                <nav class="navbar navbar-expand-lg navbar-light bg-white" style="margin-bottom: 10px">
-                    <div class="container-fluid">
-                        <a class="" id="sidebarCollapse" style="font-size: 25px;width: 60px;text-align: center;">
-                            <i class="fas fa-align-justify"></i>
-                        </a>
-                        <a class="navbar-brand mylogo" href="#">
-                            <img src="https://mdbootstrap.com/img/logo/mdb-transparent.png" height="30" alt="mdb logo">
-                        </a>
-                        <ul id="menu" class="nav navbar-nav mr-auto menu">
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Home" asp-action="HomePage">首页</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">文章</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">工具技巧</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">话题心得</a>
-                            </li>
-                        </ul>
-                        <ul id="useropt" class="nav navbar-nav ml-auto useropt">
-                            @if (User.Identity.IsAuthenticated)
-                            {
-                                <li data-flag="1" id="user-info" style="position: relative">
-                                    <a data-flag="1" v-on:click="dropDownOpt($event)" class="nav-link" href="#"><i data-flag="1" class="fa fa-user"></i>&nbsp;&nbsp;@User.Identity.Name&nbsp;&nbsp;<i data-flag="1" class="fa fa-caret-down"></i></a>
-                                    <ul data-flag="1" id="usr-opt" class="user-opt-list" style="z-index: 9999">
-                                        <li data-flag="1">
-                                            <a data-flag="1" href="#"><i data-flag="1" class="far fa-user-circle"></i><span data-flag="1" class="faw">我的主页</span></a>
-                                        </li>
-                                        <li data-flag="1">
-                                            <a data-flag="1" href="#"><i data-flag="1" class="fas fa-file-alt"></i><span data-flag="1" class="faw">草稿</span></a>
-                                        </li>
-                                        <li data-flag="1">
-                                            <a data-flag="1" href="#"><i data-flag="1" class="fas fa-star"></i><span data-flag="1" class="faw">我的收藏</span></a>
-                                        </li>
-                                        <li data-flag="1">
-                                            <a data-flag="1" href="#"><i data-flag="1" class="fas fa-tag"></i><span data-flag="1" class="faw">我的评论</span></a>
-                                        </li>
-                                        <li data-flag="1">
-                                            <a data-flag="1" href="#"><i data-flag="1" class="fas fa-bell"></i><span data-flag="1" class="faw">我的通知</span></a>
-                                        </li>
-                                        @if (User.HasClaim(ClaimTypes.Role, "Admin") || User.HasClaim(ClaimTypes.Role, "admin"))
-                                        {
-                                            <li data-flag="1">
-                                                <a data-flag="1" asp-area="Admin" asp-controller="Admin" asp-action="Index"><i data-flag="1" class="fas fa-cogs"></i><span data-flag="1" class="faw">管理</span></a>
-                                            </li>
-                                        }
-                                        else
-                                        { }
-                                        <hr data-flag="1" />
-                                        <li data-flag="1" style="padding-top: 0;">
-                                            <a data-flag="1" asp-controller="Account" asp-action="Logout"><i data-flag="1" class="fas fa-sign-out-alt"></i><span data-flag="1" class="faw">退出登录</span></a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            }
-                            else
-                            {
-                                <li id="user-login" class="nav-item" style="width: 50px;">
-                                    <a class="nav-link" href="#" data-toggle="modal" data-target="#Login">登录</a>
-                                </li>
-                            }
-
-                        </ul>
-                    </div>
-                </nav>
+                @await Html.PartialAsync("_TopNavbarMenu")@*顶部导航*@
                 <div data-flag="1" id="search-posts">
                     <form data-flag="1" asp-controller="Home" asp-action="Search" method="post">
                         <input data-flag="1" type="text" placeholder="请输入搜索内容" name="searchtext" id="searchtext" style="line-height: 30px;width: 400px;border: 1px solid lightblue;padding-left:10px" />
@@ -171,17 +48,6 @@
                     </form>
                 </div>
                 <div class="container-fluid" style="display: flex; padding: 0 25px;">
-                    <div id="aside-content">
-                        <ul>
-                            <li class="write-aside checked"><a href="#">富文本编辑器</a></li>
-                            <li class="write-aside"><a asp-controller="Post" asp-action="MarkDownEditor">MarkDown编辑器</a></li>
-                        </ul>
-                        <hr />
-                        <ul>
-                            <li class="write-aside"><a asp-controller="Post" asp-action="ArticleManager">文章管理</a></li>
-                            <li class="write-aside"><a href="#">评论管理</a></li>
-                        </ul>
-                    </div>
                     <div id="write-area">
                         <form id="formPost" asp-controller="Post" asp-action="WritePost" method="post">
                             <input type="text" id="txtTitle" maxlength="100" placeholder="输入文章标题" asp-for="Title">

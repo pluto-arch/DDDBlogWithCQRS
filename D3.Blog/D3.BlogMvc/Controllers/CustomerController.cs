@@ -28,6 +28,7 @@ namespace D3.BlogMvc.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
+            ViewBag.container = "container";//写文章页面和其他页面的样式控制
             return View(_customerAppService.GetAll());
         }
 
@@ -35,12 +36,14 @@ namespace D3.BlogMvc.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+            ViewBag.container = "container";//写文章页面和其他页面的样式控制
             return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(CustomerViewModel customerViewModel)
         {
+            ViewBag.container = "container";//写文章页面和其他页面的样式控制
             if (!ModelState.IsValid) return View(customerViewModel);
             _customerAppService.Add(customerViewModel);
 
@@ -53,6 +56,7 @@ namespace D3.BlogMvc.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewBag.container = "container";//写文章页面和其他页面的样式控制
             if (id == null)
             {
                 return NotFound();
@@ -68,6 +72,7 @@ namespace D3.BlogMvc.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(CustomerViewModel customerViewModel)
         {
+            ViewBag.container = "container";//写文章页面和其他页面的样式控制
             if (!ModelState.IsValid) return View(customerViewModel);
 
             _customerAppService.Update(customerViewModel);
@@ -82,6 +87,7 @@ namespace D3.BlogMvc.Controllers
         [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
+            ViewBag.container = "container";//写文章页面和其他页面的样式控制
             if (id == null)
             {
                 return NotFound();
@@ -100,6 +106,7 @@ namespace D3.BlogMvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            ViewBag.container = "container";//写文章页面和其他页面的样式控制
             _customerAppService.Remove(id);
             var customerViewModel = await _customerAppService.GetById(id);
             if (!IsValidOperation())

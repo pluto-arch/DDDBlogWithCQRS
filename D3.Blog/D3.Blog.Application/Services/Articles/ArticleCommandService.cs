@@ -151,5 +151,43 @@ namespace D3.Blog.Application.Services.Articles
                 return null;
             }
         }
+
+        /// <summary>
+        /// 分页获取数据
+        /// </summary>
+        /// <typeparam name="TKey">排序类型</typeparam>
+        /// <param name="pageSize">页大小</param>
+        /// <param name="pageIndex">页索引（1）开始</param>
+        /// <param name="expression">查询条件</param>
+        /// <param name="orderby">排序条件</param>
+        /// <returns></returns>
+        public IEnumerable<ArticleViewModel> GetListByPage<TKey>(int pageSize, int pageIndex, Expression<Func<Article, bool>> expression, Expression<Func<Article, TKey>> orderby)
+        {
+            try
+            {
+                var allArticles = _articleRepository.FindListByPage<TKey>(pageSize,pageIndex,expression,orderby).ToList();
+                var result = (from a in allArticles
+                    select new ArticleViewModel(
+                        a.Id,
+                        a.Title,
+                        a.ContentMd,
+                        a.ContentHtml,
+                        a.Author,
+                        "",
+                        a.Source,
+                        "",
+                        ArticleStatus.Savedraft,
+                        a.AddTime,
+                        a.ViewCount,
+                        a.PromitCount
+                    )).ToList();//此处没有用automapper
+                return result;
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e,$"发生错误：{e.Message}");//可删除这句。由AOP进行记录
+                return null;
+            }
+        }
     }
 }

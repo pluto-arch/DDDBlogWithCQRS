@@ -38,6 +38,7 @@ namespace D3.BlogMvc.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login(string returnUrl="/")
         {
+            ViewBag.container = "container";//写文章页面和其他页面的样式控制
             ViewBag.title = "博客-登录";
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
             ViewData["ReturnUrl"] = returnUrl;
@@ -115,6 +116,7 @@ namespace D3.BlogMvc.Controllers
         {
             ViewBag.title = "博客-登录";
             ViewData["ReturnUrl"] = returnUrl;
+            ViewBag.container = "container";//写文章页面和其他页面的样式控制
             if (ModelState.IsValid)
             {
                 AppBlogUser user=await _userManager.FindByEmailAsync(model.Email);
@@ -214,6 +216,7 @@ namespace D3.BlogMvc.Controllers
         [AllowAnonymous]    
         public IActionResult Register(string returnUrl="/")
         {
+            ViewBag.container = "container";//写文章页面和其他页面的样式控制
             ViewBag.title = "博客-注册";
             ViewData["ReturnUrl"] = returnUrl;
             return View();
@@ -288,11 +291,13 @@ namespace D3.BlogMvc.Controllers
 
         public IActionResult AccessDenied()
         {
+            ViewBag.container = "container";//写文章页面和其他页面的样式控制
             return new JsonResult("访问受限");
         }
 
         private IActionResult RedirectToLocal(string returnUrl=null)
         {
+            ViewBag.container = "container";//写文章页面和其他页面的样式控制
             if (Url.IsLocalUrl(returnUrl))
             {
                 return Redirect(returnUrl);

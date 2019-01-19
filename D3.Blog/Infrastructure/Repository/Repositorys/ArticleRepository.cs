@@ -74,6 +74,14 @@ namespace Infrastructure.Data.Repository.Repositorys
         }
 
 
+        public override IQueryable<Article> FindListByPage<TKey>(int pageSize,int pageIndex,Expression<Func<Article, bool>> predicate, Expression<Func<Article, TKey>> orderby)
+        {
+            var result = _dbSet.Where(predicate).OrderByDescending(orderby).Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize);
+            return result.AsQueryable();
+        }
+
+
         public override void Insert(Article entity)
         {
             _dbSet.Add(entity);

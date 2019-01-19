@@ -58,7 +58,9 @@ namespace D3.BlogMvc.Controllers
         [Authorize]
         public IActionResult WritePost()
         {
-
+            ViewBag.title = "YBLOG-写文章";
+            ViewBag.editorType = 1;//富文本编辑器
+            ViewBag.container = "container-fluid";//写文章页面和其他页面的样式控制
             return View();
         }
         
@@ -127,6 +129,9 @@ namespace D3.BlogMvc.Controllers
         [Authorize]
         public IActionResult MarkDownEditor()
         {
+            ViewBag.title = "YBLOG-写文章";
+            ViewBag.editorType = 2;//富文本编辑器
+            ViewBag.container = "container-fluid";//写文章页面和其他页面的样式控制
             return View();
         }
 
@@ -165,23 +170,45 @@ namespace D3.BlogMvc.Controllers
         /// <summary>
         /// 个人文章管理
         /// </summary>
+        /// <param name="flag">1:全部 2:已发布 3:审核中 4:草稿箱 5:回收站</param>
+        /// <param name="pageindex"></param>
         /// <returns></returns>
         [HttpGet]
         [Authorize]
         public IActionResult ArticleManager([FromQuery]string flag="1",[FromQuery]int pageindex=1)
         {
-            int pagesize = 2;//页大小
+            int pagesize = 10;//页大小
+            ViewBag.container = "container";//写文章页面和其他页面的样式控制
             ViewBag.Title = "文章管理";
             ViewBag.flag = flag;
-
             ViewBag.pageindex = pageindex;
-
             IEnumerable<ArticleViewModel> result=new List<ArticleViewModel>();
             if (_user!=null)
             {
-                result = _articleService.GetList<DateTime>(x => x.AddUserId == _user.Id,x=>x.AddTime);
-                
+
+                switch (flag)
+                {
+                    case "1":
+                        result = _articleService.GetList<DateTime>(x => x.AddUserId == _user.Id,x=>x.AddTime);//全部
+                        break;
+                    case "2":
+                        result = _articleService.GetList<DateTime>(x => x.AddUserId == _user.Id&&x.IsPublish==true,x=>x.AddTime);//已发布
+                        break;
+                    case "3":
+                        result = _articleService.GetList<DateTime>(x => x.AddUserId == _user.Id&&x.Status==ArticleStatus.Verify,x=>x.AddTime);//审核中
+                        break;
+                    case "4":
+                        result = _articleService.GetList<DateTime>(x => x.AddUserId == _user.Id&&x.Status==ArticleStatus.Savedraft,x=>x.AddTime);//草稿箱
+                        break;
+                    case "5":
+                        result = _articleService.GetList<DateTime>(x => x.AddUserId == _user.Id&&x.Status==ArticleStatus.Deleted,x=>x.AddTime);//回收箱
+                        break;
+                }
+                ViewBag.totalCount=result.Count();
             }
+            result = result.Skip((pageindex-1) * pagesize).Take(pagesize).ToList();
+            
+
             return View(result);
         }
 

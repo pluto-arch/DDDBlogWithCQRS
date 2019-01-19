@@ -35,5 +35,9 @@
         /// 审核中
         /// </summary>
         Verify=3,
+        /// <summary>
+        /// 已删除（回收箱）
+        /// </summary>
+        Deleted=4,
     }
 }

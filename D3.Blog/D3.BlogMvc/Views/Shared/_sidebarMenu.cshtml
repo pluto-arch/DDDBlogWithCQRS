@@ -1,0 +1,57 @@
+﻿@using Infrastructure.Identity.Models
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<AppBlogUser> userManager
+@inject SignInManager<AppBlogUser> signInManager
+<!-- Sidebar  -->
+<nav id="sidebar">
+    <div id="dismiss">
+        <i class="fas fa-arrow-left"></i>
+    </div>
+    <div class="sidebar-header">
+        <img src="https://mdbootstrap.com/img/logo/mdb-transparent.png" height="50" alt="mdb logo">
+    </div>
+    <ul id="side-menu" class="list-unstyled components">
+        @if (User.Identity.IsAuthenticated)
+        {
+            <li class="">
+                <a href="#">个人中心</a>
+            </li>
+        }
+        else
+        {
+            <p>Welcome</p>
+        }
+
+        <li class="active">
+            <a href="#">首页</a>
+        </li>
+        <li>
+            <a href="#">文章</a>
+        </li>
+        <li>
+            <a href="#">工具技巧</a>
+        </li>
+        <li>
+            <a href="#">话题心得</a>
+        </li>
+    </ul>
+
+    <ul class="list-unstyled CTAs">
+        @if (User.Identity.IsAuthenticated)
+        {
+            <li data-flag="1" style="padding-top: 0;">
+                <a data-flag="1" asp-controller="Account" asp-action="Logout"><i data-flag="1" class="fas fa-sign-out-alt"></i><span data-flag="1" class="faw">退出登录</span></a>
+            </li>
+        }
+        else
+        {
+            <li>
+                <a href="#" class="download" data-toggle="modal" data-target="#Login">登录</a>
+            </li>
+        }
+
+        <li>
+            <a asp-controller="Post" asp-action="WritePost" class="article"><i class="far fa-file-word"></i>&nbsp;写文章</a>
+        </li>
+    </ul>
+</nav>

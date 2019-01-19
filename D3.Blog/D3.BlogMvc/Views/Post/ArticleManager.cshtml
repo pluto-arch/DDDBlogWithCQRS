@@ -3,7 +3,7 @@
 @using Infrastructure.Data.Database
 @using Infrastructure.Identity.Models
 @using Microsoft.AspNetCore.Identity
-@model IEnumerable<D3.Blog.Application.ViewModels.Article.ArticleViewModel>
+@model  IEnumerable<D3.Blog.Application.ViewModels.Article.ArticleViewModel>
 @inject UserManager<AppBlogUser> userManager
 @inject SignInManager<AppBlogUser> signInManager
 @{
@@ -97,134 +97,11 @@
 </head>
 <body>
     <div id="app">
-        <!-- Sidebar  -->
-        <nav id="sidebar">
-            <div id="dismiss">
-                <i class="fas fa-arrow-left"></i>
-            </div>
-            <div class="sidebar-header">
-                <img src="https://mdbootstrap.com/img/logo/mdb-transparent.png" height="50" alt="mdb logo">
-            </div>
-            <ul id="side-menu" class="list-unstyled components">
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <div id="side-user">
-                        <p style="padding-top: 0px;padding-bottom: 0px; padding-left: 20px;">@User.Identity.Name</p>
-                        <ul>
-                            <li title="个人中心"><i class="far fa-user-circle"></i></li>
-                            <li title="草稿"><i class="fas fa-file-alt"></i></li>
-                            <li title="我的收藏"><i class="fas fa-star"></i></li>
-                            <li title="我的评论"><i class="fas fa-tag"></i></li>
-                            <li title="我的通知"><i class="fas fa-bell"></i></li>
-                        </ul>
-                    </div>
-                }
-                else
-                {
-                    <p>Welcome</p>
-                }
-
-                <li class="">
-                    <a asp-controller="Home" asp-action="HomePage">首页</a>
-                </li>
-                <li>
-                    <a href="#">文章</a>
-                </li>
-                <li>
-                    <a href="#">工具技巧</a>
-                </li>
-                <li>
-                    <a href="#">话题心得</a>
-                </li>
-            </ul>
-
-            <ul class="list-unstyled CTAs">
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <li data-flag="1" style="padding-top: 0;">
-                        <a data-flag="1" asp-controller="Account" asp-action="Logout"><i data-flag="1" class="fas fa-sign-out-alt"></i><span data-flag="1" class="faw">退出登录</span></a>
-                    </li>
-                }
-                else
-                {
-                    <li>
-                        <a href="#" class="download" data-toggle="modal" data-target="#Login">登录</a>
-                    </li>
-                }
-
-            </ul>
-        </nav>
+        @await Html.PartialAsync("_sidebarMenu")@*侧边导航*@
         <div class="wrapper">
             <!-- Page Content  -->
             <div id="content">
-                <nav class="navbar navbar-expand-lg navbar-light bg-white" style="margin-bottom: 10px">
-                    <div class="container">
-                        <a class="" id="sidebarCollapse" style="font-size: 25px;width: 60px;text-align: center;">
-                            <i class="fas fa-align-justify"></i>
-                        </a>
-                        <a class="navbar-brand mylogo" href="#">
-                            <img src="https://mdbootstrap.com/img/logo/mdb-transparent.png" height="30" alt="mdb logo">
-                        </a>
-                        <ul id="menu" class="nav navbar-nav mr-auto menu">
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Home" asp-action="HomePage">首页</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">文章</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">工具技巧</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">话题心得</a>
-                            </li>
-                        </ul>
-                        <ul id="useropt" class="nav navbar-nav ml-auto useropt">
-                            @if (User.Identity.IsAuthenticated)
-                            {
-                                <li data-flag="1" id="user-info" style="position: relative">
-                                    <a data-flag="1" v-on:click="dropDownOpt($event)" class="nav-link" href="#"><i data-flag="1" class="fa fa-user"></i>&nbsp;&nbsp;@User.Identity.Name&nbsp;&nbsp;<i data-flag="1" class="fa fa-caret-down"></i></a>
-                                    <ul data-flag="1" id="usr-opt" class="user-opt-list" style="z-index: 9999">
-                                        <li data-flag="1">
-                                            <a data-flag="1" href="#"><i data-flag="1" class="far fa-user-circle"></i><span data-flag="1" class="faw">我的主页</span></a>
-                                        </li>
-                                        <li data-flag="1">
-                                            <a data-flag="1" href="#"><i data-flag="1" class="fas fa-file-alt"></i><span data-flag="1" class="faw">草稿</span></a>
-                                        </li>
-                                        <li data-flag="1">
-                                            <a data-flag="1" href="#"><i data-flag="1" class="fas fa-star"></i><span data-flag="1" class="faw">我的收藏</span></a>
-                                        </li>
-                                        <li data-flag="1">
-                                            <a data-flag="1" href="#"><i data-flag="1" class="fas fa-tag"></i><span data-flag="1" class="faw">我的评论</span></a>
-                                        </li>
-                                        <li data-flag="1">
-                                            <a data-flag="1" href="#"><i data-flag="1" class="fas fa-bell"></i><span data-flag="1" class="faw">我的通知</span></a>
-                                        </li>
-                                        @if (User.HasClaim(ClaimTypes.Role, "Admin") || User.HasClaim(ClaimTypes.Role, "admin"))
-                                        {
-                                            <li data-flag="1">
-                                                <a data-flag="1" asp-area="Admin" asp-controller="Admin" asp-action="Index"><i data-flag="1" class="fas fa-cogs"></i><span data-flag="1" class="faw">管理</span></a>
-                                            </li>
-                                        }
-                                        else
-                                        { }
-                                        <hr data-flag="1" />
-                                        <li data-flag="1" style="padding-top: 0;">
-                                            <a data-flag="1" asp-controller="Account" asp-action="Logout"><i data-flag="1" class="fas fa-sign-out-alt"></i><span data-flag="1" class="faw">退出登录</span></a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            }
-                            else
-                            {
-                                <li id="user-login" class="nav-item" style="width: 50px;">
-                                    <a class="nav-link" href="#" data-toggle="modal" data-target="#Login">登录</a>
-                                </li>
-                            }
-
-                        </ul>
-                    </div>
-                </nav>
+                @await Html.PartialAsync("_TopNavbarMenu")@*顶部导航*@
                 <div data-flag="1" id="search-posts">
                     <form data-flag="1" asp-controller="Home" asp-action="Search" method="post">
                         <input data-flag="1" type="text" placeholder="请输入搜索内容" name="searchtext" id="searchtext" style="line-height: 30px;width: 400px;border: 1px solid lightblue;padding-left:10px" />
@@ -257,28 +134,28 @@
                                             <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="5" asp-route-pageindex="1">回收站</a></li>
                                             break;
                                         case "2":
-                                            <li ><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="1" asp-route-pageindex="1">全部</a></li>
+                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="1" asp-route-pageindex="1">全部</a></li>
                                             <li class="active"><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="2" asp-route-pageindex="1">已发布</a></li>
                                             <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="3" asp-route-pageindex="1">审核中</a></li>
                                             <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="4" asp-route-pageindex="1">草稿箱</a></li>
                                             <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="5" asp-route-pageindex="1">回收站</a></li>
                                             break;
                                         case "3":
-                                            <li ><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="1" asp-route-pageindex="1">全部</a></li>
-                                            <li ><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="2" asp-route-pageindex="1">已发布</a></li>
+                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="1" asp-route-pageindex="1">全部</a></li>
+                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="2" asp-route-pageindex="1">已发布</a></li>
                                             <li class="active"><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="3" asp-route-pageindex="1">审核中</a></li>
                                             <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="4" asp-route-pageindex="1">草稿箱</a></li>
                                             <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="5" asp-route-pageindex="1">回收站</a></li>
                                             break;
                                         case "4":
-                                            <li ><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="1" asp-route-pageindex="1">全部</a></li>
-                                            <li ><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="2" asp-route-pageindex="1">已发布</a></li>
+                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="1" asp-route-pageindex="1">全部</a></li>
+                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="2" asp-route-pageindex="1">已发布</a></li>
                                             <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="3" asp-route-pageindex="1">审核中</a></li>
                                             <li class="active"><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="4" asp-route-pageindex="1">草稿箱</a></li>
                                             <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="5" asp-route-pageindex="1">回收站</a></li>
                                             break;
                                         case "5":
-                                            <li ><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="1" asp-route-pageindex="1">全部</a></li>
+                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="1" asp-route-pageindex="1">全部</a></li>
                                             <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="2" asp-route-pageindex="1">已发布</a></li>
                                             <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="3" asp-route-pageindex="1">审核中</a></li>
                                             <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="4" asp-route-pageindex="1">草稿箱</a></li>
@@ -290,8 +167,8 @@
                             </ul>
                         </div>
                         <div style="margin: 5px 0px 10px; padding: 0 5px; line-height: 60px; background-color: #F2F5F7;">搜索</div>
-                        
-                        @foreach(var item in Model)
+
+                        @foreach (var item in Model)
                         {
                             <div id="post-lists" style="padding: 1rem 0;">
                                 <div style="display: flex">
@@ -318,75 +195,97 @@
                                         <p class="info">评论：@item.CommonCount</p>
                                     </div>
                                     <div style="position: absolute; right: 5px; cursor: pointer;font-size: 15px;">
-                                        <span style="color: #3ba8f5"><a asp-controller="Post" asp-action="PostDetails" asp-route-id="@item.Id" target="_blank">查看</a></span> 
-                                        <span style="color: #cccccc">|</span> 
+                                        <span style="color: #3ba8f5"><a asp-controller="Post" asp-action="PostDetails" asp-route-id="@item.Id" target="_blank">查看</a></span>
+                                        <span style="color: #cccccc">|</span>
                                         <span class="text-success">编辑</span>
-                                        <span style="color: #cccccc">|</span> 
+                                        <span style="color: #cccccc">|</span>
                                         <span style="color: orange">删除</span>
                                     </div>
                                 </div>
                             </div>
                         }
-                        
+
                         <!--分页-->
-                        <div id="pages">
-                            <div>
-                                <nav aria-label="Page navigation example">
-                                    <ul class="pagination" id="mypage">
-                                        <li class="page-item">
-                                            @{
-                                                var index = 1;
-                                                if (ViewBag.pageindex==1)
-                                                {
-                                                    index = 1;
-                                                }
-                                                else
-                                                {
-                                                    index = ViewBag.pageindex-1;
-                                                    <a class="page-link" aria-label="Previous" asp-controller="Post" asp-action="ArticleManager" asp-route-pageindex="@index" asp-route-flag="@ViewBag.flag">
-                                                        <span aria-hidden="true">&laquo;</span>
-                                                    </a>
-                                                }
-                                            }
-                                            
-                                        </li>
-                                        @{
-                                            var pages = Model.Count() % 2 == 0 ? Model.Count() / 2 : Model.Count() / 2 + 1;
-                                            for (int i = 1; i <= pages; i++)
-                                            {
-                                                if (i==1)
-                                                {
-                                                    <li class="page-item my-page active"><a class="page-link" asp-controller="Post" asp-action="ArticleManager" asp-route-pageindex="@i" asp-route-flag="@ViewBag.flag">@i</a></li>
-                                                }
-                                                else
-                                                {
-                                                    <li class="page-item my-page"><a class="page-link" asp-controller="Post" asp-action="ArticleManager" asp-route-pageindex="@i" asp-route-flag="@ViewBag.flag">@i</a></li>
+                        @{
+                            if (ViewBag.totalCount>0)
+                            {
+                                <div id="pages">
+                                    <div>
+                                        <nav aria-label="Page navigation example">
+                                            <ul class="pagination" id="mypage">
+                                                <li class="page-item">
+                                                    @{
+                                                        var index = 1;
+                                                        if (ViewBag.pageindex == 1)
+                                                        {
+                                                            index = 1;
+                                                        }
+                                                        else
+                                                        {
+                                                            index = ViewBag.pageindex - 1;
+                                                            <a class="page-link" aria-label="Previous" asp-controller="Post" asp-action="ArticleManager" asp-route-pageindex="@index" asp-route-flag="@ViewBag.flag">
+                                                                <span aria-hidden="true">&laquo;</span>
+                                                            </a>
+                                                        }
+                                                    }
+
+                                                </li>
+                                                @{
+                                                    var pages = ViewBag.totalCount % 10 == 0 ? ViewBag.totalCount / 10 : ViewBag.totalCount / 10 + 1;
+                                                    for (int i = 1; i <= pages; i++)
+                                                    {
+                                                        if (i == 1)
+                                                        {
+                                                            if (ViewBag.pageindex == i)
+                                                            {
+                                                                <li class="page-item my-page active"><a class="page-link" asp-controller="Post" asp-action="ArticleManager" asp-route-pageindex="@i" asp-route-flag="@ViewBag.flag">@i</a></li>
+                                                            }
+                                                            else
+                                                            {
+                                                                <li class="page-item my-page "><a class="page-link" asp-controller="Post" asp-action="ArticleManager" asp-route-pageindex="@i" asp-route-flag="@ViewBag.flag">@i</a></li>
+                                                            }
+
+                                                        }
+                                                        else
+                                                        {
+                                                            if (ViewBag.pageindex == i)
+                                                            {
+                                                                <li class="page-item my-page active"><a class="page-link" asp-controller="Post" asp-action="ArticleManager" asp-route-pageindex="@i" asp-route-flag="@ViewBag.flag">@i</a></li>
+                                                            }
+                                                            else
+                                                            {
+                                                                <li class="page-item my-page"><a class="page-link" asp-controller="Post" asp-action="ArticleManager" asp-route-pageindex="@i" asp-route-flag="@ViewBag.flag">@i</a></li>
+                                                            }
+
+                                                        }
+
+                                                    }
+
+                                                    <li class="page-item">
+                                                        @{
+                                                            if (ViewBag.pageindex == pages)
+                                                            {
+                                                                index = pages;
+                                                            }
+                                                            else
+                                                            {
+                                                                index = ViewBag.pageindex + 1;
+                                                                <a class="page-link" aria-label="Next" asp-controller="Post" asp-action="ArticleManager" asp-route-pageindex="@index" asp-route-flag="@ViewBag.flag">
+                                                                    <span aria-hidden="true">&raquo;</span>
+                                                                </a>
+                                                            }
+
+                                                        }
+                                                    </li>
                                                 }
 
-                                            }
-                                        
-                                            <li class="page-item">
-                                                @{
-                                                    if (ViewBag.pageindex == pages)
-                                                    {
-                                                        index = pages;
-                                                    }
-                                                    else
-                                                    {
-                                                        index = ViewBag.pageindex + 1;
-                                                        <a class="page-link" aria-label="Next" asp-controller="Post" asp-action="ArticleManager" asp-route-pageindex="@index" asp-route-flag="@ViewBag.flag">
-                                                            <span aria-hidden="true">&raquo;</span>
-                                                        </a>
-                                                    }
-                                                   
-                                                }
-                                            </li>
-                                        }
-                                        
-                                    </ul>
-                                </nav>
-                            </div>
-                        </div>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+                            }
+                        }
+
                         <!--end 分页-->
                     </div>
                 </div>

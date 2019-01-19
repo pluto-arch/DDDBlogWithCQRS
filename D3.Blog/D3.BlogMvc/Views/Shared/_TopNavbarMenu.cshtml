@@ -1,0 +1,180 @@
+﻿@using System.Security.Claims
+@using Infrastructure.Identity.Models
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<AppBlogUser> userManager
+@inject SignInManager<AppBlogUser> signInManager
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<nav class="navbar navbar-expand-lg navbar-light bg-white" style="height: 70px">
+
+    @{
+        if (ViewBag.container == "container-fluid")
+        {
+            <div class="container-fluid">
+                <a class="" id="sidebarCollapse" style="font-size: 25px;width: 60px;text-align: center;">
+                    <i class="fas fa-align-justify"></i>
+                </a>
+                <a class="navbar-brand mylogo" href="#">
+                    <img src="https://mdbootstrap.com/img/logo/mdb-transparent.png" height="30" alt="mdb logo">
+                </a>
+                <ul id="menu" class="nav navbar-nav mr-auto menu">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Home" asp-action="HomePage">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">文章</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">工具技巧</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">话题心得</a>
+                    </li>
+                </ul>
+                <ul id="useropt" class="nav navbar-nav ml-auto useropt">
+                    <li id="write-post" class="nav-item" style="width: auto; position: relative;">
+                        @{
+                            if (ViewBag.editorType==2)
+                            {
+                                <a class="nav-link" asp-controller="Post" asp-action="WritePost" style="color: #4285F4">
+                                    &nbsp;富文本编辑器
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="nav-link" asp-controller="Post" asp-action="MarkDownEditor" style="color: #4285F4">
+                                    &nbsp;MarkDown编辑器
+                                </a>
+                            }
+                        }
+                       
+                    </li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li data-flag="1" id="user-info" style="position: relative">
+                            <a data-flag="1" v-on:click="dropDownOpt($event)" class="nav-link" href="#"><i data-flag="1" class="fa fa-user"></i>&nbsp;&nbsp;@User.Identity.Name&nbsp;&nbsp;<i data-flag="1" class="fa fa-caret-down"></i></a>
+                            <ul data-flag="1" id="usr-opt" class="user-opt-list" style="z-index: 9999">
+                                <li data-flag="1">
+                                    <a data-flag="1" href="#"><i data-flag="1" class="far fa-user-circle"></i><span data-flag="1" class="faw">个人中心</span></a>
+                                </li>
+                                <li data-flag="1">
+                                    <a data-flag="1" href="#"><i data-flag="1" class="fas fa-file-alt"></i><span data-flag="1" class="faw">草稿</span></a>
+                                </li>
+                                <li data-flag="1">
+                                    <a data-flag="1" href="#"><i data-flag="1" class="fas fa-star"></i><span data-flag="1" class="faw">我的收藏</span></a>
+                                </li>
+                                <li data-flag="1">
+                                    <a data-flag="1" href="#"><i data-flag="1" class="fas fa-tag"></i><span data-flag="1" class="faw">我的评论</span></a>
+                                </li>
+                                <li data-flag="1">
+                                    <a data-flag="1" href="#"><i data-flag="1" class="fas fa-bell"></i><span data-flag="1" class="faw">我的通知</span></a>
+                                </li>
+                                @if (User.HasClaim(ClaimTypes.Role, "Admin") || User.HasClaim(ClaimTypes.Role, "admin"))
+                                {
+                                    <li data-flag="1">
+                                        <a data-flag="1" asp-area="Admin" asp-controller="Admin" asp-action="Index"><i data-flag="1" class="fas fa-cogs"></i><span data-flag="1" class="faw">管理</span></a>
+                                    </li>
+                                }
+                                else
+                                { }
+                                <hr data-flag="1" />
+                                <li data-flag="1" style="padding-top: 0;">
+                                    <a data-flag="1" asp-controller="Account" asp-action="Logout"><i data-flag="1" class="fas fa-sign-out-alt"></i><span data-flag="1" class="faw">退出登录</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    else
+                    {
+                        <li id="user-login" class="nav-item" style="width: 50px;">
+                            <a class="nav-link" href="#" data-toggle="modal" data-target="#Login">登录</a>
+                        </li>
+                    }
+
+                </ul>
+            </div>
+        }
+        else
+        {
+            <div class="container">
+                <a class="" id="sidebarCollapse" style="font-size: 25px; width: 60px; text-align: center;">
+                    <i class="fas fa-align-justify"></i>
+                </a>
+                <a class="navbar-brand mylogo" href="#">
+                    <img src="https://mdbootstrap.com/img/logo/mdb-transparent.png" height="30" alt="mdb logo">
+                </a>
+                <ul id="menu" class="nav navbar-nav mr-auto menu">
+                    <li class="nav-item">
+                        <a class="nav-link clickactive" asp-controller="Home" asp-action="HomePage">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">文章</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">工具技巧</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">话题心得</a>
+                    </li>
+                </ul>
+                <ul id="useropt" class="nav navbar-nav ml-auto useropt">
+                    <li id="write-post" class="nav-item" style="width: 88px; position: relative;">
+                        <a class="nav-link" asp-controller="Post" asp-action="WritePost" style="color: #4285F4">
+                            <i class="far fa-file-word"></i>&nbsp;写文章
+                        </a>
+                    </li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li data-flag="1" id="user-info" style="position: relative">
+                            <a data-flag="1" v-on:click="dropDownOpt($event)" class="nav-link" href="#"><i data-flag="1" class="fa fa-user"></i>&nbsp;&nbsp;@User.Identity.Name&nbsp;&nbsp;<i data-flag="1" class="fa fa-caret-down"></i></a>
+                            <ul data-flag="1" id="usr-opt" class="user-opt-list">
+                                <li data-flag="1">
+                                    <a data-flag="1" href="#"><i data-flag="1" class="far fa-user-circle"></i><span data-flag="1" class="faw">个人中心</span></a>
+                                </li>
+                                <li data-flag="1">
+                                    <a data-flag="1" href="#"><i data-flag="1" class="fas fa-file-alt"></i><span data-flag="1" class="faw">草稿</span></a>
+                                </li>
+                                <li data-flag="1">
+                                    <a data-flag="1" href="#"><i data-flag="1" class="fas fa-star"></i><span data-flag="1" class="faw">我的收藏</span></a>
+                                </li>
+                                <li data-flag="1">
+                                    <a data-flag="1" href="#"><i data-flag="1" class="fas fa-tag"></i><span data-flag="1" class="faw">我的评论</span></a>
+                                </li>
+                                <li data-flag="1">
+                                    <a data-flag="1" href="#"><i data-flag="1" class="fas fa-bell"></i><span data-flag="1" class="faw">我的通知</span></a>
+                                </li>
+                                @if (User.HasClaim(ClaimTypes.Role, "Admin") || User.HasClaim(ClaimTypes.Role, "admin"))
+                                {
+                                    <li data-flag="1">
+                                        <a data-flag="1" asp-area="Admin" asp-controller="Admin" asp-action="Index"><i data-flag="1" class="fas fa-cogs"></i><span data-flag="1" class="faw">管理</span></a>
+                                    </li>
+                                }
+                                else
+                                {
+                                }
+                                <hr data-flag="1" />
+                                <li data-flag="1" style="padding-top: 0;">
+                                    <a data-flag="1" asp-controller="Account" asp-action="Logout"><i data-flag="1" class="fas fa-sign-out-alt"></i><span data-flag="1" class="faw">退出登录</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    else
+                    {
+                        <li id="user-login" class="nav-item" style="width: 50px;">
+                            <a class="nav-link" href="#" data-toggle="modal" data-target="#Login">登录</a>
+                        </li>
+                    }
+                    <li data-flag="1" class="nav-item" style="width: 40px;">
+                        <a data-flag="1" class="nav-link" href="#" v-on:click="optSearch($event)">
+                            <span data-flag="1" class="fa fa-search" title="搜索"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        }
+    }
+
+
+</nav>

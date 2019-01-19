@@ -39,5 +39,8 @@ namespace Infrastructure.Data.Repository
         public abstract IQueryable<TEntity> FindListByClause<TKey>(Expression<Func<TEntity, bool>> predicate,
             Expression<Func<TEntity, TKey>> orderby);
 
+        public abstract IQueryable<TEntity> FindListByPage<TKey>(int pageSiza, int pageIndex,
+            Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, TKey>> orderby);
+
     }
 }

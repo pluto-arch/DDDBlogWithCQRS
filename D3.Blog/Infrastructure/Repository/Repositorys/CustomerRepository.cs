@@ -67,6 +67,11 @@ namespace Infrastructure.Data.Repository.Repositorys
             throw new NotImplementedException();
         }
 
+        public override IQueryable<Customer> FindListByPage<TKey>(int pageSiza, int pageIndex, Expression<Func<Customer, bool>> predicate, Expression<Func<Customer, TKey>> orderby)
+        {
+            throw new NotImplementedException();
+        }
+
         public Customer GetByEmail(string email)
         {
             return _dbSet.AsNoTracking().FirstOrDefault(c => c.Email == email);

@@ -36,7 +36,7 @@ namespace D3.BlogMvc.Controllers
         public async Task<IActionResult> Index()
         {
             ViewBag.num = "111";
-
+            ViewBag.container = "container";//写文章页面和其他页面的样式控制
             var model = await _customerService.GetById(1);
 
             //CustomerViewModel model = new CustomerViewModel();
@@ -63,6 +63,7 @@ namespace D3.BlogMvc.Controllers
         public IActionResult HomePage()
         {
             ViewBag.title = "YLBlog-首页";
+            ViewBag.container = "container";//写文章页面和其他页面的样式控制
             return View();
         }
         
@@ -76,7 +77,8 @@ namespace D3.BlogMvc.Controllers
         public IActionResult Search([FromForm]string searchtext)
         {
             ViewBag.title = "YLBlog-搜索结果";
-            ViewBag.searchKeyWord=searchtext;            
+            ViewBag.searchKeyWord=searchtext;    
+            ViewBag.container = "container";//写文章页面和其他页面的样式控制
             return View();
         }
 

@@ -34,6 +34,18 @@ namespace D3.Blog.Domain.Infrastructure
         IQueryable<T> FindListByClause<TKey>(Expression<Func<T, bool>> predicate, Expression<Func<T, TKey>> orderby);
 
         /// <summary>
+        /// 分页查询数据
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <param name="pageSiza"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="predicate"></param>
+        /// <param name="orderby"></param>
+        /// <returns></returns>
+        IQueryable<T> FindListByPage<TKey>(int pageSiza,int pageIndex,Expression<Func<T, bool>> predicate, Expression<Func<T, TKey>> orderby);
+
+
+        /// <summary>
         /// 根据条件查询数据
         /// </summary>
         /// <param name="predicate">条件表达式树</param>

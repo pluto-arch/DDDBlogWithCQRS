@@ -42,6 +42,18 @@ namespace D3.Blog.Application.Interface
         /// <param name="expression"></param>
         /// <returns></returns>
         IEnumerable<ArticleViewModel> GetList<TKey>(Expression<Func<Article, bool>> expression,Expression<Func<Article, TKey>> orderby);
+
+        /// <summary>
+        /// 分页获取数据
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <param name="pageSize"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="expression"></param>
+        /// <param name="orderby"></param>
+        /// <returns></returns>
+        IEnumerable<ArticleViewModel> GetListByPage<TKey>(int pageSize,int pageIndex,Expression<Func<Article, bool>> expression,Expression<Func<Article, TKey>> orderby);
+
         /// <summary>
         /// 根据条件获取单条数据
         /// </summary>

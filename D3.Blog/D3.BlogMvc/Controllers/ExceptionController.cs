@@ -32,7 +32,7 @@ namespace D3.BlogMvc.Controllers
         {
 
             ViewBag.Title = "不好意思，发生错误了！";
-
+            ViewBag.container = "container";//写文章页面和其他页面的样式控制
             //记录异常信息
             //var statusCodePagesFeature = HttpContext.Features.Get<IStatusCodePagesFeature>();//获取状态吗
             var statusCodePagesFeature = HttpContext.Features.Get<IExceptionHandlerFeature>();//获取异常
@@ -52,6 +52,8 @@ namespace D3.BlogMvc.Controllers
         /// <returns></returns>
         public IActionResult ErrorStatusCode(int id)
         {
+            ViewBag.Title = "不好意思，发生错误了！";
+            ViewBag.container = "container";//写文章页面和其他页面的样式控制
             var file = Path.Combine(Directory.GetCurrentDirectory(), 
                                     "wwwroot", "statuscodepage", "welcome.html");
             if (404==id)

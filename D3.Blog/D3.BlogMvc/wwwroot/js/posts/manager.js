@@ -72,12 +72,7 @@ var app = new Vue({
             });//侧边菜单
 
 
-            $('#mypage .my-page').click(function () {
-                var f = this;
-                $('#mypage .my-page').each(function () {
-                    this.className = this == f ? 'page-item my-page active' : 'page-item my-page';
-                });
-            });//分页
+           
 
 
             $('#quick-search ul li').click(function () {

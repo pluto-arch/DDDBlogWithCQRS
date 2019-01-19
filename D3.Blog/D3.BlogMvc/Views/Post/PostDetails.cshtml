@@ -43,170 +43,33 @@
 
 <body>
     <div id="app">
-        <!-- Sidebar  -->
-        <nav id="sidebar">
-            <div id="dismiss">
-                <i class="fas fa-arrow-left"></i>
-            </div>
-            <div class="sidebar-header">
-                <img src="https://mdbootstrap.com/img/logo/mdb-transparent.png" height="50" alt="mdb logo">
-            </div>
-            <ul id="side-menu" class="list-unstyled components">
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <div id="side-user">
-                        <p style="padding-top: 0px;padding-bottom: 0px; padding-left: 20px;">@User.Identity.Name</p>
-                        <ul>
-                            <li title="个人中心"><i class="far fa-user-circle"></i></li>
-                            <li title="草稿"><i class="fas fa-file-alt"></i></li>
-                            <li title="我的收藏"><i class="fas fa-star"></i></li>
-                            <li title="我的评论"><i class="fas fa-tag"></i></li>
-                            <li title="我的通知"><i class="fas fa-bell"></i></li>
-                        </ul>
-                    </div>
-
-
-                }
-                else
-                {
-                    <p>Welcome</p>
-                }
-
-                <li class="">
-                    <a asp-controller="Home" asp-action="HomePage">首页</a>
-                </li>
-                <li>
-                    <a href="#">文章</a>
-                </li>
-                <li>
-                    <a href="#">工具技巧</a>
-                </li>
-                <li>
-                    <a href="#">话题心得</a>
-                </li>
-            </ul>
-
-            <ul class="list-unstyled CTAs">
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <li data-flag="1" style="padding-top: 0;">
-                        <a data-flag="1" asp-controller="Account" asp-action="Logout"><i data-flag="1" class="fas fa-sign-out-alt"></i><span data-flag="1" class="faw">退出登录</span></a>
-                    </li>
-                }
-                else
-                {
-                    <li>
-                        <a href="#" class="download" data-toggle="modal" data-target="#Login">登录</a>
-                    </li>
-                }
-
-                <li>
-                    <a href="#" class="article">关于本站</a>
-                </li>
-            </ul>
-        </nav>
+    @await Html.PartialAsync("_sidebarMenu")@*侧边导航*@
         <div class="wrapper">
             <!-- Page Content  -->
             <div id="content">
-                <nav class="navbar navbar-expand-lg navbar-light bg-white" style="height: 70px">
-                    <div class="container">
-                        <a class="" id="sidebarCollapse" style="font-size: 25px;width: 60px;text-align: center;">
-                            <i class="fas fa-align-justify"></i>
-                        </a>
-                        <a class="navbar-brand mylogo" href="#">
-                            <img src="https://mdbootstrap.com/img/logo/mdb-transparent.png" height="30" alt="mdb logo">
-                        </a>
-                        <ul id="menu" class="nav navbar-nav mr-auto menu">
-                            <li class="nav-item">
-                                <a class="nav-link " asp-controller="Home" asp-action="HomePage">首页</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">文章</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">工具技巧</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">话题心得</a>
-                            </li>
-                        </ul>
-                        <ul id="useropt" class="nav navbar-nav ml-auto useropt">
-                            <li id="write-post" class="nav-item" style="width: 88px;position: relative;">
-                                <a class="nav-link" asp-controller="Post" asp-action="WritePost" style="color: #4285F4">
-                                    <i class="far fa-file-word"></i>&nbsp;写文章
-                                </a>
-                            </li>
-                            @if (User.Identity.IsAuthenticated)
-                            {
-                                <li data-flag="1" id="user-info" style="position: relative">
-                                    <a data-flag="1" v-on:click="dropDownOpt($event)" class="nav-link" href="#"><i data-flag="1" class="fa fa-user"></i>&nbsp;&nbsp;@User.Identity.Name&nbsp;&nbsp;<i data-flag="1" class="fa fa-caret-down"></i></a>
-                                    <ul data-flag="1" id="usr-opt" class="user-opt-list">
-                                        <li data-flag="1">
-                                            <a data-flag="1" href="#"><i data-flag="1" class="far fa-user-circle"></i><span data-flag="1" class="faw">我的主页</span></a>
-                                        </li>
-                                        <li data-flag="1">
-                                            <a data-flag="1" href="#"><i data-flag="1" class="fas fa-file-alt"></i><span data-flag="1" class="faw">草稿</span></a>
-                                        </li>
-                                        <li data-flag="1">
-                                            <a data-flag="1" href="#"><i data-flag="1" class="fas fa-star"></i><span data-flag="1" class="faw">我的收藏</span></a>
-                                        </li>
-                                        <li data-flag="1">
-                                            <a data-flag="1" href="#"><i data-flag="1" class="fas fa-tag"></i><span data-flag="1" class="faw">我的评论</span></a>
-                                        </li>
-                                        <li data-flag="1">
-                                            <a data-flag="1" href="#"><i data-flag="1" class="fas fa-bell"></i><span data-flag="1" class="faw">我的通知</span></a>
-                                        </li>
-                                        @if (User.HasClaim(ClaimTypes.Role, "Admin") || User.HasClaim(ClaimTypes.Role, "admin"))
-                                        {
-                                            <li data-flag="1">
-                                                <a data-flag="1" asp-area="Admin" asp-controller="Admin" asp-action="Index"><i data-flag="1" class="fas fa-cogs"></i><span data-flag="1" class="faw">管理</span></a>
-                                            </li>
-                                        }
-                                        else
-                                        { }
-                                        <hr data-flag="1" />
-                                        <li data-flag="1" style="padding-top: 0;">
-                                            <a data-flag="1" asp-controller="Account" asp-action="Logout"><i data-flag="1" class="fas fa-sign-out-alt"></i><span data-flag="1" class="faw">退出登录</span></a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            }
-                            else
-                            {
-                                <li id="user-login" class="nav-item" style="width: 50px;">
-                                    <a class="nav-link" href="#" data-toggle="modal" data-target="#Login">登录</a>
-                                </li>
-                            }
-                            <li data-flag="1" class="nav-item" style="width: 40px;">
-                                <a data-flag="1" class="nav-link" href="#" v-on:click="optSearch($event)">
-                                    <span data-flag="1" class="fa fa-search" title="搜索"></span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
+                @await Html.PartialAsync("_TopNavbarMenu")@*顶部导航*@
                 <div data-flag="1" id="search-posts">
                     <form data-flag="1" asp-controller="Home" asp-action="Search" method="post">
-                        <input data-flag="1" type="text" placeholder="请输入搜索内容" name="searchtext" id="searchtext" style="line-height: 30px;width: 400px;border: 1px solid lightblue;padding-left:10px" />
-                        <button data-flag="1" type="submit" style="line-height: 30px;border: none;background-color: #309dda;width: 60px;border: 1px solid #309dda;">搜索</button>
+                        <input data-flag="1" type="text" placeholder="请输入搜索内容" name="searchtext" id="searchtext" style="line-height: 30px; width: 400px; border: 1px solid lightblue; padding-left: 10px" />
+                        <button data-flag="1" type="submit" style="line-height: 30px; border: none; background-color: #309dda; width: 60px; border: 1px solid #309dda;">搜索</button>
                     </form>
                 </div>
                 <div class="container" style="display: flex">
-                    <div id="main-content" class="bg-white" style="overflow: hidden; flex-grow: 1;padding-bottom:10px;min-height:900px">
+                    <div id="main-content" class="bg-white" style="overflow: hidden; flex-grow: 1; padding-bottom: 10px; min-height: 900px">
                         <div id="post-owin" class="author-info">
                             <div class="author-img">
-                                <a href="#"><img src="holder.js/50x50?theme=headimg" style="border-radius:50px" /></a>
+                                <a href="#"><img src="holder.js/50x50?theme=headimg" style="border-radius: 50px" /></a>
                             </div>
                             <div class="author-name">
-                                <a href="#" style="display:block">@Model.Item3.Author</a>
-                                <span style="color:#cac7c7">@Model.Item3.CreateTime.ToString("yyyy-MM-dd")&nbsp;&nbsp;阅读&nbsp;@Model.Item3.ViewCount</span>
+                                <a href="#" style="display: block">@Model.Item3.Author</a>
+                                <span style="color: #cac7c7">@Model.Item3.CreateTime.ToString("yyyy-MM-dd")&nbsp;&nbsp;阅读&nbsp;@Model.Item3.ViewCount</span>
                             </div>
                         </div>
                         <!--帖子详情-->
                         <div id="post-detail">
-                            <div class="post-header" style="text-align:center;margin-bottom:15px;">
+                            <div class="post-header" style="text-align: center; margin-bottom: 15px;">
                                 <h1>@Model.Item3.Title</h1>
-                                <p style="font-size:14px;">
+                                <p style="font-size: 14px;">
                                     <span>分类：<a id="post-category" href="#">开源框架</a></span>
                                     <span>&nbsp;评论(@Model.Item3.CommonCount)</span>
                                 </p>
@@ -218,7 +81,7 @@
                                 <div id="test-editormd">
                                     <textarea style="display: none;">
 
-@if (@Model.Item3.ContentMd.Trim()=="")
+@if (@Model.Item3.ContentMd.Trim() == "")
 {
     @Model.Item3.ContentHtml
 }
@@ -232,12 +95,12 @@ else
                             </div>
 
                             <!--发表评论-->
-                            <div id="publish-common" style="width: 100%; background-color: #FAFBFC;padding: 5px 2px">
-                                <form method="post" asp-controller="Post" asp-action="" style="display:flex ">
+                            <div id="publish-common" style="width: 100%; background-color: #FAFBFC; padding: 5px 2px">
+                                <form method="post" asp-controller="Post" asp-action="" style="display: flex">
                                     <div>
                                         <i class="fas fa-user-circle fa-3x" style="color: #d6d6d6"></i>
                                     </div>
-                                    <div style=" width: 100%;">
+                                    <div style="width: 100%;">
                                         <input type="text" class="form-control" style="line-height: 36px; margin-left: 10px;" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
                                     </div>
                                 </form>
@@ -251,9 +114,9 @@ else
                                             <img src="holder.js/32x32?theme=headimg" style="border-radius: 32px;">
                                         </div>
                                         <div clsss="common-body" style="width: 100%">
-                                            <div class="parent-common" style="width: 100%; padding-bottom: 5px;border-bottom: 1px solid #b1d2e2">
-                                                <span style="font-size: 13px;color:#aba6a6">吾爱真理更爱葛巾</span>
-                                                <div style="color: #66696b;font-size: 14px;">
+                                            <div class="parent-common" style="width: 100%; padding-bottom: 5px; border-bottom: 1px solid #b1d2e2">
+                                                <span style="font-size: 13px; color: #aba6a6">吾爱真理更爱葛巾</span>
+                                                <div style="color: #66696b; font-size: 14px;">
                                                     小鱼哥，请问能把我也拉进群吗，我想跟你们混，我的微信wxy2013623
                                                     <div class="toolbar" style="margin-bottom: 10px">
                                                         <span style="margin-right: 20px;">2019-02-02</span>
@@ -262,13 +125,13 @@ else
                                                     </div>
                                                 </div>
                                                 <!--子评论-->
-                                                <div class="child-common" style="color: #66696b;font-size: 14px; display: flex; background-color: #FBFBFB; width: 100%;padding: 5px">
+                                                <div class="child-common" style="color: #66696b; font-size: 14px; display: flex; background-color: #FBFBFB; width: 100%; padding: 5px">
                                                     <div style="margin-right: 10px;">
                                                         <img src="holder.js/32x32?theme=headimg" style="border-radius: 32px;">
                                                     </div>
                                                     <div class="parent-common" style="width: 100%">
-                                                        <span style="font-size: 13px;color:#aba6a6">admin</span>
-                                                        <div style="color: #66696b;font-size: 14px;">
+                                                        <span style="font-size: 13px; color: #aba6a6">admin</span>
+                                                        <div style="color: #66696b; font-size: 14px;">
                                                             回复<span style="color: #4285f4">吾爱真理更爱葛巾</span>文中有微信哦
                                                             <div class="toolbar">
                                                                 <span style="margin-right: 20px;">2019-02-02</span>
@@ -279,13 +142,13 @@ else
                                                     </div>
                                                 </div>
                                                 <!--子评论-->
-                                                <div class="child-common" style="color: #66696b;font-size: 14px; display: flex; background-color: #FBFBFB; width: 100%;padding: 5px">
+                                                <div class="child-common" style="color: #66696b; font-size: 14px; display: flex; background-color: #FBFBFB; width: 100%; padding: 5px">
                                                     <div style="margin-right: 10px;">
                                                         <img src="holder.js/32x32?theme=headimg" style="border-radius: 32px;">
                                                     </div>
                                                     <div class="parent-common" style="width: 100%">
-                                                        <span style="font-size: 13px;color:#aba6a6">admin</span>
-                                                        <div style="color: #66696b;font-size: 14px;">
+                                                        <span style="font-size: 13px; color: #aba6a6">admin</span>
+                                                        <div style="color: #66696b; font-size: 14px;">
                                                             回复<span style="color: #4285f4">吾爱真理更爱葛巾</span>文中有微信哦
                                                             <div class="toolbar">
                                                                 <span style="margin-right: 20px;">2019-02-02</span>
@@ -303,7 +166,7 @@ else
                                 </div>
                             </div>
                             <!--加载更多评论-->
-                            <div clsss="loadmorecommon" style="line-height: 35px; width: 100%; text-align: center;color: #4285f4">
+                            <div clsss="loadmorecommon" style="line-height: 35px; width: 100%; text-align: center; color: #4285f4">
                                 加载更多 >
                             </div>
                         </div>
@@ -354,7 +217,8 @@ else
                 <footer class="footer">
                     <div class="footer-header">
                         <p>
-                            <span>Copyright</span><span>&copy;</span><span>2018&nbsp;&nbsp;</span><a href="#">阿里布布</a><span>
+                            <span>Copyright</span><span>&copy;</span><span>2018&nbsp;&nbsp;</span><a href="#">阿里布布</a>
+                            <span>
                                 &nbsp;&nbsp;Design By
                                 zyl
                             </span>
@@ -397,8 +261,8 @@ else
                                 <input type="password" name="password" minlength="6" maxlength="64" class="textinput textInput form-control user-error" placeholder="密码" id="id_password_" required="" data-purpose="password" aria-invalid="true" asp-for="Item2.Password">
                             </div>
                             <a v-on:click="SignUp" class="btn btn-default" style="width: 100%; background-color: #17b1ec">注&nbsp;&nbsp;册</a>
-                            <p style="text-align: center; width: 100%; padding: 10px;height: 30px;">
-                                <a v-on:click="isSignUp=false" href="#" style="text-decoration: none; color: #4285f4; font-size: 10px; float: left;font-weight: bold;">&nbsp;已有账号登录</a>
+                            <p style="text-align: center; width: 100%; padding: 10px; height: 30px;">
+                                <a v-on:click="isSignUp=false" href="#" style="text-decoration: none; color: #4285f4; font-size: 10px; float: left; font-weight: bold;">&nbsp;已有账号登录</a>
                             </p>
                         </form>
 
@@ -411,9 +275,9 @@ else
                                 <input type="password" name="password" minlength="6" maxlength="64" class="textinput textInput form-control user-error" placeholder="密码" id="id_password" required="" data-purpose="password" aria-invalid="true" asp-for="Item1.Password">
                             </div>
                             <a v-on:click="Login" class="btn btn-default" style="width: 100%; background-color: #17b1ec">登&nbsp;&nbsp;录</a>
-                            <p style="text-align: center; width: 100%; padding: 10px;height: 30px;">
-                                <a v-on:click="isSignUp=true" href="#" style="text-decoration: none; color: #4285f4; font-size: 10px; float: left;font-weight: bold;">&nbsp;新用户注册</a>
-                                <a href="#" style="text-decoration: none; color: #4285f4; font-size: 10px; float: right;font-weight: bold;">&nbsp;忘记密码？</a>
+                            <p style="text-align: center; width: 100%; padding: 10px; height: 30px;">
+                                <a v-on:click="isSignUp=true" href="#" style="text-decoration: none; color: #4285f4; font-size: 10px; float: left; font-weight: bold;">&nbsp;新用户注册</a>
+                                <a href="#" style="text-decoration: none; color: #4285f4; font-size: 10px; float: right; font-weight: bold;">&nbsp;忘记密码？</a>
                             </p>
                         </form>
 
@@ -433,15 +297,15 @@ else
                                         {
                                             if (provider.Name.Trim() == "QQ")
                                             {
-                                                <button type="submit" style="border: none;background: #3596e8;width: 30px;line-height: 20px;border-radius: 10px;" data-toggle="tooltip" data-placement="top" title="正在准备中" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.Name</button>
+                                                <button type="submit" style="border: none; background: #3596e8; width: 30px; line-height: 20px; border-radius: 10px;" data-toggle="tooltip" data-placement="top" title="正在准备中" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.Name</button>
                                             }
                                             if (provider.Name.Trim() == "WeChat")
                                             {
-                                                <button type="submit" style="border: none;background: #49f156;width: 60px;line-height: 20px;border-radius: 10px;" data-toggle="tooltip" data-placement="top" title="正在准备中" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.Name</button>
+                                                <button type="submit" style="border: none; background: #49f156; width: 60px; line-height: 20px; border-radius: 10px;" data-toggle="tooltip" data-placement="top" title="正在准备中" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.Name</button>
                                             }
                                             if (provider.Name.Trim() == "Google")
                                             {
-                                                <button type="submit" style="border: none;background: #d0d0d0;width: 60px;line-height: 20px;border-radius: 10px;" data-toggle="tooltip" data-placement="top" title="正在准备中" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.Name</button>
+                                                <button type="submit" style="border: none; background: #d0d0d0; width: 60px; line-height: 20px; border-radius: 10px;" data-toggle="tooltip" data-placement="top" title="正在准备中" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.Name</button>
                                             }
                                         }
                                     }
