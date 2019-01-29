@@ -19,7 +19,7 @@ namespace Infrastructure.Data.DataConfig
             builder.ToTable("Article");
             builder.HasKey(x => x.Id);
 
-            builder.Property(e => e.Title).HasMaxLength(300).IsUnicode(false).IsRequired();
+            builder.Property(e => e.Title).HasMaxLength(300).IsUnicode().IsRequired();
 
             builder.Property(x => x.ContentMd).HasColumnType("text").IsUnicode().IsRequired();
 

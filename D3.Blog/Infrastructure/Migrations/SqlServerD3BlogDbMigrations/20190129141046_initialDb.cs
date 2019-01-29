@@ -13,7 +13,7 @@ namespace Infrastructure.Data.Migrations.SqlServerD3BlogDbMigrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Title = table.Column<string>(maxLength: 120, nullable: false),
                     ParentId = table.Column<int>(nullable: true),
                     Sort = table.Column<int>(nullable: false),
@@ -33,11 +33,11 @@ namespace Infrastructure.Data.Migrations.SqlServerD3BlogDbMigrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(maxLength: 200, nullable: true),
                     Email = table.Column<string>(nullable: false),
                     Birthday = table.Column<DateTime>(nullable: false),
-                    RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true)
+                    RowVersion = table.Column<DateTime>(rowVersion: true, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -49,16 +49,18 @@ namespace Infrastructure.Data.Migrations.SqlServerD3BlogDbMigrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Title = table.Column<string>(unicode: false, maxLength: 300, nullable: false),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Title = table.Column<string>(maxLength: 300, nullable: false),
                     ImageUrl = table.Column<string>(maxLength: 300, nullable: true),
-                    Content = table.Column<string>(type: "text", nullable: false),
+                    ContentMd = table.Column<string>(type: "text", nullable: false),
+                    ContentHtml = table.Column<string>(type: "text", nullable: false),
                     ViewCount = table.Column<int>(nullable: false, defaultValue: 0),
                     CollectedCount = table.Column<int>(nullable: false, defaultValue: 0),
                     PromitCount = table.Column<int>(nullable: false, defaultValue: 0),
-                    Sort = table.Column<int>(nullable: false),
-                    Author = table.Column<string>(maxLength: 120, nullable: false),
-                    Source = table.Column<string>(maxLength: 100, nullable: true),
+                    Author = table.Column<string>(maxLength: 120, nullable: true),
+                    Source = table.Column<int>(maxLength: 100, nullable: true),
+                    ExternalUrl = table.Column<string>(maxLength: 300, nullable: true),
+                    Status = table.Column<int>(nullable: false, defaultValue: 1),
                     SeoTitle = table.Column<string>(maxLength: 100, nullable: true),
                     SeoKeyword = table.Column<string>(maxLength: 100, nullable: true),
                     SeoDescription = table.Column<string>(maxLength: 250, nullable: true),

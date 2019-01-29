@@ -1,1 +1,4 @@
 ﻿Add-Migration initialDb -Context D3BlogDbContext -OutputDir Migrations\SqlServerD3BlogDbMigrations
+
+
+EventStoreMigrations

@@ -3,29 +3,26 @@ using System;
 using Infrastructure.Data.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Data.Migrations.SqlServerD3BlogDbMigrations
 {
     [DbContext(typeof(D3BlogDbContext))]
-    [Migration("20190109100700_initialDb")]
+    [Migration("20190129141046_initialDb")]
     partial class initialDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "2.2.1-servicing-10028")
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("D3.Blog.Domain.Entitys.Article", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("AddTime");
 
@@ -35,7 +32,6 @@ namespace Infrastructure.Data.Migrations.SqlServerD3BlogDbMigrations
                         .HasColumnName("CategoryID");
 
                     b.Property<string>("Author")
-                        .IsRequired()
                         .HasMaxLength(120)
                         .IsUnicode(true);
 
@@ -43,10 +39,18 @@ namespace Infrastructure.Data.Migrations.SqlServerD3BlogDbMigrations
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(0);
 
-                    b.Property<string>("Content")
+                    b.Property<string>("ContentHtml")
                         .IsRequired()
                         .HasColumnType("text")
                         .IsUnicode(true);
+
+                    b.Property<string>("ContentMd")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .IsUnicode(true);
+
+                    b.Property<string>("ExternalUrl")
+                        .HasMaxLength(300);
 
                     b.Property<string>("ImageUrl")
                         .HasMaxLength(300)
@@ -88,16 +92,18 @@ namespace Infrastructure.Data.Migrations.SqlServerD3BlogDbMigrations
                         .HasMaxLength(100)
                         .IsUnicode(true);
 
-                    b.Property<int>("Sort");
-
-                    b.Property<string>("Source")
+                    b.Property<int?>("Source")
                         .HasMaxLength(100)
                         .IsUnicode(true);
+
+                    b.Property<int>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(1);
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(300)
-                        .IsUnicode(false);
+                        .IsUnicode(true);
 
                     b.Property<int?>("VerifyUserId");
 
@@ -115,8 +121,7 @@ namespace Infrastructure.Data.Migrations.SqlServerD3BlogDbMigrations
             modelBuilder.Entity("D3.Blog.Domain.Entitys.ArticleCategory", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Icon")
                         .HasMaxLength(50)
@@ -153,8 +158,7 @@ namespace Infrastructure.Data.Migrations.SqlServerD3BlogDbMigrations
             modelBuilder.Entity("D3.Blog.Domain.Entitys.Customer", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("BirthDate")
                         .HasColumnName("Birthday");
@@ -166,7 +170,7 @@ namespace Infrastructure.Data.Migrations.SqlServerD3BlogDbMigrations
                         .HasColumnName("Name")
                         .HasMaxLength(200);
 
-                    b.Property<byte[]>("RowVersion")
+                    b.Property<DateTime?>("RowVersion")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
 
