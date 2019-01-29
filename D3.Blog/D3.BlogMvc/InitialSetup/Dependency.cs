@@ -111,10 +111,7 @@ namespace D3.BlogMvc.InitialSetup
         /// <param name="builder"></param>
         internal static void ConfigureDependenciesAutofac(this ContainerBuilder builder)
         {
-
-            // ASP.NET HttpContext dependency
-
-
+            
             builder.RegisterType<Mediator>().As<IMediator>().InstancePerLifetimeScope();
             builder.Register<ServiceFactory>(context =>
             {

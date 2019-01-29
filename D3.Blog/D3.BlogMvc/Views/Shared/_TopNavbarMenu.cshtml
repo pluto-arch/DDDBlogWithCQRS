@@ -56,7 +56,7 @@
                             <a data-flag="1" v-on:click="dropDownOpt($event)" class="nav-link" href="#"><i data-flag="1" class="fa fa-user"></i>&nbsp;&nbsp;@User.Identity.Name&nbsp;&nbsp;<i data-flag="1" class="fa fa-caret-down"></i></a>
                             <ul data-flag="1" id="usr-opt" class="user-opt-list" style="z-index: 9999">
                                 <li data-flag="1">
-                                    <a data-flag="1" href="#"><i data-flag="1" class="far fa-user-circle"></i><span data-flag="1" class="faw">个人中心</span></a>
+                                    <a data-flag="1" asp-controller="Post" asp-action="ArticleManager" asp-route-flag="1"><i data-flag="1" class="far fa-user-circle"></i><span data-flag="1" class="faw">个人中心</span></a>
                                 </li>
                                 <li data-flag="1">
                                     <a data-flag="1" href="#"><i data-flag="1" class="fas fa-file-alt"></i><span data-flag="1" class="faw">草稿</span></a>
@@ -130,7 +130,7 @@
                             <a data-flag="1" v-on:click="dropDownOpt($event)" class="nav-link" href="#"><i data-flag="1" class="fa fa-user"></i>&nbsp;&nbsp;@User.Identity.Name&nbsp;&nbsp;<i data-flag="1" class="fa fa-caret-down"></i></a>
                             <ul data-flag="1" id="usr-opt" class="user-opt-list">
                                 <li data-flag="1">
-                                    <a data-flag="1" href="#"><i data-flag="1" class="far fa-user-circle"></i><span data-flag="1" class="faw">个人中心</span></a>
+                                    <a data-flag="1" asp-controller="Post" asp-action="ArticleManager" asp-route-flag="1"><i data-flag="1" class="far fa-user-circle"></i><span data-flag="1" class="faw">个人中心</span></a>
                                 </li>
                                 <li data-flag="1">
                                     <a data-flag="1" href="#"><i data-flag="1" class="fas fa-file-alt"></i><span data-flag="1" class="faw">草稿</span></a>

@@ -29,9 +29,9 @@ namespace Infrastructure.Data.Database
                 .Build();
 
             // 使用默认的sql数据库连接
-//            optionsBuilder.UseSqlServer(config.GetConnectionString("BLOG_DBCONN"));
+            optionsBuilder.UseSqlServer(config.GetConnectionString("BLOG_DBCONN"));
 
-            optionsBuilder.UseMySql(config.GetConnectionString("BLOG_MYSQL"));
+//            optionsBuilder.UseMySql(config.GetConnectionString("BLOG_MYSQL"));
         }
     }
 }

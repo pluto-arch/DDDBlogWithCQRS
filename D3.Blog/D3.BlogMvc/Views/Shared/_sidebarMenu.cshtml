@@ -14,7 +14,7 @@
         @if (User.Identity.IsAuthenticated)
         {
             <li class="">
-                <a href="#">个人中心</a>
+                <a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="1">个人中心</a>
             </li>
         }
         else

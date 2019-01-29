@@ -49,7 +49,7 @@ namespace D3.BlogMvc
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-//            services.ConfigureDependencies(); //配置依赖注入  
+            services.ConfigureDependencies(); //配置依赖注入  
 
             services.ConfigureSeriLog(Configuration);//配置serilog
 
@@ -57,7 +57,7 @@ namespace D3.BlogMvc
 
             #region IDentity
             services.AddDbContext<AppIdentityDbContext>(
-                options =>options.UseMySql(Configuration.GetConnectionString("ID_DBCONN")));
+                options =>options.UseSqlServer(Configuration.GetConnectionString("ID_DBCONN")));
             services.AddIdentity<AppBlogUser, AppBlogRole>()
                     .AddEntityFrameworkStores<AppIdentityDbContext>()
                     .AddDefaultTokenProviders();
@@ -121,7 +121,7 @@ namespace D3.BlogMvc
             builder.Populate(services);//将原生的注入填充进去
             builder.RegisterType<BlogLogAOP>();//可以直接替换其他拦截器！一定要把拦截器进行注册
             builder.RegisterType<BlogCacheAOP>();
-            builder.ConfigureDependenciesAutofac();
+//            builder.ConfigureDependenciesAutofac();
 
 
             var applicationContainer = builder.Build();//构建新容器
