@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Data;
 using System.Threading.Tasks;
 using D3.Blog.Domain.Entitys;
 using D3.Blog.Domain.Infrastructure;
 using Infrastructure.Data.Database;
 using Infrastructure.Identity.Data;
+using Microsoft.EntityFrameworkCore;
+using MySql.Data.MySqlClient;
 
 namespace Infrastructure.Data.UOW
 {
@@ -27,7 +30,7 @@ namespace Infrastructure.Data.UOW
         {
             _dbContext  = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
-
+        
         public bool Commit()
         {
             return _dbContext.SaveChanges() > 0;

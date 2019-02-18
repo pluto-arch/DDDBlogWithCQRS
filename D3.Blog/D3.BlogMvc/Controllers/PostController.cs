@@ -24,6 +24,7 @@ using Newtonsoft.Json;
 using Microsoft.AspNetCore.Identity;
 using Infrastructure.Data.Database;
 using Infrastructure.Identity.Models;
+using Infrastructure.NLoger;
 using Remotion.Linq.Parsing.Structure.IntermediateModel;
 
 namespace D3.BlogMvc.Controllers
@@ -45,8 +46,8 @@ namespace D3.BlogMvc.Controllers
         /// <param name="signInManager"></param>
         /// <param name="logger"></param>
         /// <param name="notifications"></param>
-        public PostController(IArticleService articleService,UserManager<AppBlogUser> userManager, RoleManager<AppBlogRole> roleManager, SignInManager<AppBlogUser> signInManager, Serilog.ILogger logger, INotificationHandler<DomainNotification> notifications,IUser user)
-            : base(userManager, roleManager, signInManager, logger, notifications)
+        public PostController(IArticleService articleService,UserManager<AppBlogUser> userManager, RoleManager<AppBlogRole> roleManager, SignInManager<AppBlogUser> signInManager, Serilog.ILogger logger, INotificationHandler<DomainNotification> notifications,IUser user,ICustomerLogging _logger)
+            : base(userManager, roleManager, signInManager, notifications,_logger)
         {
             _articleService = articleService;
             _user = user;
@@ -177,23 +178,27 @@ namespace D3.BlogMvc.Controllers
             IEnumerable<ArticleViewModel> result=new List<ArticleViewModel>();
             if (_user!=null)
             {
-
+                var uid = -1;
+                if (_user.Id!=null)
+                {
+                    uid = int.Parse(_user.Id);
+                }
                 switch (flag)
                 {
                     case "1":
-                        result = _articleService.GetList<DateTime>(x => x.AddUserId == _user.Id,x=>x.AddTime);//全部
+                        result = _articleService.GetList<DateTime>(x => x.AddUserId == uid,x=>x.AddTime);//全部
                         break;
                     case "2":
-                        result = _articleService.GetList<DateTime>(x => x.AddUserId == _user.Id&&x.IsPublish==true,x=>x.AddTime);//已发布
+                        result = _articleService.GetList<DateTime>(x => x.AddUserId == uid&&x.IsPublish==true,x=>x.AddTime);//已发布
                         break;
                     case "3":
-                        result = _articleService.GetList<DateTime>(x => x.AddUserId == _user.Id&&x.Status==ArticleStatus.Verify,x=>x.AddTime);//审核中
+                        result = _articleService.GetList<DateTime>(x => x.AddUserId == uid&&x.Status==ArticleStatus.Verify,x=>x.AddTime);//审核中
                         break;
                     case "4":
-                        result = _articleService.GetList<DateTime>(x => x.AddUserId == _user.Id&&x.Status==ArticleStatus.Savedraft,x=>x.AddTime);//草稿箱
+                        result = _articleService.GetList<DateTime>(x => x.AddUserId == uid&&x.Status==ArticleStatus.Savedraft,x=>x.AddTime);//草稿箱
                         break;
                     case "5":
-                        result = _articleService.GetList<DateTime>(x => x.AddUserId == _user.Id&&x.Status==ArticleStatus.Deleted,x=>x.AddTime);//回收箱
+                        result = _articleService.GetList<DateTime>(x => x.AddUserId == uid&&x.Status==ArticleStatus.Deleted,x=>x.AddTime);//回收箱
                         break;
                 }
                 ViewBag.totalCount=result.Count();

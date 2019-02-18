@@ -15,7 +15,7 @@ namespace D3.Blog.Application.Infrastructure
         /// <summary>
         /// serilog对象
         /// </summary>
-        private readonly Serilog.ILogger _logger;
+//        private readonly Serilog.ILogger _logger;
         /// <summary>
         /// 当前操作用户
         /// </summary>
@@ -35,7 +35,7 @@ namespace D3.Blog.Application.Infrastructure
         public RequestPerformanceBehaviour(Serilog.ILogger logger,IUser user)
         {
             _timer=new Stopwatch();
-            _logger = logger;
+//            _logger = logger;
             _user = user;
         }
 
@@ -58,7 +58,7 @@ namespace D3.Blog.Application.Infrastructure
             {
                 var name = typeof(TRequest).Name;
                 
-                _logger.CustomInformation(_user.Name,other: _timer.ElapsedMilliseconds+"",informationMessage:$@"【{_user.Name}】请求【{name}】。耗时【{_timer.ElapsedMilliseconds}】秒");
+//                _logger.CustomInformation(_user.Name,other: _timer.ElapsedMilliseconds+"",informationMessage:$@"【{_user.Name}】请求【{name}】。耗时【{_timer.ElapsedMilliseconds}】秒");
             }
 
             return response;

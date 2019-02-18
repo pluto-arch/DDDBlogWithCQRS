@@ -40,6 +40,7 @@ namespace D3.Blog.Application.Interface
         /// 根据条件获取集合
         /// </summary>
         /// <param name="expression"></param>
+        /// <param name="orderby"></param>
         /// <returns></returns>
         IEnumerable<ArticleViewModel> GetList<TKey>(Expression<Func<Article, bool>> expression,Expression<Func<Article, TKey>> orderby);
 

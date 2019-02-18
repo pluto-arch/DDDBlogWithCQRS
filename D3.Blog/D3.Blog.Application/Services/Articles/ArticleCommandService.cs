@@ -40,7 +40,7 @@ namespace D3.Blog.Application.Services.Articles
         /// <summary>
         /// 日志
         /// </summary>
-        public readonly Serilog.ILogger  _logger;
+//        public readonly Serilog.ILogger  _logger;
 
         public ArticleService(
             IMapper               mapper,
@@ -51,7 +51,7 @@ namespace D3.Blog.Application.Services.Articles
             _mapper               = mapper;
             _articleRepository   = articleRepository;
             Bus                   = bus;
-            _logger = logger;
+//            _logger = logger;
         }
 
 
@@ -70,7 +70,7 @@ namespace D3.Blog.Application.Services.Articles
             catch (Exception e)
             {
                 //异常记录
-                _logger.Error(e,$"发生错误：{e.Message}");
+//                _logger.Error(e,$"发生错误：{e.Message}");
             }
         }
 
@@ -101,7 +101,7 @@ namespace D3.Blog.Application.Services.Articles
             }
             catch (Exception e)
             {
-                _logger.Error(e,$"发生错误：{e.Message}");
+//                _logger.Error(e,$"发生错误：{e.Message}");
                 return null;
             }
         }
@@ -147,7 +147,7 @@ namespace D3.Blog.Application.Services.Articles
             }
             catch (Exception e)
             {
-                _logger.Error(e,$"发生错误：{e.Message}");
+//                _logger.Error(e,$"发生错误：{e.Message}");
                 return null;
             }
         }
@@ -185,7 +185,7 @@ namespace D3.Blog.Application.Services.Articles
             }
             catch (Exception e)
             {
-                _logger.Error(e,$"发生错误：{e.Message}");//可删除这句。由AOP进行记录
+//                _logger.Error(e,$"发生错误：{e.Message}");//可删除这句。由AOP进行记录
                 return null;
             }
         }

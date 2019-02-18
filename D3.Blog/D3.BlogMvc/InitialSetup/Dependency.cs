@@ -32,6 +32,7 @@ using Infrastructure.Data.Repository.EventSourcing;
 using Infrastructure.Data.Repository.Repositorys;
 using Microsoft.Extensions.DependencyInjection;
 using Infrastructure.Identity.Models;
+using Infrastructure.NLoger;
 using Microsoft.AspNetCore.Http;
 
 namespace D3.BlogMvc.InitialSetup
@@ -53,6 +54,9 @@ namespace D3.BlogMvc.InitialSetup
             // ASP.NET HttpContext dependency
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IUser, AspNetUser>();
+
+            services.AddScoped<ICustomerLogging, CustomerLogging>();
+            services.AddScoped<IDBHelper, DBHelper>();
 
             #region 单元工作与总线bus
             services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));

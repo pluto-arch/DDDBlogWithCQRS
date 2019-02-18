@@ -16,13 +16,13 @@ namespace Infrastructure.Data.Repository.Repositorys
     {
         internal   D3BlogDbContext _context;
         internal DbSet<Article>       _dbSet;
-        internal readonly Serilog.ILogger _logger;
+//        internal readonly Serilog.ILogger _logger;
 
         public ArticleRepository(D3BlogDbContext context,Serilog.ILogger logger)
         {
             _context = context;
             _dbSet   = context.Set<Article>();
-            _logger = logger;
+//            _logger = logger;
         }
 
         public override void Delete(Article entity)
@@ -63,7 +63,7 @@ namespace Infrastructure.Data.Repository.Repositorys
             }
             catch (Exception e)
             {
-                _logger.Information(e,$"出现错误：{e.Message}");
+//                _logger.Information(e,$"出现错误：{e.Message}");
             }
             return null;
         }

@@ -15,12 +15,12 @@ namespace Infrastructure.AOP
     /// </summary>
     public class BlogLogAOP : IInterceptor
     {
-        internal Serilog.ILogger _logger ;
+//        internal Serilog.ILogger _logger ;
         internal IUser _user;
 
-        public BlogLogAOP(Serilog.ILogger logger,IUser user)
+        public BlogLogAOP(IUser user)
         {
-            _logger = logger;
+//            _logger = logger;
             _user = user;
         }
 
@@ -35,13 +35,13 @@ namespace Infrastructure.AOP
                 //在被拦截的方法执行完毕后 继续执行当前方法，注意是被拦截的是异步的
                 invocation.Proceed();
                 dataIntercept += ($"执行完毕，返回结果：{invocation.ReturnValue}");
-                _logger.CustomInformation(_user==null?"":_user.Name,"","","",dataIntercept);
+//                _logger.CustomInformation(_user==null?"":_user.Name,"","","",dataIntercept);
             }
             catch (Exception e)
             {
                 //执行的 service 中，出现异常
                 dataIntercept += ($"方法执行中出现异常：{e.Message+e.InnerException}");
-                _logger.CustomInformation(_user==null?"":_user.Name,"","","",dataIntercept);
+//                _logger.CustomInformation(_user==null?"":_user.Name,"","","",dataIntercept);
             }
         }
     }

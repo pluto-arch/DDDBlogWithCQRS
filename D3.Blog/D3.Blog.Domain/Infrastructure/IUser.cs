@@ -5,8 +5,9 @@ namespace D3.Blog.Domain.Infrastructure
 {
     public interface IUser
     {
-        int Id { get; }
+        string Id { get; }
         string Name { get; }
+        string ClientIP { get; }
         bool IsAuthenticated();
         IEnumerable<Claim> GetClaimsIdentity();
     }

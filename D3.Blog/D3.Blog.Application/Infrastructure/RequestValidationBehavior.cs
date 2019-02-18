@@ -20,7 +20,7 @@ namespace D3.Blog.Application.Infrastructure
         /// <summary>
         /// serilog对象
         /// </summary>
-        private readonly Serilog.ILogger _logger;
+//        private readonly Serilog.ILogger _logger;
         /// <summary>
         /// 当前操作用户
         /// </summary>
@@ -38,7 +38,7 @@ namespace D3.Blog.Application.Infrastructure
         public RequestValidationBehavior(IEnumerable<IValidator<TRequest>> validators,Serilog.ILogger logger,IUser user)
         {
             _validators = validators;
-            _logger = logger;
+//            _logger = logger;
             _user = user;
         }
 
@@ -63,7 +63,7 @@ namespace D3.Blog.Application.Infrastructure
             {
                 var name = typeof(TRequest).Name;
                 var failure = JsonConvert.SerializeObject(failures);
-                _logger.CustomFatal(_user.Name,fatalMessage:failure);
+//                _logger.CustomFatal(_user.Name,fatalMessage:failure);
             }
 
             return next();

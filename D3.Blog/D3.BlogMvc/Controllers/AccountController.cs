@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using D3.BlogMvc.Hubs;
 using D3.BlogMvc.Models.AccountModels;
@@ -12,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Infrastructure.NLoger;
 using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -23,15 +26,16 @@ namespace D3.BlogMvc.Controllers
         private readonly UserManager<AppBlogUser> _userManager;
         private readonly RoleManager<AppBlogRole> _roleManager;
         private readonly SignInManager<AppBlogUser> _signInManager;
-        private readonly Serilog.ILogger _logger;
+        private readonly ICustomerLogging _logger;
+        private readonly IDBHelper _dbHelper;
 
-
-        public AccountController (UserManager<AppBlogUser> userManager, RoleManager<AppBlogRole> roleManager, SignInManager<AppBlogUser> signInManager, Serilog.ILogger logger)
+        public AccountController (UserManager<AppBlogUser> userManager, RoleManager<AppBlogRole> roleManager, SignInManager<AppBlogUser> signInManager,ICustomerLogging logger,IDBHelper dbHelper)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
             _logger = logger;
+            _dbHelper = dbHelper;
         }
         
         [HttpGet]
@@ -70,8 +74,7 @@ namespace D3.BlogMvc.Controllers
                     var result= await _signInManager.PasswordSignInAsync(user,model.Password,model.RememberMe,false);
                     if (result.Succeeded)
                     {
-                        _logger.CustomInformation(user:user.UserName,other:"登录",enviornment:"Dev",host:"Dell NoteBook",informationMessage:"用户登录");
-                        
+                        _logger.LogLoginInfo("用户登录",nameof(LoginAsync),nameof(AccountController),null,user.UserName,user.Id.ToString());
                         return new JsonResult(errormessage);
                     }
                     else if (result.IsLockedOut)
@@ -131,7 +134,7 @@ namespace D3.BlogMvc.Controllers
                     var result= await _signInManager.PasswordSignInAsync(user,model.Password,model.RememberMe,false);
                     if (result.Succeeded)
                     {
-                        _logger.CustomInformation(user:user.UserName,other:"登录",enviornment:"Dev",host:"Dell NoteBook",informationMessage:"用户登录");                        
+                        _logger.LogLoginInfo("用户登录",nameof(LoginAsync),nameof(AccountController),null,user.UserName,user.Id.ToString());
                         return LocalRedirect(returnUrl);//登录成功
                     }
                     else if (result.IsLockedOut)
@@ -274,9 +277,13 @@ namespace D3.BlogMvc.Controllers
         
         public async Task<IActionResult> Logout(string returnUrl=null)
         {
-             ViewData["ReturnUrl"] = returnUrl;
+            ViewData["ReturnUrl"] = returnUrl;
             await _signInManager.SignOutAsync();
-            // _logger.LogInformation("User logged out.");
+            var res= _dbHelper.ExecSqlStoredProcedure("call timeDiff('"+DateTime.Now.ToString()+"',2,@s);select @s as sum;");
+
+            var dt = res.Tables[0].Columns[0].DefaultValue;
+
+            _logger.LogCustomerInfo($"用户注销,在线时长:100分钟",nameof(LoginAsync),nameof(AccountController),null);
             if (returnUrl != null)
             {
                 return LocalRedirect(returnUrl);

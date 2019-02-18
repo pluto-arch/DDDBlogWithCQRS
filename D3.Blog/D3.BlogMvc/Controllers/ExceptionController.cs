@@ -7,6 +7,7 @@ using D3.Blog.Domain.Core.Notifications;
 using Infrastructure.Data.Database;
 using Infrastructure.Identity.Models;
 using Infrastructure.Logging;
+using Infrastructure.NLoger;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
@@ -20,8 +21,8 @@ namespace D3.BlogMvc.Controllers
     [AllowAnonymous]
     public class ExceptionController : BaseController
     {
-        public ExceptionController(UserManager<AppBlogUser> userManager, RoleManager<AppBlogRole> roleManager, SignInManager<AppBlogUser> signInManager, Serilog.ILogger logger, INotificationHandler<DomainNotification> notifications)
-            :base(userManager,roleManager,signInManager,logger, notifications)
+        public ExceptionController(UserManager<AppBlogUser> userManager, RoleManager<AppBlogRole> roleManager, SignInManager<AppBlogUser> signInManager, INotificationHandler<DomainNotification> notifications,ICustomerLogging _logger)
+            :base(userManager,roleManager,signInManager, notifications,_logger)
         {
         }
         /// <summary>
@@ -39,7 +40,7 @@ namespace D3.BlogMvc.Controllers
 
             var currentuser= User.Identity.Name;
 
-            _logger.CustomError(errorMessage:statusCodePagesFeature.Error.Message,user:currentuser);
+            
 
             ViewBag.ErrorMessage = statusCodePagesFeature.Error.Message;
             

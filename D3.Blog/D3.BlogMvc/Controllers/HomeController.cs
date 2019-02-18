@@ -17,14 +17,15 @@ using Newtonsoft.Json;
 using Microsoft.AspNetCore.Identity;
 using Infrastructure.Data.Database;
 using Infrastructure.Identity.Models;
+using Infrastructure.NLoger;
 
 namespace D3.BlogMvc.Controllers
 {
     public class HomeController : BaseController
     {
         private readonly ICustomerService _customerService;
-        public HomeController(ICustomerService customerService,UserManager<AppBlogUser> userManager, RoleManager<AppBlogRole> roleManager, SignInManager<AppBlogUser> signInManager, Serilog.ILogger logger, INotificationHandler<DomainNotification> notifications)
-           : base(userManager, roleManager, signInManager, logger, notifications)
+        public HomeController(ICustomerService customerService,UserManager<AppBlogUser> userManager, RoleManager<AppBlogRole> roleManager, SignInManager<AppBlogUser> signInManager, INotificationHandler<DomainNotification> notifications,ICustomerLogging _logger)
+           : base(userManager, roleManager, signInManager, notifications,_logger)
         {
             _customerService = customerService;
         }

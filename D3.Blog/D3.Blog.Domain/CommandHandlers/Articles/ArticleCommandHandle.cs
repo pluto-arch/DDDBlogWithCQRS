@@ -26,7 +26,7 @@ namespace D3.Blog.Domain.CommandHandlers.Articles
         /// <summary>
         /// 日志
         /// </summary>
-        public readonly Serilog.ILogger  _logger;
+//        public readonly Serilog.ILogger  _logger;
 
         public ArticleCommandHandle(
             Serilog.ILogger  logger,
@@ -39,7 +39,7 @@ namespace D3.Blog.Domain.CommandHandlers.Articles
             _articleRepository = articleRepository;
             _bus = bus;
             _user = user;
-            _logger = logger;
+//            _logger = logger;
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace D3.Blog.Domain.CommandHandlers.Articles
 
                 article.AddTime = request.AddTime;
 
-                article.AddUserId = _user.Id;
+                if (_user.Id != null) article.AddUserId = int.Parse(_user.Id);
 
                 article.Author = request.Author??"";
 
@@ -93,7 +93,7 @@ namespace D3.Blog.Domain.CommandHandlers.Articles
             catch (Exception e)
             {
                 _bus.RaiseEvent(new DomainNotification(request.MessageType,e.Message));
-                _logger.Error(e,$"发生错误：{e.Message}");
+//                _logger.Error(e,$"发生错误：{e.Message}");
             }
             return Unit.Task;
         }

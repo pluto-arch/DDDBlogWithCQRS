@@ -14,7 +14,7 @@ namespace D3.Blog.Application.Infrastructure
         /// <summary>
         /// 日志对象
         /// </summary>
-        private readonly Serilog.ILogger _logger;
+//        private readonly Serilog.ILogger _logger;
         /// <summary>
         /// 当前操作用户
         /// </summary>
@@ -24,9 +24,9 @@ namespace D3.Blog.Application.Infrastructure
         /// </summary>
         /// <param name="logger"></param>
         /// <param name="user"></param>
-        public RequestLogger(Serilog.ILogger logger,IUser user)
+        public RequestLogger(IUser user)
         {
-            _logger = logger;
+//            _logger = logger;
             _user = user;
         }
         /// <summary>
@@ -40,7 +40,7 @@ namespace D3.Blog.Application.Infrastructure
             var name = typeof(TRequest).Name;
 
             // TODO: 添加请求日志
-            _logger.CustomInformation(_user.Name,name,informationMessage: $@"{name} Request: {request}");
+//            _logger.CustomInformation(_user.Name,name,informationMessage: $@"{name} Request: {request}");
 
             return Task.CompletedTask;
         }

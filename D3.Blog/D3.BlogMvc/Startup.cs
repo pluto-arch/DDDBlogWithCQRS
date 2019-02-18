@@ -32,6 +32,8 @@ using D3.Blog.Application.Services.Customer;
 using D3.Blog.Domain.Infrastructure.IRepositorys;
 using Infrastructure.AOP;
 using Infrastructure.Data.Repository.Repositorys;
+using NLog.Extensions.Logging;
+using NLog.Web;
 
 namespace D3.BlogMvc
 {
@@ -51,7 +53,7 @@ namespace D3.BlogMvc
         {
             services.ConfigureDependencies(); //配置依赖注入  
 
-            services.ConfigureSeriLog(Configuration);//配置serilog
+//            services.ConfigureSeriLog(Configuration);//配置serilog
 
             services.AddAutoMapperSetup();
 
@@ -139,7 +141,11 @@ namespace D3.BlogMvc
         
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddSerilog();
+            //使用NLog作为日志记录工具
+            loggerFactory.AddNLog();
+            //引入Nlog配置文件
+            env.ConfigureNLog("Nlog.config");  
+
             if (env.IsDevelopment())
             {
                 //开发环境异常
