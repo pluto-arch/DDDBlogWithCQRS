@@ -17,3 +17,6 @@ update database -verbose -Context AppIdentityDbContext
 
 然后运行一次MVC项目，对identit数据库进行初始化。默认会有两个用户，和角色。可参见AppIdentitySeedData.cs文件中
 
+
+##### 因为数据库变更为mysql  使用serilog 时无法自定义列，所以将日志框架新增NLog 日志框架。原有serilog暂时不适用。如果使用sqlserver的话就使用serilog，比NLog方便些。
+
