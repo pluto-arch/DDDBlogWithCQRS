@@ -24,14 +24,20 @@ namespace Infrastructure.Data.DataConfig
                 .HasMaxLength(120)
                 .IsRequired()
                 .IsUnicode();
-            builder.Property(x => x.SeoTitle)
-                .HasMaxLength(120)
-                .IsUnicode();
-            builder.Property(x => x.SeoKeywords)
-                .HasMaxLength(120)
-                .IsUnicode();
-            builder.Property(x => x.SeoDes)
-                .HasMaxLength(200)
+        }
+    }
+
+    /// <summary>
+    /// 个人分类EF映射
+    /// </summary>
+    public class PersonalArticleCategoryMap : IEntityTypeConfiguration<PersoalArticleCategory>
+    {
+        public void Configure(EntityTypeBuilder<PersoalArticleCategory> builder)
+        {
+            builder.ToTable("PersonalCategory");
+            builder.HasKey(x => x.Id);
+            builder.Property(x => x.CategoryName)
+                .HasMaxLength(100)
                 .IsUnicode();
         }
     }

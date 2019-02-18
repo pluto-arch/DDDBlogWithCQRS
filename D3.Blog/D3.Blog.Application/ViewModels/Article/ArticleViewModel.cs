@@ -55,7 +55,7 @@ namespace D3.Blog.Application.ViewModels.Article
         /// <summary>
         /// 文章的状态：0已经发布。1保存为草稿。3审核中
         /// </summary>
-        [DefaultValue(ArticleStatus.Publish)]
+        [DefaultValue(ArticleStatus.Savedraft)]
         public ArticleStatus Status { get; set; }
         /// <summary>
         /// 创建事件

@@ -14,7 +14,7 @@ namespace Infrastructure.Data.Migrations.SqlServerD3BlogDbMigrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.1-servicing-10028")
+                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("D3.Blog.Domain.Entitys.Article", b =>
@@ -129,18 +129,6 @@ namespace Infrastructure.Data.Migrations.SqlServerD3BlogDbMigrations
 
                     b.Property<int?>("ParentId");
 
-                    b.Property<string>("SeoDes")
-                        .HasMaxLength(200)
-                        .IsUnicode(true);
-
-                    b.Property<string>("SeoKeywords")
-                        .HasMaxLength(120)
-                        .IsUnicode(true);
-
-                    b.Property<string>("SeoTitle")
-                        .HasMaxLength(120)
-                        .IsUnicode(true);
-
                     b.Property<int>("Sort");
 
                     b.Property<string>("Title")
@@ -175,6 +163,22 @@ namespace Infrastructure.Data.Migrations.SqlServerD3BlogDbMigrations
                     b.HasKey("Id");
 
                     b.ToTable("Customer");
+                });
+
+            modelBuilder.Entity("D3.Blog.Domain.Entitys.PersoalArticleCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("CategoryName")
+                        .HasMaxLength(100)
+                        .IsUnicode(true);
+
+                    b.Property<int>("Uid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PersonalCategory");
                 });
 
             modelBuilder.Entity("D3.Blog.Domain.Entitys.Article", b =>

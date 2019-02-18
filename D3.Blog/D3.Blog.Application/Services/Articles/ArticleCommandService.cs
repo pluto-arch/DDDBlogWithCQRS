@@ -115,7 +115,7 @@ namespace D3.Blog.Application.Services.Articles
             }
             catch (Exception e)
             {
-                _logger.Error(e,$"发生错误：{e.Message}");
+//                _logger.Error(e,$"发生错误：{e.Message}");
                 return null;
             }
         }

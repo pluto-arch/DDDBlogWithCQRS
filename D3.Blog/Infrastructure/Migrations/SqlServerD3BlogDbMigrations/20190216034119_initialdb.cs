@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Infrastructure.Data.Migrations.SqlServerD3BlogDbMigrations
 {
-    public partial class initialDb : Migration
+    public partial class initialdb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -18,9 +18,6 @@ namespace Infrastructure.Data.Migrations.SqlServerD3BlogDbMigrations
                     ParentId = table.Column<int>(nullable: true),
                     Sort = table.Column<int>(nullable: false),
                     Icon = table.Column<string>(maxLength: 50, nullable: true),
-                    SeoTitle = table.Column<string>(maxLength: 120, nullable: true),
-                    SeoKeywords = table.Column<string>(maxLength: 120, nullable: true),
-                    SeoDes = table.Column<string>(maxLength: 200, nullable: true),
                     IsDelete = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
@@ -42,6 +39,20 @@ namespace Infrastructure.Data.Migrations.SqlServerD3BlogDbMigrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Customer", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PersonalCategory",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Uid = table.Column<int>(nullable: false),
+                    CategoryName = table.Column<string>(maxLength: 100, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PersonalCategory", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -99,6 +110,9 @@ namespace Infrastructure.Data.Migrations.SqlServerD3BlogDbMigrations
 
             migrationBuilder.DropTable(
                 name: "Customer");
+
+            migrationBuilder.DropTable(
+                name: "PersonalCategory");
 
             migrationBuilder.DropTable(
                 name: "ArticleCategory");

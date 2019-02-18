@@ -57,7 +57,11 @@ namespace D3.BlogMvc
 
             #region IDentity
             services.AddDbContext<AppIdentityDbContext>(
-                options =>options.UseMySql(Configuration.GetConnectionString("BLOG_MYSQL")));
+                options =>options.UseMySql(Configuration.GetConnectionString("BLOG_MYSQL")));//MYSQL
+
+//            services.AddDbContext<AppIdentityDbContext>(
+//                options =>options.UseSqlServer(Configuration.GetConnectionString("ID_DBCONN")));
+
             services.AddIdentity<AppBlogUser, AppBlogRole>()
                     .AddEntityFrameworkStores<AppIdentityDbContext>()
                     .AddDefaultTokenProviders();

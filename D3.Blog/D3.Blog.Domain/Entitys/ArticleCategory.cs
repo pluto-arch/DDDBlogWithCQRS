@@ -30,9 +30,6 @@ namespace D3.Blog.Domain.Entitys
             ParentId = parentId;
             Sort = sort;
             Icon = icon;
-            SeoTitle = seoTitle;
-            SeoKeywords = seoKeywords;
-            SeoDes = seoDes;
             IsDelete = isDelete;
         }
 
@@ -55,9 +52,6 @@ namespace D3.Blog.Domain.Entitys
             ParentId = parentId;
             Sort = sort;
             Icon = icon;
-            SeoTitle = seoTitle;
-            SeoKeywords = seoKeywords;
-            SeoDes = seoDes;
             IsDelete = isDelete;
         }
 
@@ -78,18 +72,6 @@ namespace D3.Blog.Domain.Entitys
         /// 图标
         /// </summary>
         public string Icon { get; set; }
-        /// <summary>
-        /// seo标题
-        /// </summary>
-        public string SeoTitle { get; set; }
-        /// <summary>
-        /// seo关键字
-        /// </summary>
-        public string SeoKeywords { get; set; }
-        /// <summary>
-        /// seo描述
-        /// </summary>
-        public string SeoDes { get; set; }
         /// <summary>
         /// 删除标志
         /// </summary>

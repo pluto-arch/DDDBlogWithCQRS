@@ -15,11 +15,13 @@ namespace Infrastructure.Data.Database
 
         public DbSet<Article> Article { get; set; }
         public DbSet<ArticleCategory> ArticleCategory { get; set; }
+        public DbSet<PersoalArticleCategory> PersoalArticleCategory { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new CustomerEFMapping());
             builder.ApplyConfiguration(new ArticleCategoryMap());
+            builder.ApplyConfiguration(new PersonalArticleCategoryMap());
             builder.ApplyConfiguration(new ArticleMap());
             base.OnModelCreating(builder);
         }

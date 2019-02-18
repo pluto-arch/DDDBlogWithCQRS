@@ -17,6 +17,7 @@ using D3.Blog.Domain.Enums;
 using D3.Blog.Domain.Infrastructure;
 using D3.BlogMvc.Models;
 using D3.BlogMvc.Models.AccountModels;
+using D3.BlogMvc.Models.PostModels;
 using Infrastructure.Logging;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
@@ -72,7 +73,7 @@ namespace D3.BlogMvc.Controllers
         /// <returns></returns>
         [HttpPost]
         [Authorize]
-        public JsonResult WritePost([FromForm]Search articleModel,[FromQuery]string flag="2")
+        public JsonResult WritePost([FromForm]NewArticleModel articleModel,[FromQuery]string flag="2")
         {
            
             var a = _articleService.GetByFilter(x => x.Title.Equals(articleModel.Title));
@@ -81,23 +82,16 @@ namespace D3.BlogMvc.Controllers
                 return new JsonResult("文章标题已存在，请重新输入"); 
             }
 
-            NewArticleModel mo=new NewArticleModel();
-            mo.BlogType = articleModel.BlogType;
-            mo.ArticleType = articleModel.PostType;
-            mo.ContentHtml = articleModel.Content;
-            mo.ContentMd = articleModel.Contentmd;
-            mo.Title = articleModel.Title;
+            NewArticleModel mo=articleModel;
             mo.CreateTime=DateTime.Now;
-            mo.Tags = articleModel.PostTag;
-            mo.ExternalUrl = articleModel.ZZUrl;
             switch (flag)
             {
                 case "1":
-                    //发布，状态变审核
+                    //发布，状态变审核中
                     mo.Status = ArticleStatus.Verify;
                     break;
                 case "2":
-                    //只保存
+                    //只保存，不进入审核
                     mo.Status = ArticleStatus.Savedraft;
                     break;
                 default:
@@ -111,12 +105,10 @@ namespace D3.BlogMvc.Controllers
                     mo.Author =_user.Name;
                 }
             }
-            else 
-            {
-                mo.Author = articleModel.ExUrl;
-            }
             _articleService.Add(mo);
+
             var error = _notifications.GetNotifications().Select(n => n.Value);//通知结果
+
             return new JsonResult(error);
         }
 
