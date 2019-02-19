@@ -46,7 +46,13 @@ namespace D3.BlogMvc.Controllers
         /// <param name="signInManager"></param>
         /// <param name="logger"></param>
         /// <param name="notifications"></param>
-        public PostController(IArticleService articleService,UserManager<AppBlogUser> userManager, RoleManager<AppBlogRole> roleManager, SignInManager<AppBlogUser> signInManager, Serilog.ILogger logger, INotificationHandler<DomainNotification> notifications,IUser user,ICustomerLogging _logger)
+        public PostController(
+            IArticleService articleService,
+            UserManager<AppBlogUser> userManager, 
+            RoleManager<AppBlogRole> roleManager, 
+            SignInManager<AppBlogUser> signInManager,
+            INotificationHandler<DomainNotification> notifications,
+            IUser user,ICustomerLogging _logger)
             : base(userManager, roleManager, signInManager, notifications,_logger)
         {
             _articleService = articleService;
@@ -107,9 +113,7 @@ namespace D3.BlogMvc.Controllers
                 }
             }
             _articleService.Add(mo);
-
             var error = _notifications.GetNotifications().Select(n => n.Value);//通知结果
-
             return new JsonResult(error);
         }
 

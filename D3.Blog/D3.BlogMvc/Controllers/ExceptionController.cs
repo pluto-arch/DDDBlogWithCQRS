@@ -11,6 +11,7 @@ using Infrastructure.NLoger;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
@@ -21,7 +22,12 @@ namespace D3.BlogMvc.Controllers
     [AllowAnonymous]
     public class ExceptionController : BaseController
     {
-        public ExceptionController(UserManager<AppBlogUser> userManager, RoleManager<AppBlogRole> roleManager, SignInManager<AppBlogUser> signInManager, INotificationHandler<DomainNotification> notifications,ICustomerLogging _logger)
+        public ExceptionController(
+            UserManager<AppBlogUser> userManager, 
+            RoleManager<AppBlogRole> roleManager, 
+            SignInManager<AppBlogUser> signInManager, 
+            INotificationHandler<DomainNotification> notifications,
+            ICustomerLogging _logger)
             :base(userManager,roleManager,signInManager, notifications,_logger)
         {
         }
@@ -37,13 +43,9 @@ namespace D3.BlogMvc.Controllers
             //记录异常信息
             //var statusCodePagesFeature = HttpContext.Features.Get<IStatusCodePagesFeature>();//获取状态吗
             var statusCodePagesFeature = HttpContext.Features.Get<IExceptionHandlerFeature>();//获取异常
-
-            var currentuser= User.Identity.Name;
-
-            
-
+            _logger.LogCustomerError("出现异常",statusCodePagesFeature.Error.Source,nameof(ExceptionController),statusCodePagesFeature.Error);
+//            var currentuser= User.Identity.Name;
             ViewBag.ErrorMessage = statusCodePagesFeature.Error.Message;
-            
             return View("Error",statusCodePagesFeature);//暂时返回json  应该返回error友好界面
         }
 

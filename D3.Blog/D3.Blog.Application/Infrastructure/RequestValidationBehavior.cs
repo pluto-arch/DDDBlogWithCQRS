@@ -35,7 +35,7 @@ namespace D3.Blog.Application.Infrastructure
         /// <param name="validators"></param>
         /// <param name="logger"></param>
         /// <param name="user"></param>
-        public RequestValidationBehavior(IEnumerable<IValidator<TRequest>> validators,Serilog.ILogger logger,IUser user)
+        public RequestValidationBehavior(IEnumerable<IValidator<TRequest>> validators,IUser user)
         {
             _validators = validators;
 //            _logger = logger;

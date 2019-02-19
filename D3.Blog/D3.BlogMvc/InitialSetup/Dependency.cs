@@ -54,9 +54,9 @@ namespace D3.BlogMvc.InitialSetup
             // ASP.NET HttpContext dependency
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IUser, AspNetUser>();
-
             services.AddScoped<ICustomerLogging, CustomerLogging>();
             services.AddScoped<IDBHelper, DBHelper>();
+            services.AddMediatR();
 
             #region 单元工作与总线bus
             services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
@@ -64,7 +64,7 @@ namespace D3.BlogMvc.InitialSetup
             #endregion
 
 
-            services.AddMediatR();
+            
 
             #region  Domain - Commands
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPerformanceBehaviour<,>));
@@ -91,11 +91,11 @@ namespace D3.BlogMvc.InitialSetup
 
 
             #region 仓储和服务
-            services.AddScoped<ICustomerRepository, CustomerRepository>();
-            services.AddScoped<IArticleRepository, ArticleRepository>();
-
-            services.AddScoped<ICustomerService, CustomerService>();
-            services.AddScoped<IArticleService, ArticleService>();
+//            services.AddScoped<ICustomerRepository, CustomerRepository>();
+//            services.AddScoped<IArticleRepository, ArticleRepository>();
+//
+//            services.AddScoped<ICustomerService, CustomerService>();
+//            services.AddScoped<IArticleService, ArticleService>();
             #endregion
 
             #region 事件存储需要
@@ -116,17 +116,18 @@ namespace D3.BlogMvc.InitialSetup
         internal static void ConfigureDependenciesAutofac(this ContainerBuilder builder)
         {
             
-            builder.RegisterType<Mediator>().As<IMediator>().InstancePerLifetimeScope();
-            builder.Register<ServiceFactory>(context =>
-            {
-                var c = context.Resolve<IComponentContext>();
-                return t => c.Resolve(t);
-            });
+//            builder.RegisterType<Mediator>().As<IMediator>().InstancePerLifetimeScope();
+//            builder.Register<ServiceFactory>(context =>
+//            {
+//                var c = context.Resolve<IComponentContext>();
+//                return t => c.Resolve(t);
+//            });
 
-            builder.RegisterType<HttpContextAccessor>().As(typeof(IHttpContextAccessor)).SingleInstance();
-            builder.RegisterType<AspNetUser>().As(typeof(IUser)).InstancePerLifetimeScope();
-
-
+//            builder.RegisterType<HttpContextAccessor>().As(typeof(IHttpContextAccessor)).SingleInstance();
+//            builder.RegisterType<AspNetUser>().As(typeof(IUser)).InstancePerLifetimeScope();
+//
+//            builder.RegisterType<CustomerLogging>().As(typeof(ICustomerLogging)).SingleInstance();
+//            builder.RegisterType<DBHelper>().As(typeof(IDBHelper)).InstancePerLifetimeScope();
 
             #region 单元工作与总线bus
             builder.RegisterType<UnitOfWork>().As(typeof(IUnitOfWork)).InstancePerLifetimeScope();
@@ -137,68 +138,68 @@ namespace D3.BlogMvc.InitialSetup
 
 
             #region  Domain - Commands
-            builder.RegisterGeneric(typeof(RequestPerformanceBehaviour<,>)).As(typeof(IPipelineBehavior<,>)).InstancePerDependency();
-            builder.RegisterGeneric(typeof(RequestValidationBehavior<,>)).As(typeof(IPipelineBehavior<,>)).InstancePerDependency();
-
-            builder.RegisterType<CustomerCommandHandler>().As(typeof(IRequestHandler<RegisterNewCustomerCommand>)).InstancePerLifetimeScope();
-            builder.RegisterType<CustomerCommandHandler>().As(typeof(IRequestHandler<UpdateCustomerCommand>)).InstancePerLifetimeScope();
-            builder.RegisterType<ArticleCommandHandle>().As(typeof(IRequestHandler<AddNewArticleCommand>)).InstancePerLifetimeScope();
+//            builder.RegisterGeneric(typeof(RequestPerformanceBehaviour<,>)).As(typeof(IPipelineBehavior<,>)).InstancePerDependency();
+//            builder.RegisterGeneric(typeof(RequestValidationBehavior<,>)).As(typeof(IPipelineBehavior<,>)).InstancePerDependency();
+//
+//            builder.RegisterType<CustomerCommandHandler>().As(typeof(IRequestHandler<RegisterNewCustomerCommand>)).InstancePerLifetimeScope();
+//            builder.RegisterType<CustomerCommandHandler>().As(typeof(IRequestHandler<UpdateCustomerCommand>)).InstancePerLifetimeScope();
+//            builder.RegisterType<ArticleCommandHandle>().As(typeof(IRequestHandler<AddNewArticleCommand>)).InstancePerLifetimeScope();
             #endregion
 
 
             #region Domain - Events
-            builder.RegisterType<DomainNotificationHandler>().As(typeof(INotificationHandler<DomainNotification>)).InstancePerLifetimeScope();
-            builder.RegisterType<CustomerEventHandler>().As(typeof(INotificationHandler<CustomerRegisteredEvent>)).InstancePerLifetimeScope();
-            builder.RegisterType<CustomerEventHandler>().As(typeof(INotificationHandler<CustomerUpdatedEvent>)).InstancePerLifetimeScope();
-            builder.RegisterType<ArticleEventHandler>().As(typeof(INotificationHandler<ArticleAddOrEditEvent>)).InstancePerLifetimeScope();
+//            builder.RegisterType<DomainNotificationHandler>().As(typeof(INotificationHandler<DomainNotification>)).InstancePerLifetimeScope();
+//            builder.RegisterType<CustomerEventHandler>().As(typeof(INotificationHandler<CustomerRegisteredEvent>)).InstancePerLifetimeScope();
+//            builder.RegisterType<CustomerEventHandler>().As(typeof(INotificationHandler<CustomerUpdatedEvent>)).InstancePerLifetimeScope();
+//            builder.RegisterType<ArticleEventHandler>().As(typeof(INotificationHandler<ArticleAddOrEditEvent>)).InstancePerLifetimeScope();
 
             #endregion
 
 
             #region 事件存储
-            builder.RegisterType<EventStoreSqlRepository>().As(typeof(IEventStoreRepository)).InstancePerLifetimeScope();
-            builder.RegisterType<SqlEventStore>().As(typeof(IEventStore)).InstancePerLifetimeScope();
-            builder.RegisterType<EventStoreSQLContext>().InstancePerLifetimeScope();
+//            builder.RegisterType<EventStoreSqlRepository>().As(typeof(IEventStoreRepository)).InstancePerLifetimeScope();
+//            builder.RegisterType<SqlEventStore>().As(typeof(IEventStore)).InstancePerLifetimeScope();
+//            builder.RegisterType<EventStoreSQLContext>().InstancePerLifetimeScope();
             #endregion
 
 
             #region 仓储和服务
-            builder.RegisterType<CustomerRepository>().As(typeof(ICustomerRepository)).InstancePerLifetimeScope();
-            builder.RegisterType<ArticleRepository>().As(typeof(IArticleRepository)).InstancePerLifetimeScope();
+//            builder.RegisterType<CustomerRepository>().As(typeof(ICustomerRepository)).InstancePerLifetimeScope();
+//            builder.RegisterType<ArticleRepository>().As(typeof(IArticleRepository)).InstancePerLifetimeScope();
+//
+//            builder.RegisterType<CustomerService>().As(typeof(ICustomerService)).InstancePerLifetimeScope();
+//            builder.RegisterType<ArticleService>().As(typeof(IArticleService))
+//                .InstancePerLifetimeScope();
 
-            builder.RegisterType<CustomerService>().As(typeof(ICustomerService)).InstancePerLifetimeScope();
-            builder.RegisterType<ArticleService>().As(typeof(IArticleService))
-                .InstancePerLifetimeScope();
 
+//
+                        builder.RegisterType<CustomerRepository>().As(typeof(ICustomerRepository)).InstancePerLifetimeScope()
+                           .EnableInterfaceInterceptors()//启动动态代理，拦截器
+                           .InterceptedBy(typeof(BlogLogAOP));//附加拦截器;
+                        builder.RegisterType<ArticleRepository>().As(typeof(IArticleRepository)).InstancePerLifetimeScope()
+                            .EnableInterfaceInterceptors()//启动动态代理，拦截器
+                            .InterceptedBy(typeof(BlogLogAOP));//附加拦截器;
 
-            /*
-             *  builder.RegisterType<CustomerRepository>().As(typeof(ICustomerRepository)).InstancePerLifetimeScope()
-                .EnableInterfaceInterceptors()//启动动态代理，拦截器
-                .InterceptedBy(typeof(BlogLogAOP));//附加拦截器;
-            builder.RegisterType<ArticleRepository>().As(typeof(IArticleRepository)).InstancePerLifetimeScope()
-                .EnableInterfaceInterceptors()//启动动态代理，拦截器
-                .InterceptedBy(typeof(BlogLogAOP));//附加拦截器;
+                        builder.RegisterType<CustomerService>().As(typeof(ICustomerService)).InstancePerLifetimeScope()
+                            .EnableInterfaceInterceptors()//启动动态代理，拦截器
+                            .InterceptedBy(typeof(BlogLogAOP));//附加拦截器;
+                        builder.RegisterType<ArticleService>().As(typeof(IArticleService))
+                            .InstancePerLifetimeScope()
+                            .EnableInterfaceInterceptors() //启动动态代理，拦截器
+                            .InterceptedBy(typeof(BlogLogAOP));
+            //              .InterceptedBy(typeof(BlogCacheAOP));//附加拦截器
 
-            builder.RegisterType<CustomerService>().As(typeof(ICustomerService)).InstancePerLifetimeScope()
-                .EnableInterfaceInterceptors()//启动动态代理，拦截器
-                .InterceptedBy(typeof(BlogLogAOP));//附加拦截器;
-            builder.RegisterType<ArticleService>().As(typeof(IArticleService))
-                .InstancePerLifetimeScope()
-                .EnableInterfaceInterceptors()//启动动态代理，拦截器
-                .InterceptedBy(typeof(BlogLogAOP))
-                .InterceptedBy(typeof(BlogCacheAOP));//附加拦截器
-             */
 
 
             #endregion
 
             #region 事件存储需要
 
-            builder.RegisterType<AppBlogUser>().InstancePerLifetimeScope();
+//            builder.RegisterType<AppBlogUser>().InstancePerLifetimeScope();
             #endregion
 
             #region BlogDbContext
-            builder.RegisterType<D3BlogDbContext>().InstancePerLifetimeScope();
+//            builder.RegisterType<D3BlogDbContext>().InstancePerLifetimeScope();
             #endregion
 
         }

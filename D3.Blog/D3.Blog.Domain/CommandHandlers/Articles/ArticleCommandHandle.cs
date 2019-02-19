@@ -22,14 +22,13 @@ namespace D3.Blog.Domain.CommandHandlers.Articles
     {
         private readonly IArticleRepository _articleRepository;
         private readonly IMediatorHandler    _bus;
-        private IUser _user;
+        private readonly IUser _user;
         /// <summary>
         /// 日志
         /// </summary>
 //        public readonly Serilog.ILogger  _logger;
 
         public ArticleCommandHandle(
-            Serilog.ILogger  logger,
             IUser user,
             IArticleRepository articleRepository,
             IUnitOfWork uow, 
@@ -93,7 +92,6 @@ namespace D3.Blog.Domain.CommandHandlers.Articles
             catch (Exception e)
             {
                 _bus.RaiseEvent(new DomainNotification(request.MessageType,e.Message));
-//                _logger.Error(e,$"发生错误：{e.Message}");
             }
             return Unit.Task;
         }

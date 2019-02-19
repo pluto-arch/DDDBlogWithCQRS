@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.IO;
+using Pomelo.EntityFrameworkCore.MySql.Storage.Internal;
 
 namespace Infrastructure.Data.Database
 {
@@ -40,5 +41,6 @@ namespace Infrastructure.Data.Database
             optionsBuilder.UseMySql(config.GetConnectionString("BLOG_MYSQL"));
 
         }
+        
     }
 }

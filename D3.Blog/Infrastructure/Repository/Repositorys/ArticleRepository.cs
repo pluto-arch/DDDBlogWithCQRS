@@ -16,13 +16,11 @@ namespace Infrastructure.Data.Repository.Repositorys
     {
         internal   D3BlogDbContext _context;
         internal DbSet<Article>       _dbSet;
-//        internal readonly Serilog.ILogger _logger;
 
-        public ArticleRepository(D3BlogDbContext context,Serilog.ILogger logger)
+        public ArticleRepository(D3BlogDbContext context)
         {
             _context = context;
             _dbSet   = context.Set<Article>();
-//            _logger = logger;
         }
 
         public override void Delete(Article entity)
@@ -57,15 +55,7 @@ namespace Infrastructure.Data.Repository.Repositorys
 
         public override Task<Article> FindByIdAsync(object pkValue)
         {
-            try
-            {
-                return  _dbSet.FirstAsync(x => x.Id == int.Parse(pkValue.ToString()));
-            }
-            catch (Exception e)
-            {
-//                _logger.Information(e,$"出现错误：{e.Message}");
-            }
-            return null;
+            return  _dbSet.FirstAsync(x => x.Id == int.Parse(pkValue.ToString()));
         }
 
         public override IQueryable<Article> FindListByClause<TKey>(Expression<Func<Article, bool>> predicate, Expression<Func<Article, TKey>> orderby)
@@ -76,9 +66,20 @@ namespace Infrastructure.Data.Repository.Repositorys
 
         public override IQueryable<Article> FindListByPage<TKey>(int pageSize,int pageIndex,Expression<Func<Article, bool>> predicate, Expression<Func<Article, TKey>> orderby)
         {
-            var result = _dbSet.Where(predicate).OrderByDescending(orderby).Skip((pageIndex - 1) * pageSize)
-                .Take(pageSize);
-            return result.AsQueryable();
+            if (predicate!=null)
+            {
+                var result = _dbSet.Where(predicate).OrderByDescending(orderby).Skip((pageIndex - 1) * pageSize)
+                    .Take(pageSize);
+                return result.AsQueryable();
+            }
+            else
+            {
+                var result = _dbSet.OrderByDescending(orderby).Skip((pageIndex - 1) * pageSize)
+                    .Take(pageSize);
+                return result.AsQueryable();
+            }
+           
+            
         }
 
 

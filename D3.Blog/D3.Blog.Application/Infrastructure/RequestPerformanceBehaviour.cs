@@ -32,7 +32,7 @@ namespace D3.Blog.Application.Infrastructure
         /// </summary>
         /// <param name="logger"></param>
         /// <param name="user"></param>
-        public RequestPerformanceBehaviour(Serilog.ILogger logger,IUser user)
+        public RequestPerformanceBehaviour(IUser user)
         {
             _timer=new Stopwatch();
 //            _logger = logger;

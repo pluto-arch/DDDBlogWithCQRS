@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using D3.BlogMvc.Hubs;
 using D3.BlogMvc.Models.AccountModels;
@@ -14,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using D3.Blog.Domain.Infrastructure;
 using Infrastructure.NLoger;
 using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,14 +30,16 @@ namespace D3.BlogMvc.Controllers
         private readonly SignInManager<AppBlogUser> _signInManager;
         private readonly ICustomerLogging _logger;
         private readonly IDBHelper _dbHelper;
+        private readonly IUser _user;
 
-        public AccountController (UserManager<AppBlogUser> userManager, RoleManager<AppBlogRole> roleManager, SignInManager<AppBlogUser> signInManager,ICustomerLogging logger,IDBHelper dbHelper)
+        public AccountController (UserManager<AppBlogUser> userManager, RoleManager<AppBlogRole> roleManager, SignInManager<AppBlogUser> signInManager,ICustomerLogging logger,IDBHelper dbHelper,IUser user)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
             _logger = logger;
             _dbHelper = dbHelper;
+            _user = user;
         }
         
         [HttpGet]
@@ -134,7 +138,7 @@ namespace D3.BlogMvc.Controllers
                     var result= await _signInManager.PasswordSignInAsync(user,model.Password,model.RememberMe,false);
                     if (result.Succeeded)
                     {
-                        _logger.LogLoginInfo("用户登录",nameof(LoginAsync),nameof(AccountController),null,user.UserName,user.Id.ToString());
+                        _logger.LogLoginInfo($"{user.UserName} 用户登录",nameof(LoginAsync),nameof(AccountController),null,user.UserName,user.Id.ToString());
                         return LocalRedirect(returnUrl);//登录成功
                     }
                     else if (result.IsLockedOut)
@@ -265,6 +269,7 @@ namespace D3.BlogMvc.Controllers
             if (issuccess.Succeeded)
             {
                 await _signInManager.PasswordSignInAsync(newuser,model.Password,false,false);
+                _logger.LogLoginInfo($"{newuser.UserName} 用户注册并登录",nameof(RegisterAsync),nameof(AccountController),null,newuser.UserName,_user.Id.ToString());
                 return new JsonResult(errormessage);
             }
             foreach (var s in issuccess.Errors)
@@ -279,11 +284,13 @@ namespace D3.BlogMvc.Controllers
         {
             ViewData["ReturnUrl"] = returnUrl;
             await _signInManager.SignOutAsync();
-            var res= _dbHelper.ExecSqlStoredProcedure("call timeDiff('"+DateTime.Now.ToString()+"',2,@s);select @s as sum;");
-
-            var dt = res.Tables[0].Columns[0].DefaultValue;
-
-            _logger.LogCustomerInfo($"用户注销,在线时长:100分钟",nameof(LoginAsync),nameof(AccountController),null);
+            var res= _dbHelper.ExecSqlStoredProcedure("call login_time_length('"+DateTime.Now+"',"+_user.Id+",@s);");
+            var userOnLineTimes = "";
+            if (res!=null&&res.Tables.Count>0)
+            {
+               userOnLineTimes = res.Tables[0].Rows[0].ItemArray[0].ToString();           
+            }
+            _logger.LogCustomerInfo($"{_user.Name} 注销登录,在线时长:{userOnLineTimes}",nameof(LoginAsync),nameof(AccountController),null);
             if (returnUrl != null)
             {
                 return LocalRedirect(returnUrl);

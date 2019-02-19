@@ -33,18 +33,23 @@ namespace Infrastructure.Data.Database
         /// <summary>
         /// 执行存储过程
         /// </summary>
-        /// <param name="procNameSql"></param>
+        /// <param name="procNameSql">存储过程语句</param>
         /// <returns></returns>
         public DataSet ExecSqlStoredProcedure(string procNameSql)
         {
             using ( var connection = (MySqlConnection) _dbContext.Database.GetDbConnection())
             {
+                if (connection.State!=ConnectionState.Open)
+                {
+                    connection.Open();
+                }
                 var command = connection.CreateCommand();
                 command.CommandType = CommandType.Text;
                 command.CommandText = procNameSql;
                 MySqlDataAdapter adapter=new MySqlDataAdapter(command);
                 var ds=new DataSet();
-                adapter.Fill(ds);
+                adapter.Fill(ds,"sumtime");
+                connection.Close();
                 return ds;
             }
         }

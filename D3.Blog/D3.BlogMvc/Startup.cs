@@ -62,7 +62,7 @@ namespace D3.BlogMvc
                 options =>options.UseMySql(Configuration.GetConnectionString("BLOG_MYSQL")));//MYSQL
 
 //            services.AddDbContext<AppIdentityDbContext>(
-//                options =>options.UseSqlServer(Configuration.GetConnectionString("ID_DBCONN")));
+//                options =>options.UseSqlServer(Configuration.GetConnectionString("ID_DBCONN")));//Sql
 
             services.AddIdentity<AppBlogUser, AppBlogRole>()
                     .AddEntityFrameworkStores<AppIdentityDbContext>()
@@ -117,19 +117,17 @@ namespace D3.BlogMvc
 
             services.AddMemoryCache();
             services.AddMvc();
-            services.AddSignalR();
+            services.AddSignalR(); //以后在线聊天可以使用
 
 
 
             
-            #region Autofac
+            #region Autofac  暂时当作service和repoitory的拦截器使用
             var builder = new ContainerBuilder();
             builder.Populate(services);//将原生的注入填充进去
             builder.RegisterType<BlogLogAOP>();//可以直接替换其他拦截器！一定要把拦截器进行注册
             builder.RegisterType<BlogCacheAOP>();
-//            builder.ConfigureDependenciesAutofac();
-
-
+            builder.ConfigureDependenciesAutofac();
             var applicationContainer = builder.Build();//构建新容器
             #endregion
 

@@ -51,7 +51,8 @@ var app = new Vue({
             /* 选择改变事件(转载链接) */
             $("#sel1").change(function () {
                 var opt = $("#sel1").val();
-                if (opt.trim() == "转载") {
+                alert(opt);
+                if (opt.trim() == 'Transport') {
                     v.iszz = true;
                 } else {
                     v.iszz = false;

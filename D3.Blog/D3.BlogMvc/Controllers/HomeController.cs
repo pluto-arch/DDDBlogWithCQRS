@@ -18,16 +18,23 @@ using Microsoft.AspNetCore.Identity;
 using Infrastructure.Data.Database;
 using Infrastructure.Identity.Models;
 using Infrastructure.NLoger;
+using Remotion.Linq.Parsing.Structure.IntermediateModel;
 
 namespace D3.BlogMvc.Controllers
 {
     public class HomeController : BaseController
     {
-        private readonly ICustomerService _customerService;
-        public HomeController(ICustomerService customerService,UserManager<AppBlogUser> userManager, RoleManager<AppBlogRole> roleManager, SignInManager<AppBlogUser> signInManager, INotificationHandler<DomainNotification> notifications,ICustomerLogging _logger)
+        private readonly IArticleService _articleService;
+        public HomeController(
+            IArticleService articleService,
+            UserManager<AppBlogUser> userManager, 
+            RoleManager<AppBlogRole> roleManager, 
+            SignInManager<AppBlogUser> signInManager, 
+            INotificationHandler<DomainNotification> notifications,
+            ICustomerLogging _logger)
            : base(userManager, roleManager, signInManager, notifications,_logger)
         {
-            _customerService = customerService;
+            _articleService = articleService;
         }
 
         /// <summary>
@@ -38,7 +45,7 @@ namespace D3.BlogMvc.Controllers
         {
             ViewBag.num = "111";
             ViewBag.container = "container";//写文章页面和其他页面的样式控制
-            var model = await _customerService.GetById(1);
+//            var model = await _customerService.GetById(1);
 
             //CustomerViewModel model = new CustomerViewModel();
             //model.Name = "张玉龙";
@@ -65,8 +72,19 @@ namespace D3.BlogMvc.Controllers
         {
             ViewBag.title = "YLBlog-首页";
             ViewBag.container = "container";//写文章页面和其他页面的样式控制
+
+//            var postlist= _articleService.GetListByPage(10, 1, null, a => a.AddTime).ToList();
+
             return View();
         }
+
+        [HttpGet]
+        public IActionResult GetPostList()
+        {
+            var postlist= _articleService.GetListByPage(10, 1, null, a => a.AddTime).ToList();
+            return Json(postlist);
+        }
+
         
         /// <summary>
         /// 搜索

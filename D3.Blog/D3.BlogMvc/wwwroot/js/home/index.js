@@ -84,6 +84,11 @@ var app = new Vue({
             };
         });
     },
+    mounted: function () {
+        this.$nextTick(function () {
+            this.LoadPostList();
+        });
+    },
     methods: {
         setNavBarMenu: function () {
             var v = this;
@@ -201,8 +206,18 @@ var app = new Vue({
             this.isSearch = !this.isSearch;           
         }
         , showPostDetails: function (value, event) {
-            value = 10;
+            value = 5;
             window.location.href = "/Post/PostDetails/" + value;
+        }
+        , LoadPostList: function () {
+            var v = this;
+            v.$http.get('/Home/GetPostList')
+                .then(res => {
+                    console.log(res);
+                   
+                }).catch(error => {
+                    toastr.info('出现错误：' + error);
+                });
         }
     },
     watch: {
