@@ -32,7 +32,11 @@
     <script defer src="~/fontawesome-free/js/solid.js"></script>
     <script defer src="~/fontawesome-free/js/fontawesome.min.js"></script>
     <!--[if lt IE 9]><script src="~/lib/html5.min.js"></script><![endif]-->
-
+    <style>
+        * {
+            font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
+        }
+    </style>
 </head>
 
 <body>
@@ -66,9 +70,9 @@
                                         <p class="card-text" style="font-size: 12px; color: #999; word-wrap: break-word; line-height: 20px;">这是一张更宽的卡片，下面有支持文字作为其他内容的自然引导。这是一张更宽的卡片，下面有支持文字作为其他内容的自然引导。这是一张更宽的卡片这是一张更宽的卡片这是一张更宽的卡片...</p>
                                         <div id="post-opt">
                                             <ul>
-                                                <li title="点赞"><i class="fas fa-thumbs-up" style="color: #ccccccb5"></i>&nbsp;<a>7</a></li>
-                                                <li title="浏览"><i class="fas fa-eye" style="color: #ccccccb5"></i><a>&nbsp;128</a></li>
-                                                <li title="收藏"><i class="fas fa-heart" style="color: #ccccccb5"></i><a>&nbsp;78</a></li>
+                                                <li title="点赞"><i class="fas fa-thumbs-up" ></i>&nbsp;7</li>
+                                                <li title="浏览"><i class="fas fa-eye" ></i>&nbsp;128</li>
+                                                <li title="收藏"><i class="fas fa-heart" ></i>&nbsp;78</li>
                                             </ul>
                                         </div>
                                     </div>
@@ -233,9 +237,6 @@
                 </div>
             </div>
         </div>
-
-
-
     </div>
 
     <script src="~/js/vue/polyfill.min.js"></script>
@@ -252,6 +253,35 @@
     <script src="~/js/holder/holder.min.js"></script>
     <script src="~/lib/toastr/toastr.min.js"></script>
     <script src="~/js/home/index.js"></script>
+
+@{
+    if (ViewBag.NewAreaLogin!=null)
+    {
+        if (ViewBag.NewAreaLogin)
+        {
+            <text>
+                <script>
+                    toastr.options = {
+                        closeButton: true,                                            // 是否显示关闭按钮，（提示框右上角关闭按钮）
+                        debug: false,                                                    // 是否使用deBug模式
+                        progressBar: false,                                            // 是否显示进度条，（设置关闭的超时时间进度条）
+                        positionClass: "toast-top-center",              // 设置提示款显示的位置
+                        onclick: null,                                                     // 点击消息框自定义事件 
+                        showDuration: "300",                                      // 显示动画的时间
+                        hideDuration: "2000",                                     //  消失的动画时间
+                        timeOut: "2000",                                             //  自动关闭超时时间 
+                        extendedTimeOut: "2000",                             //  加长展示时间
+                        showEasing: "swing",                                     //  显示时的动画缓冲方式
+                        hideEasing: "linear",                                       //   消失时的动画缓冲方式
+                        showMethod: "fadeIn",                                   //   显示时的动画方式
+                        hideMethod: "fadeOut"                                   //   消失时的动画方式
+                    };
+                    toastr.info('异地登录提示：<span style="color:yellow">您的账户在其他地方登录，若非本人所为，建议尽快修改密码</span>');
+                </script>
+            </text>
+        }
+    }
+}
     <script>
         //占位
         Holder.addTheme('thumb', {

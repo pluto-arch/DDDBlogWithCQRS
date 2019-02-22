@@ -1,4 +1,14 @@
-﻿var datass = [
+﻿
+$('#sidebarCollapse').on('click', function () {
+    $('body').css('overflow', 'hidden');
+    $('#sidebar').addClass('active');
+    $('.overlay').addClass('active');
+    $('.collapse.in').toggleClass('in');
+    $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+});
+
+
+var datass = [
     {
         id: 1,
         text: 'asp.net core',
@@ -86,6 +96,7 @@ var app = new Vue({
     },
     mounted: function () {
         this.$nextTick(function () {
+            this.setNavBarMenu();
             this.LoadPostList();
         });
     },
@@ -99,7 +110,6 @@ var app = new Vue({
                     v.isSearch = false;
                 }
             });
-
             $(window).scroll(function () {
                 var topp = $(document).scrollTop();
                 $('#search-posts').slideUp();
@@ -116,7 +126,6 @@ var app = new Vue({
                 $('html ,body').animate({ scrollTop: 0 }, 300);
                 return false;
             });
-
             $('[data-toggle="tooltip"]').tooltip()
             $('#dismiss, .overlay').on('click', function () {
                 $('#sidebar').removeClass('active');

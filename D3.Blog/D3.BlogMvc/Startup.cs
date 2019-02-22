@@ -30,8 +30,10 @@ using D3.Blog.Application.Interface;
 using D3.Blog.Application.Services.Articles;
 using D3.Blog.Application.Services.Customer;
 using D3.Blog.Domain.Infrastructure.IRepositorys;
+using D3.BlogMvc.Middlewares;
 using Infrastructure.AOP;
 using Infrastructure.Data.Repository.Repositorys;
+using Infrastructure.Identity.Authorization;
 using NLog.Extensions.Logging;
 using NLog.Web;
 
@@ -115,6 +117,8 @@ namespace D3.BlogMvc
                          });
             #endregion
 
+            
+
             services.AddMemoryCache();
             services.AddMvc();
             services.AddSignalR(); //以后在线聊天可以使用
@@ -161,9 +165,12 @@ namespace D3.BlogMvc
             app.UseStatusCodePagesWithRedirects("/Exception/ErrorStatusCode/{0}");//http 错误状态码页面
             app.UseHttpsRedirection();
 
+            
             app.UseAuthentication();
+           
+            app.UseCustomerAuth();//自定义异地登录处理
 
-
+            //实时通信使用
             app.UseSignalR(routes =>
             {
                 routes.MapHub<D3BlogHub>("/D3BlogHub");

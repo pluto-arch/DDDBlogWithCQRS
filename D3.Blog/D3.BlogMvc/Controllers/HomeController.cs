@@ -101,5 +101,18 @@ namespace D3.BlogMvc.Controllers
             return View();
         }
 
+        /// <summary>
+        /// 异地登录提示页面
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult NewAreaLogin()
+        {
+            ViewBag.NewAreaLogin = true;//异地登录标志
+            return View("HomePage");
+        }
+
+
     }
 }

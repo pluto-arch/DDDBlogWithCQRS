@@ -600,17 +600,23 @@ a.article:hover {
         #post-opt ul li {
             padding: 0;
             margin: 0;
-            min-width: 50px;
-            font-size: 14px;
+            min-width: 44px;
+            font-size: 12px;
             text-align: center;
-            border: 1px solid #cccccc6b;
             list-style: none;
             cursor: pointer;
         }
             #post-opt ul li:hover {
-                background-color: #cccccc6b;
+                background-color: lightblue;
+            }
+#post-opt ul li {
+    color: lightgrey;
+}
+            #post-opt ul li:hover {
+                color: #4285f4;
             }
             #post-opt ul li a {
-                color: #ccccccb5;
-                font-weight: 900;
+                color: lightgrey;
+                font-weight: 600;
+                margin-left: 3px;
             }

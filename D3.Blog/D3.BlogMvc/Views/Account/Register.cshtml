@@ -48,7 +48,7 @@
                     </div>
                     <div class="form-group" style="display: flex;">
                         <label asp-for="Password" class="control-label">密码</label>
-                        <input asp-for="Password" class="form-control"/>
+                        <input type="password" asp-for="Password" class="form-control"/>
                         <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
                     <div class="form-group">
@@ -79,7 +79,7 @@
             data: $("#form1").serialize(),
             success: function(result) {
                 toastr.info('注册成功,即将跳转到首页！');
-                window.location.href = "/";
+                window.location.href = "/Home/HomePage";
             },
             error: function(res) {
                 toastr.warning('出现错误，请稍后重试。' + res);

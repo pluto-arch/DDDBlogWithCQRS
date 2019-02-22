@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using D3.Blog.Domain.Infrastructure;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Infrastructure.Identity.Models
 {
@@ -72,13 +73,13 @@ namespace Infrastructure.Identity.Models
             return _accessor.HttpContext.User.Claims;
         }
         /// <summary>
-        /// 客户端ip
+        /// 客户端ip,或者客户端连接id
         /// </summary>
         public string ClientIP
         {
             get
             {
-                return _accessor.HttpContext.Connection.RemoteIpAddress.ToString();
+                return _accessor.HttpContext.Connection.Id;
             }
         }
 

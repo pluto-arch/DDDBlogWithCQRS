@@ -17,6 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 using D3.Blog.Domain.Infrastructure;
 using Infrastructure.NLoger;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -31,8 +32,9 @@ namespace D3.BlogMvc.Controllers
         private readonly ICustomerLogging _logger;
         private readonly IDBHelper _dbHelper;
         private readonly IUser _user;
+        internal readonly IMemoryCache _memoryCache;
 
-        public AccountController (UserManager<AppBlogUser> userManager, RoleManager<AppBlogRole> roleManager, SignInManager<AppBlogUser> signInManager,ICustomerLogging logger,IDBHelper dbHelper,IUser user)
+        public AccountController (UserManager<AppBlogUser> userManager, RoleManager<AppBlogRole> roleManager, SignInManager<AppBlogUser> signInManager,ICustomerLogging logger,IDBHelper dbHelper,IUser user,IMemoryCache memoryCache)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -40,8 +42,14 @@ namespace D3.BlogMvc.Controllers
             _logger = logger;
             _dbHelper = dbHelper;
             _user = user;
+            _memoryCache = memoryCache;
         }
         
+        /// <summary>
+        /// 新页面登录
+        /// </summary>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> Login(string returnUrl="/")
@@ -79,6 +87,7 @@ namespace D3.BlogMvc.Controllers
                     if (result.Succeeded)
                     {
                         _logger.LogLoginInfo("用户登录",nameof(LoginAsync),nameof(AccountController),null,user.UserName,user.Id.ToString());
+                        _memoryCache.Set(user.UserName+"_"+user.Id, _user.ClientIP,new DateTimeOffset(DateTime.Now.AddMinutes(60)));//登陆后将客户端连接id存入缓存，缓存时间和cookie 过期时间一致
                         return new JsonResult(errormessage);
                     }
                     else if (result.IsLockedOut)
@@ -112,7 +121,7 @@ namespace D3.BlogMvc.Controllers
         }
 
         /// <summary>
-        /// 新页面登录
+        /// 新页面登录 post
         /// </summary>
         /// <param name="model"></param>
         /// <param name="returnUrl"></param>
@@ -139,6 +148,7 @@ namespace D3.BlogMvc.Controllers
                     if (result.Succeeded)
                     {
                         _logger.LogLoginInfo($"{user.UserName} 用户登录",nameof(LoginAsync),nameof(AccountController),null,user.UserName,user.Id.ToString());
+                        _memoryCache.Set(user.UserName+"_"+user.Id, _user.ClientIP,new DateTimeOffset(DateTime.Now.AddMinutes(60)));//登陆后将客户端连接id存入缓存,缓存时长和cookie 过期 时间一致
                         return LocalRedirect(returnUrl);//登录成功
                     }
                     else if (result.IsLockedOut)
@@ -218,7 +228,11 @@ namespace D3.BlogMvc.Controllers
         #endregion
 
 
-
+        /// <summary>
+        /// 页面注册
+        /// </summary>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]    
         public IActionResult Register(string returnUrl="/")
@@ -229,7 +243,11 @@ namespace D3.BlogMvc.Controllers
             return View();
         }
 
-
+        /// <summary>
+        /// 弹窗注册
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -284,12 +302,17 @@ namespace D3.BlogMvc.Controllers
         {
             ViewData["ReturnUrl"] = returnUrl;
             await _signInManager.SignOutAsync();
-            var res= _dbHelper.ExecSqlStoredProcedure("call login_time_length('"+DateTime.Now+"',"+_user.Id+",@s);");
+            var endTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            var utime=(DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000000;
+            System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1));
+            DateTime TranslateDate = startTime.AddSeconds(utime);
+            var res= _dbHelper.ExecSqlStoredProcedure("call login_time_length('"+TranslateDate.ToString("yyyy-MM-dd HH:mm:ss")+"',"+_user.Id+",@s);");
             var userOnLineTimes = "";
             if (res!=null&&res.Tables.Count>0)
             {
                userOnLineTimes = res.Tables[0].Rows[0].ItemArray[0].ToString();           
             }
+            _memoryCache.Remove(_user.Name+"_"+_user.Id); //注销时移除client 连接id
             _logger.LogCustomerInfo($"{_user.Name} 注销登录,在线时长:{userOnLineTimes}",nameof(LoginAsync),nameof(AccountController),null);
             if (returnUrl != null)
             {
