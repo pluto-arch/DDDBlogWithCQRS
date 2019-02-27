@@ -79,7 +79,7 @@ namespace Infrastructure.Identity.Models
         {
             get
             {
-                return _accessor.HttpContext.Connection.Id;
+                return _accessor.HttpContext.Connection.RemoteIpAddress.ToString();
             }
         }
 

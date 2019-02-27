@@ -62,11 +62,19 @@ namespace Infrastructure.Data.DataConfig
 
             builder.Property(e => e.ArticleCategoryId).HasColumnName("CategoryID").IsRequired(false);
 
+            //类别外键
             builder.HasOne(d => d.ArticleCategory)
                 .WithMany(p => p.Article)
                 .HasForeignKey(d => d.ArticleCategoryId)
                 .HasConstraintName("FK_Products_Categories")
                 .OnDelete(DeleteBehavior.SetNull);
+            //所属分组外键
+            builder.HasOne(d => d.PostGropu)
+                .WithMany(p => p.Article)
+                .HasForeignKey(d => d.GroupId)
+                .HasConstraintName("FK_Article_Group")
+                .OnDelete(DeleteBehavior.SetNull);
+
 
         }
     }

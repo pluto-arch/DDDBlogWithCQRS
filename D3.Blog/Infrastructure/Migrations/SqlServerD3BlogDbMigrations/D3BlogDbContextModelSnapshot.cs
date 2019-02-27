@@ -50,6 +50,8 @@ namespace Infrastructure.Data.Migrations.SqlServerD3BlogDbMigrations
                     b.Property<string>("ExternalUrl")
                         .HasMaxLength(300);
 
+                    b.Property<int?>("GroupId");
+
                     b.Property<string>("ImageUrl")
                         .HasMaxLength(300)
                         .IsUnicode(true);
@@ -112,6 +114,8 @@ namespace Infrastructure.Data.Migrations.SqlServerD3BlogDbMigrations
                     b.HasKey("Id");
 
                     b.HasIndex("ArticleCategoryId");
+
+                    b.HasIndex("GroupId");
 
                     b.ToTable("Article");
                 });
@@ -181,12 +185,32 @@ namespace Infrastructure.Data.Migrations.SqlServerD3BlogDbMigrations
                     b.ToTable("PersonalCategory");
                 });
 
+            modelBuilder.Entity("D3.Blog.Domain.Entitys.PostSeries", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("GroupName");
+
+                    b.Property<int>("OwinUserId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PostSeries");
+                });
+
             modelBuilder.Entity("D3.Blog.Domain.Entitys.Article", b =>
                 {
                     b.HasOne("D3.Blog.Domain.Entitys.ArticleCategory", "ArticleCategory")
                         .WithMany("Article")
                         .HasForeignKey("ArticleCategoryId")
                         .HasConstraintName("FK_Products_Categories")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("D3.Blog.Domain.Entitys.PostSeries", "PostGropu")
+                        .WithMany("Article")
+                        .HasForeignKey("GroupId")
+                        .HasConstraintName("FK_Article_Group")
                         .OnDelete(DeleteBehavior.SetNull);
                 });
 #pragma warning restore 612, 618

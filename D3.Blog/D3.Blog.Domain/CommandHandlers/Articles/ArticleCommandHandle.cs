@@ -58,30 +58,19 @@ namespace D3.Blog.Domain.CommandHandlers.Articles
             try
             {
                 var article = new Article();
-
                 article.Title = request.Title;
-
                 article.AddTime = request.AddTime;
-
                 if (_user.Id != null) article.AddUserId = int.Parse(_user.Id);
-
                 article.Author = request.Author??"";
-
                 article.ExternalUrl = request.ExternalUrl??"";
-
                 if (request.ArticleCategoryId!=null)
                 {
                     article.ArticleCategoryId = request.ArticleCategoryId;
                 }
-
                 article.ContentMd = request.ContentMd ?? "";
-
                 article.ContentHtml = request.ContentHtml ?? "";
-
                 article.Source = request.Source;
-
                 article.Status = request.Status;
-                
                 _articleRepository.Insert(article);
                 if (Commit())
                 {

@@ -29,7 +29,6 @@
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Models\" />
-    <Folder Include="Areas\Admin\Views\" />
     <Folder Include="wwwroot\images\" />
     <Folder Include="wwwroot\elementUI\" />
     <Folder Include="wwwroot\js\vue\" />
@@ -1592,7 +1591,7 @@
     <PackageReference Include="AspectCore.Extensions.Configuration" Version="1.1.0" />
     <PackageReference Include="AspectCore.Extensions.DependencyInjection" Version="1.1.0" />
     <PackageReference Include="AspNetCore.Authentication.WeChat" Version="2.0.0" />
-    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.3.1" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.4.0" />
     <PackageReference Include="Autofac.Extras.DynamicProxy" Version="4.5.0" />
     <PackageReference Include="AutoMapper" Version="8.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
@@ -1609,11 +1608,13 @@
     <PackageReference Include="NLog" Version="4.5.11" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.8.0" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.4" />
+    <PackageReference Include="SSH.NET" Version="2016.1.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\D3.Blog.Application\D3.Blog.Application.csproj" />
     <ProjectReference Include="..\D3.Blog.Domain\D3.Blog.Domain.csproj" />
+    <ProjectReference Include="..\DependencyInjection\DependencyInjection.csproj" />
     <ProjectReference Include="..\Infrastructure.Data\Infrastructure.csproj" />
     <ProjectReference Include="..\Infrastructure.Identity\Infrastructure.Identity.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.Data.csproj" />

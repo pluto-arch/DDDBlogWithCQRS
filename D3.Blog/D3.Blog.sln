@@ -29,6 +29,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{36FA5D2B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "D3Blog_Tests", "D3Blog_Tests\D3Blog_Tests.csproj", "{EAACEDA0-B7C1-4BDB-B093-B9CF82236408}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DependencyInjection", "DependencyInjection\DependencyInjection.csproj", "{E7335608-1389-4032-AA35-F3B4815C5FFC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,10 @@ Global
 		{EAACEDA0-B7C1-4BDB-B093-B9CF82236408}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EAACEDA0-B7C1-4BDB-B093-B9CF82236408}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EAACEDA0-B7C1-4BDB-B093-B9CF82236408}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7335608-1389-4032-AA35-F3B4815C5FFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7335608-1389-4032-AA35-F3B4815C5FFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7335608-1389-4032-AA35-F3B4815C5FFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7335608-1389-4032-AA35-F3B4815C5FFC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -85,6 +91,7 @@ Global
 		{CDD79D17-83E0-4F00-96FD-A65E4855B7D4} = {034B55E7-6DC7-404F-9B29-A422091AD29D}
 		{3D4BBD6F-14BE-421A-B6E8-79FC82AA2462} = {6FE926DC-16FE-43EF-8B91-6EC7D45C4F55}
 		{EAACEDA0-B7C1-4BDB-B093-B9CF82236408} = {36FA5D2B-BB01-45DE-AAFB-D10925C5D243}
+		{E7335608-1389-4032-AA35-F3B4815C5FFC} = {6FE926DC-16FE-43EF-8B91-6EC7D45C4F55}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B1F2C007-8BE4-44A3-9DB2-00CE207D1CFB}

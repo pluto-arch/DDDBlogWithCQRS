@@ -8,11 +8,12 @@ using Microsoft.AspNetCore.Mvc;
 namespace D3.BlogMvc.Areas.Admin.Controllers
 {
     [Authorize(Roles = "admin,Admin")]
+    [Area("Admin")]
     public class AdminController : Controller
     {
         public IActionResult Index()
         {
-            return new JsonResult("this is Admin area");
+            return View();
         }
 
         public IActionResult About(int? id)

@@ -7,6 +7,7 @@ namespace D3.Blog.Domain.Commands.Articles
 {
     public abstract class ArticleCommand:Command
     {
+        public int Id { get; set; }
         /// <summary>
         /// 标题
         /// </summary>
@@ -113,6 +114,13 @@ namespace D3.Blog.Domain.Commands.Articles
         /// </summary>
         public int? ArticleCategoryId { get; set; }
         public ArticleCategory ArticleCategory { get; set; }
+
+        /// <summary>
+        /// 类别id
+        /// </summary>
+        public int? GroupId { get; set; }
+        public PostSeries PostGropu { get; set; }
+
         #endregion
     }
 }

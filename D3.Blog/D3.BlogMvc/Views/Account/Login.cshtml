@@ -3,93 +3,94 @@
 @using Infrastructure.Identity.Models
 @using Microsoft.AspNetCore.Identity
 @model D3.BlogMvc.Models.AccountModels.LoginModel
-@inject SignInManager<AppBlogUser> SignInManager
+@inject SignInManager<AppBlogUser> signInManager
 
 
 @{
     Layout = null;
 }
-
 <!DOCTYPE html>
-
 <html>
+	
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.title</title>
-    <link rel="stylesheet" asp-href-include="~/css/all.min.css" />
-    <link rel="stylesheet" asp-href-include="~/css/index.min.css" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-    <!-- import CSS -->
-    <link rel="stylesheet" href="~/elementUI/index.css">
+    <meta charset="utf-8">
+    <title>登录界面</title>
+    <link rel="stylesheet" href="~/pagelogin/css/reset.css" />
+    <link rel="stylesheet" href="~/pagelogin/css/common.css" />
+    <link rel="stylesheet" href="~/pagelogin/css/font-awesome.min.css" />
 </head>
-<body class="text-center" style="display: flex; justify-content: center; padding: 50px;">
-    <div id="app" class="text-center m-3" style="width: 300px;">
-        <form class="form-signin" asp-action="NewPageLoginAsync" method="post" asp-route-returnUrl="@ViewData["returnUrl"]">
-            <img class="mb-4" data-src="holder.js/72x72?theme=thumb" alt="" width="72" height="72">
-            <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-            @*<vc:summary />*@<!--验证错误信息-->
-            <label for="inputEmail" class="sr-only">Email address</label>
-            <input type="email" id="inputEmail" asp-for="Email" class="form-control" placeholder="Email address" required autofocus  style="margin: 10px 0;">
-            <span asp-validation-for="Email" class="text-danger"></span>
-            <label for="inputPassword" class="sr-only">Password</label>
-            <input type="password" id="inputPassword" asp-for="Password" class="form-control" placeholder="Password" required style="margin: 10px 0;">
-            <span asp-validation-for="Password" class="text-danger"></span>
-            <div class="checkbox mb-3">
-                <label>
-                    <input type="checkbox" value="true" class="form-check-input" asp-for="RememberMe" style="margin-top: 7px;"><span style="font-size: 15px;">记住我</span>
-                </label>
-                &nbsp;&nbsp;&nbsp;<label style="font-size: 10px;">
-                    <span>还没有账号？<a asp-controller="Account" asp-action="Register" asp-route-returnUrl="@ViewData["returnUrl"]" style="color: #0000ff">点击注册</a></span>
-                </label>
-            </div>
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-        </form>
-        <!--第三方登录-->
-        <div class="col-md-12">
-            <section>
-                <hr />
-                @{
-                    var loginProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-                    if (loginProviders.Count == 0)
-                    { }
-                    else
-                    {
-                        <form asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
-                            <div>
-                                <p>
-                                    @foreach (var provider in loginProviders)
+<body>
+<div class="wrap login_wrap">
+    <div class="content">
+        <div class="logo"></div>
+        <div class="login_box">	
+					
+            <div class="login_form">
+                <div class="login_title">
+                    登录
+                </div>
+                <form asp-controller="Account" asp-action="Login" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
+                    <div class="form_text_ipt">
+                        <input name="Email" asp-for="Email" type="text" placeholder="邮箱">
+                    </div>
+                    <span asp-validation-for="Email" style="margin-left: 10px"></span>
+                    <div class="form_text_ipt">
+                        <input name="password" asp-for="Password" type="password" placeholder="密码">
+                    </div>
+                    <span asp-validation-for="Password" style="margin-left: 10px"></span>
+                    <div class="form_check_ipt">
+                        <div class="left check_left">
+                            <label><input name="" asp-for="RememberMe" type="checkbox"> 下次自动登录</label>
+                        </div>
+                        <div class="right check_right">
+                            <a href="#">忘记密码</a>
+                        </div>
+                    </div>
+                    <div class="form_btn">
+                        <button type="submit" >登录</button>
+                    </div>
+                    <div class="form_reg_btn">
+                        <span>还没有帐号？</span><a>马上注册</a>
+                    </div>
+                </form>
+                <div class="other_login">
+                    <div class="left other_left">
+                        <span>其它登录方式</span>
+                    </div>
+                    <div class="right other_right">
+                        <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+                                @{
+                                    var loginProviders = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+                                    if (loginProviders.Count == 0)
                                     {
-                                        <button type="submit" class="btn btn-outline-success" data-toggle="tooltip" data-placement="top" title="正在准备中" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.Name</button>
                                     }
-                                </p>
-                            </div>
+                                    else
+                                    {
+                                        foreach (var provider in loginProviders)
+                                        {
+                                            if (provider.Name.Trim() == "QQ")
+                                            {
+                                                <button type="submit" style="border: none;background:white; color: #636363;margin: 5px" data-toggle="tooltip" data-placement="top" title="正在准备中" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account"><i class="fa fa-qq fa-2x"></i></button>
+                                            }
+                                            if (provider.Name.Trim() == "WeChat")
+                                            {
+                                                <button type="submit" style="border: none;background: white; color: #636363;margin: 5px" data-toggle="tooltip" data-placement="top" title="正在准备中" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account"><i class="fa fa-weixin fa-2x"></i></button>
+                                            }
+                                            if (provider.Name.Trim() == "Google")
+                                            {
+                                                <button type="submit" style="border: none;background: white;color:#636363" data-toggle="tooltip" data-placement="top" title="正在准备中" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account"><i class="fa fa-google fa-2x"></i></button>
+                                            }
+                                        }
+                                    }
+                                }
                         </form>
-                    }
-                }
-            </section>
+                    </div>
+                </div>
+            </div>
         </div>
-        <p class="mt-5 mb-3 text-muted">  <span>Copyright</span><span>&copy;</span><span>2018&nbsp;&nbsp;</span><a href="#">阿里布布</a><span>
-            &nbsp;&nbsp;Design By
-            zyl
-        </span></p>
-
     </div>
-
-
-    <script src="~/lib/signalr/dist/browser/signalr.js"></script>
-    <script src="~/js/axios/axios.min.js"></script>
-    <script src="https://cdn.bootcss.com/holder/2.9.4/holder.min.js"></script>
-    <script type="text/javascript" asp-src-include="~/js/all.min.js"></script>
-    <script>
-        /*
-         * 占位图片
-         */
-        Holder.addTheme('thumb', {
-            bg: '#007BFF',
-            fg: '#eceeef',
-            text: 'BLOG'
-        });
-    </script>
-
+</div>
+<script type="text/javascript" src="~/pagelogin/js/jquery.min.js" ></script>
+<script type="text/javascript" src="~/pagelogin/js/common.js" ></script>
 </body>
 </html>

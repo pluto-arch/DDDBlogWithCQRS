@@ -28,9 +28,14 @@
 
   <ItemGroup>
     <ProjectReference Include="..\D3.Blog.Domain\D3.Blog.Domain.csproj" />
+    <ProjectReference Include="..\Infrastructure.Identity\Infrastructure.Identity.csproj" />
+    <ProjectReference Include="..\Infrastructure\Infrastructure.Data.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="MediatR.Extensions.Microsoft.DependencyInjection">
+      <HintPath>C:\Users\62052\.nuget\packages\mediatr.extensions.microsoft.dependencyinjection\6.0.1\lib\netstandard2.0\MediatR.Extensions.Microsoft.DependencyInjection.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\newtonsoft.json\11.0.2\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
     </Reference>

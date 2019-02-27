@@ -20,7 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Infrastructure\IRepositorys\" />
     <Folder Include="Validations\ArticleVaildations\" />
   </ItemGroup>
 

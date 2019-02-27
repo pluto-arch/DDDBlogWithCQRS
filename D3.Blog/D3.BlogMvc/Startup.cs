@@ -4,7 +4,6 @@ using System.Reflection;
 using AspectCore.Configuration;
 using AspectCore.Extensions.DependencyInjection;
 using D3.BlogMvc.Hubs;
-using D3.BlogMvc.InitialSetup;
 using Infrastructure.Data.Database;
 using Infrastructure.Identity.Data;
 using Infrastructure.Identity.Models;
@@ -30,12 +29,14 @@ using D3.Blog.Application.Interface;
 using D3.Blog.Application.Services.Articles;
 using D3.Blog.Application.Services.Customer;
 using D3.Blog.Domain.Infrastructure.IRepositorys;
+using D3.BlogMvc.InitialSetup;
 using D3.BlogMvc.Middlewares;
 using Infrastructure.AOP;
 using Infrastructure.Data.Repository.Repositorys;
 using Infrastructure.Identity.Authorization;
 using NLog.Extensions.Logging;
 using NLog.Web;
+using DependencyInjection;
 
 namespace D3.BlogMvc
 {
@@ -53,7 +54,7 @@ namespace D3.BlogMvc
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.ConfigureDependencies(); //配置依赖注入  
+            services.ServerDependencies(); //配置依赖注入  
 
 //            services.ConfigureSeriLog(Configuration);//配置serilog
 
@@ -131,10 +132,9 @@ namespace D3.BlogMvc
             builder.Populate(services);//将原生的注入填充进去
             builder.RegisterType<BlogLogAOP>();//可以直接替换其他拦截器！一定要把拦截器进行注册
             builder.RegisterType<BlogCacheAOP>();
-            builder.ConfigureDependenciesAutofac();
+            builder.ServerDependenciesAutofac();
             var applicationContainer = builder.Build();//构建新容器
             #endregion
-
             
 
             return new AutofacServiceProvider(applicationContainer);//新容器
@@ -178,13 +178,15 @@ namespace D3.BlogMvc
 
             app.UseMvc(router =>
             {
+                
                 router.MapRoute(
                     name: "Default",
                     template: "{controller=Home}/{action=HomePage}/{id?}");
                 router.MapAreaRoute(
-                       name: "areas",
-                       template: "{area:exists}/{controller=Home}/{action=Index}/{id?}",
-                       areaName:"Admin");
+                    name: "area",
+                    template: "{controller=Admin}/{action=Index}/{id?}",
+                    areaName:"Admin");
+                
             });
         }
     }

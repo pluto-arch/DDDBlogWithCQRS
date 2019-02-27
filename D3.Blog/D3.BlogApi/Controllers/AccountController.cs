@@ -8,6 +8,7 @@ using D3.BlogApi.Models.AccountModels;
 using Infrastructure.Data.Database;
 using Infrastructure.Identity.Models;
 using Infrastructure.Logging;
+using Infrastructure.NLoger;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -27,10 +28,10 @@ namespace D3.BlogApi.Controllers
         private readonly UserManager<AppBlogUser>   _userManager;
         private readonly RoleManager<AppBlogRole>   _roleManager;
         private readonly SignInManager<AppBlogUser> _signInManager;
-        private readonly Serilog.ILogger            _logger;
+        private readonly ICustomerLogging _logger;
         private readonly JwtHelper _JwtHelper;
 
-        public AccountController(UserManager<AppBlogUser> userManager, RoleManager<AppBlogRole> roleManager, SignInManager<AppBlogUser> signInManager, ILogger logger, JwtHelper JwtHelper)
+        public AccountController(UserManager<AppBlogUser> userManager, RoleManager<AppBlogRole> roleManager, SignInManager<AppBlogUser> signInManager, ICustomerLogging logger, JwtHelper JwtHelper)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -51,7 +52,7 @@ namespace D3.BlogApi.Controllers
             
                 if (result.Succeeded)
                 {
-                    _logger.CustomInformation(user:user.UserName,other:"登录",enviornment:"Dev",host:"Dell NoteBook",informationMessage:"用户登录");
+                    _logger.LogLoginInfo($"{user.UserName} 用户登录",nameof(Login),nameof(AccountController),null,user.UserName,user.Id.ToString());
                     var userrole = await _userManager.GetRolesAsync(user);
                     string roles = "";
                     foreach (var r in userrole)

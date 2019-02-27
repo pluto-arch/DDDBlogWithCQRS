@@ -30,7 +30,7 @@ namespace D3.BlogMvc.Middlewares
 
         public async Task Invoke(HttpContext context)
         {
-            var connectionId = context.Connection.Id;
+            var connectionIP = context.Connection.RemoteIpAddress.ToString();
             try
             {
                 var uid = context.User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
@@ -39,13 +39,10 @@ namespace D3.BlogMvc.Middlewares
                 var cacheConnId = _cache.Get(cachekey);
                 if (cacheConnId != null)
                 {
-                    if (connectionId != cacheConnId.ToString())
+                    if (connectionIP != cacheConnId.ToString())
                     {
                         context.Response.Cookies.Delete("zylblog"); //删除客户端cookie
-
-;                       string js = @"<script language='JavaScript'>
-                                    alert('您的账户在其他地方登录，建议重新登录并修改密码');</script>";
-                        context.Response.Redirect("https://localhost:5001/Home/NewAreaLogin");
+                        context.Response.Redirect("/Home/NewAreaLogin");
                     }
                     else
                     {
@@ -63,7 +60,7 @@ namespace D3.BlogMvc.Middlewares
                         {
                             uname = authenticateResult?.Principal.Identity.Name;
                             uid=authenticateResult?.Principal.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
-                            _cache.Set(uname + "_" + uid,context.Connection.Id,new DateTimeOffset(DateTime.Now.AddMinutes(60)));
+                            _cache.Set(uname + "_" + uid,context.Connection.RemoteIpAddress.ToString(),new DateTimeOffset(DateTime.Now.AddMinutes(60)));
                         }
                     }
                     await this.next(context);

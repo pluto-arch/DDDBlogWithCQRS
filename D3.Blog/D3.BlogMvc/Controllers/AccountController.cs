@@ -128,7 +128,7 @@ namespace D3.BlogMvc.Controllers
         /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> NewPageLoginAsync([FromForm]LoginModel model, string returnUrl=null)
+        public async Task<IActionResult> Login([FromForm]LoginModel model, string returnUrl=null)
         {
             ViewBag.title = "博客-登录";
             ViewData["ReturnUrl"] = returnUrl;
@@ -242,6 +242,50 @@ namespace D3.BlogMvc.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
+
+        /// <summary>
+        /// 新页面注册
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [AllowAnonymous]  
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register([FromForm]RegisterModel model,string returnUrl="/")
+        {
+            if (ModelState.IsValid)
+            {
+                var user=await _userManager.FindByEmailAsync(model.Email);
+                if (user!=null)
+                {
+                    ModelState.AddModelError("EmailExist", "邮箱已被使用");
+                    return View(model);
+                }
+                var user2 = await _userManager.FindByNameAsync(model.Name);
+                if (user2!=null)
+                {
+                    ModelState.AddModelError("NameExist","用户名已被使用");
+                    return View(model);
+                }
+                var  newuser=new AppBlogUser
+                {
+                    UserName = model.Name,
+                    Email = model.Email
+                };
+                IdentityResult issuccess= await _userManager.CreateAsync(newuser, model.Password);
+                if (issuccess.Succeeded)
+                {
+                    await _signInManager.PasswordSignInAsync(newuser,model.Password,false,false);
+                    _logger.LogLoginInfo($"{newuser.UserName} 用户注册并登录",nameof(RegisterAsync),nameof(AccountController),null,newuser.UserName,_user.Id.ToString());
+                    return RedirectToLocal(returnUrl);
+                }
+
+            }
+
+            return View(model);
+        }
+
 
         /// <summary>
         /// 弹窗注册

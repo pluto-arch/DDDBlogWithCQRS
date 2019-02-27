@@ -33,11 +33,18 @@ using Infrastructure.Data.UOW;
 using D3.Blog.Application.Infrastructure;
 using D3.Blog.Application.Interface;
 using D3.Blog.Application.Services;
+using D3.Blog.Application.Services.Articles;
 using D3.Blog.Application.Services.Customer;
+using D3.Blog.Application.Services.PostGroup;
 using D3.Blog.Application.ViewModels;
 using D3.Blog.Domain.CommandHandlers.Articles;
+using D3.Blog.Domain.CommandHandlers.PostGroup;
 using D3.Blog.Domain.Commands.Articles;
+using D3.Blog.Domain.Commands.PostGroup;
 using D3.Blog.Domain.Entitys;
+using D3.Blog.Domain.EventHandlers.PostGroupEventHandler;
+using D3.Blog.Domain.Events.ArticleEvent;
+using D3.Blog.Domain.Events.PostGroup;
 using Infrastructure.Logging;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -146,14 +153,28 @@ namespace D3Blog_Tests
             IServiceProvider serviceProvider = BuildService();
             var bus = serviceProvider.GetRequiredService<IMediatorHandler>();//获取实例
             var articleRep = serviceProvider.GetRequiredService<IArticleRepository>();//获取实例
-            //AddNewArticleCommand
-//            var addcmd = new AddNewArticleCommand("asp","<p>this is asp</p>","张玉龙",1,"自创","asp","asp","asp","../../1.jpg");//获取实例
-
-//            bus.SendCommand(addcmd).Wait();
             var articles=articleRep.FindAll().Include(x=>x.ArticleCategory).ToList();
 
             Assert.True(articles.Count>0);
         }
+
+        /// <summary>
+        /// 添加文章分组测试
+        /// </summary>
+        [Fact]
+        public void PostGroupTets()
+        {
+            IServiceProvider serviceProvider = BuildService();
+            var bus = serviceProvider.GetRequiredService<IMediatorHandler>();//获取实例
+            var _notifications = (DomainNotificationHandler)serviceProvider.GetRequiredService<INotificationHandler<DomainNotification>>();
+            var addcmd = new AddPostGroupCommands("IDS系列", 2);
+
+            bus.SendCommand(addcmd);
+            var error = _notifications.GetNotifications().Select(n => n.Value);//通知结果
+            Assert.True(true);
+
+        }
+
 
 
         /// <summary>
@@ -165,7 +186,6 @@ namespace D3Blog_Tests
             var services = new ServiceCollection();
 
             #region 注入
-             services.ConfigureSeriLog(GetConfiguration());//配置serilog
             // ASP.NET HttpContext dependency
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IUser, AspNetUser>();
@@ -180,11 +200,13 @@ namespace D3Blog_Tests
             services.AddScoped<IRequestHandler<RegisterNewCustomerCommand>, CustomerCommandHandler>();
             services.AddScoped<IRequestHandler<UpdateCustomerCommand>, CustomerCommandHandler>();
             services.AddScoped<IRequestHandler<AddNewArticleCommand>, ArticleCommandHandle>();
+            services.AddScoped<IRequestHandler<AddPostGroupCommands>, PostGroupCommandHandler>();
             #endregion
             #region Domain - Events
             services.AddScoped<INotificationHandler<DomainNotification>, DomainNotificationHandler>();
             services.AddScoped<INotificationHandler<CustomerRegisteredEvent>, CustomerEventHandler>();
             services.AddScoped<INotificationHandler<CustomerUpdatedEvent>, CustomerEventHandler>();
+            services.AddScoped<INotificationHandler<PostGroupAddOrEditEvent>, PostGroupEventHandler>();
             #endregion
             #region 事件存储
             services.AddScoped<IEventStoreRepository, EventStoreSqlRepository>();
@@ -199,10 +221,12 @@ namespace D3Blog_Tests
             AutoMapperConfig.RegisterMappings();
 
             #region 仓储和服务
-//            services.AddScoped(typeof(IRepository<>),typeof(Repository<>));
-            services.AddScoped<ICustomerRepository,CustomerRepository>();
-            services.AddScoped<ICustomerService,CustomerService>();
-            services.AddScoped<IArticleRepository,ArticleRepository>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<IArticleRepository, ArticleRepository>();
+            services.AddScoped<IPostGroupRepository, PostGroupRepository>();
+            services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<IArticleService, ArticleService>();
+            services.AddScoped<IPostGroupServer, PostGroupServer>();
             #endregion
 
 

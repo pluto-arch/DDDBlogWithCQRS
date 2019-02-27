@@ -32,9 +32,9 @@ var app = new Vue({
             var E = window.wangEditor;
             var editor = new E('#divDemo');
             editor.customConfig.uploadImgShowBase64 = true;
-            editor.customConfig.linkImgCallback = function (url) {
-                alert("插入网络图片的回调"); // url 即插入图片的地址
-            }
+            editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024
+            editor.customConfig.uploadImgServer = '/File/UpLoadFile?flag=we';
+            editor.customConfig.linkImgCallback = function (url) {}
             editor.create();
             v.editor = editor;
 
@@ -44,7 +44,10 @@ var app = new Vue({
                     width: "100%",
                     height: 640,
                     path: "../../lib/markdown/lib/",
-                    saveHTMLToTextarea: true
+                    saveHTMLToTextarea: true,
+                    imageUpload: true,
+                    imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+                    imageUploadURL: "/File/UpLoadFile?flag=md"//上传的请求
                 });
             v.mdeditor = testEditor;
             

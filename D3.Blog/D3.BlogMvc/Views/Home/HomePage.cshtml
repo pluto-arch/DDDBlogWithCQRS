@@ -2,7 +2,7 @@
 @using Infrastructure.Data.Database
 @using Infrastructure.Identity.Models
 @using Microsoft.AspNetCore.Identity
-@model Tuple<D3.BlogMvc.Models.AccountModels.LoginModel, D3.BlogMvc.Models.AccountModels.RegisterModel>
+@model Tuple<D3.BlogMvc.Models.AccountModels.LoginModel, D3.BlogMvc.Models.AccountModels.RegisterModel,List<D3.BlogMvc.Models.PostModels.PostListModel>>
 @inject UserManager<AppBlogUser> userManager
 @inject SignInManager<AppBlogUser> signInManager
 @{
@@ -55,24 +55,55 @@
                 <div class="container" style="display: flex">
                     <div id="main-content" class="bg-white" style="overflow: hidden; flex-grow: 1;min-height:900px">
                         <!--帖子列表-->
+                        @{
+                            if (Model.Item3 != null)
+                            {
+                                foreach (var post in Model.Item3)
+                                {
+                                    <transition-group name="card" tag="div">
+                                        <div :key="@post.id" class="my-postcard">
+                                            <div class="card flex-md-row mb-2  h-auto" style="border: none; border-bottom: 1px solid #cccccc73;">
+                                                <img class="card-img-right flex-auto d-none d-lg-block" src="~/images/visual_studio.png" alt="Card image cap" style="padding: 10px;width: 180px">
+                                                <div class="card-body d-flex flex-column align-items-start" style="padding-bottom: 5px; padding-top: 10px;width: 600px">
+                                                    <h3 class="mb-0 mb-2 my-posttitle" v-on:click="showPostDetails(@post.id,$event)">
+                                                        @post.title
+                                                    </h3>
+                                                    <div class="mb-1 text-muted">
+                                                        <i class="far fa-clock"></i>&nbsp;<span style="margin-right: 20px;">@post.createtime</span>
+                                                        <i class="fas fa-user"></i>&nbsp;<span class="text-primary" style="cursor: pointer">@post.author</span>
+                                                    </div>
+                                                    <p class="card-text" style="font-size: 12px; color: #999; word-wrap: break-word; line-height: 20px;">@post.describe</p>
+                                                    <div id="post-opt">
+                                                        <ul>
+                                                            <li title="点赞"><i class="fas fa-thumbs-up"></i>&nbsp;@post.supports</li>
+                                                            <li title="浏览"><i class="fas fa-eye"></i>&nbsp;@post.views</li>
+                                                            <li title="收藏"><i class="fas fa-heart"></i>&nbsp;@post.collections</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </transition-group>
+                                }
+                            }
+                        }
                         <transition-group name="card" tag="div">
                             <div :key="post.id" class="my-postcard" v-for="(post,index) in posts">
                                 <div class="card flex-md-row mb-2  h-auto" style="border: none; border-bottom: 1px solid #cccccc73;">
-                                    <img class="card-img-right flex-auto d-none d-lg-block" src="~/images/visual_studio.png" alt="Card image cap" style="padding: 10px;width: 280px">
-                                    <div class="card-body d-flex flex-column align-items-start" style="padding-bottom: 5px;padding-top: 0">
-                                        <h3 class="mb-0 mb-2" v-on:click="showPostDetails(post.id,$event)">
-                                            <a class="my-posttitle" href="#" style="text-decoration: none" v-text="post.text"></a>
+                                    <img class="card-img-right flex-auto d-none d-lg-block" src="~/images/visual_studio.png" alt="Card image cap" style="padding: 10px;width: 180px">
+                                    <div class="card-body d-flex flex-column align-items-start" style="padding-bottom: 5px; padding-top: 10px;width: 600px">
+                                        <h3 class="mb-0 mb-2 my-posttitle" v-on:click="showPostDetails(post.id,$event)" v-text="post.text">
                                         </h3>
                                         <div class="mb-1 text-muted">
                                             <i class="far fa-clock"></i>&nbsp;<span style="margin-right: 20px;" v-text="post.createtime"></span>
                                             <i class="fas fa-user"></i>&nbsp;<span class="text-primary" style="cursor: pointer" v-text="post.author"></span>
                                         </div>
-                                        <p class="card-text" style="font-size: 12px; color: #999; word-wrap: break-word; line-height: 20px;">这是一张更宽的卡片，下面有支持文字作为其他内容的自然引导。这是一张更宽的卡片，下面有支持文字作为其他内容的自然引导。这是一张更宽的卡片这是一张更宽的卡片这是一张更宽的卡片...</p>
+                                        <p class="card-text" style="font-size: 12px; color: #999; word-wrap: break-word; line-height: 20px;" v-text="post.describe"></p>
                                         <div id="post-opt">
                                             <ul>
-                                                <li title="点赞"><i class="fas fa-thumbs-up" ></i>&nbsp;7</li>
-                                                <li title="浏览"><i class="fas fa-eye" ></i>&nbsp;128</li>
-                                                <li title="收藏"><i class="fas fa-heart" ></i>&nbsp;78</li>
+                                                <li title="点赞"><i class="fas fa-thumbs-up"></i>&nbsp;{{post.supports}}</li>
+                                                <li title="浏览"><i class="fas fa-eye"></i>&nbsp;{{post.views}}</li>
+                                                <li title="收藏"><i class="fas fa-heart"></i>&nbsp;{{post.collections}}</li>
                                             </ul>
                                         </div>
                                     </div>

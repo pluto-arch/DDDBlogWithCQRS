@@ -114,8 +114,17 @@ namespace D3.Blog.Domain.Entitys
         /// </summary>
         public int? ArticleCategoryId { get; set; }
         public ArticleCategory ArticleCategory { get; set; }
+
+        /// <summary>
+        /// 文章分组
+        /// </summary>
+        public int? GroupId { get; set; }
+        public PostSeries PostGropu { get; set; }
+
         #endregion
         
+
+
 
     }
 }

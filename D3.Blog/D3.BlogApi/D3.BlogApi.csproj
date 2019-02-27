@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.Authentication.WeChat" Version="2.0.0" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.3.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="6.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
@@ -29,6 +30,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
+    <PackageReference Include="MySql.Data" Version="8.0.15" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.4" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
   </ItemGroup>
@@ -43,6 +45,9 @@
   <ItemGroup>
     <Reference Include="AspNetCore.Authentication.WeChat">
       <HintPath>C:\Users\62052\.nuget\packages\aspnetcore.authentication.wechat\2.0.0\lib\netstandard2.0\AspNetCore.Authentication.WeChat.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Extras.DynamicProxy">
+      <HintPath>C:\Users\62052\.nuget\packages\autofac.extras.dynamicproxy\4.5.0\lib\netstandard1.3\Autofac.Extras.DynamicProxy.dll</HintPath>
     </Reference>
     <Reference Include="AutoMapper.Extensions.Microsoft.DependencyInjection">
       <HintPath>C:\Users\62052\.nuget\packages\automapper.extensions.microsoft.dependencyinjection\6.0.0\lib\netstandard2.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll</HintPath>

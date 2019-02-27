@@ -1,91 +1,90 @@
 ﻿@model D3.BlogMvc.Models.AccountModels.RegisterModel
+@using Infrastructure.Data.Database
+@using Infrastructure.Identity.Models
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<AppBlogUser> signInManager
 
 @{
     Layout = null;
 }
 
 <!DOCTYPE html>
-
 <html>
+
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>博客-注册</title>
-    <link rel="stylesheet" asp-href-include="~/css/all.min.css" />
-    <link rel="stylesheet" asp-href-include="~/css/index.min.css" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-    <!-- import CSS -->
-    <link rel="stylesheet" href="~/elementUI/index.css">
-    <link href="~/lib/toastr/toastr.min.css" rel="stylesheet" />
-    <style>
-        li {
-            list-style: none;
-        }
-        .control-label {
-            width: 150px;
-        }
-    </style>
+    <meta charset="utf-8">
+    <title>登录界面</title>
+    <link rel="stylesheet" href="~/pagelogin/css/reset.css" />
+    <link rel="stylesheet" href="~/pagelogin/css/common.css" />
+    <link rel="stylesheet" href="~/pagelogin/css/font-awesome.min.css" />
 </head>
-<body class="text-center" style="padding: 50px;display: flex">
-<div style="width: 50%; height: 100%; background-color: aqua;">
-    a
-</div>
-<div>
-    <div id="app" style="width: 300px; display: flex; flex-direction: column; align-items: center; justify-content: center">
-        <h4>欢迎注册</h4>
-        <hr/>
-        <div class="row" style="">
-            <div class="col-md-12">
-                <form id="form1" asp-action="RegisterAsync" asp-route-returnUrl="@ViewData["returnUrl"]">
-                    <div class="form-group" style="display: flex;">
-                        <label asp-for="Name" class="control-label">昵称</label>
-                        <input asp-for="Name" class="form-control"/>
-                        <span asp-validation-for="Name" class="text-danger"></span>
+<body>
+    <div class="wrap login_wrap">
+        <div class="content">
+            <div class="logo"></div>
+            <div class="login_box">
+
+                <div class="login_form">
+                    <div class="login_title">
+                        登录
                     </div>
-                    <div class="form-group" style="display: flex;">
-                        <label asp-for="Email" class="control-label">邮箱</label>
-                        <input asp-for="Email" class="form-control"/>
-                        <span asp-validation-for="Email" class="text-danger"></span>
+                    <form asp-controller="Account" asp-action="Register" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
+                        <div class="form_text_ipt">
+                            <input name="Name" asp-for="Name" type="text" placeholder="名称">
+                        </div>
+                        <span asp-validation-for="Email" style="margin-left: 10px"></span>
+                        <div class="form_text_ipt">
+                            <input name="Email" asp-for="Email" type="Email" placeholder="邮箱">
+                        </div>
+                        <span asp-validation-for="Password" style="margin-left: 10px"></span>
+                        <div class="form_text_ipt">
+                            <input name="password" asp-for="Password" type="password" placeholder="密码">
+                        </div>
+                        <div class="form_btn">
+                            <button type="submit">注册</button>
+                        </div>
+                        <div class="form_reg_btn">
+                            <span>已有帐号？</span><a asp-controller="Account" asp-action="Login" style="color: lightblue">点击登录</a>
+                        </div>
+                    </form>
+                    <div class="other_login">
+                        <div class="left other_left">
+                            <span>其它登录方式</span>
+                        </div>
+                        <div class="right other_right">
+                            <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+                                @{
+                                    var loginProviders = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+                                    if (loginProviders.Count == 0)
+                                    {
+                                    }
+                                    else
+                                    {
+                                        foreach (var provider in loginProviders)
+                                        {
+                                            if (provider.Name.Trim() == "QQ")
+                                            {
+                                                <button type="submit" style="border: none;background:white; color: #636363;margin: 5px" data-toggle="tooltip" data-placement="top" title="正在准备中" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account"><i class="fa fa-qq fa-2x"></i></button>
+                                            }
+                                            if (provider.Name.Trim() == "WeChat")
+                                            {
+                                                <button type="submit" style="border: none;background: white; color: #636363;margin: 5px" data-toggle="tooltip" data-placement="top" title="正在准备中" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account"><i class="fa fa-weixin fa-2x"></i></button>
+                                            }
+                                            if (provider.Name.Trim() == "Google")
+                                            {
+                                                <button type="submit" style="border: none;background: white;color:#636363" data-toggle="tooltip" data-placement="top" title="正在准备中" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account"><i class="fa fa-google fa-2x"></i></button>
+                                            }
+                                        }
+                                    }
+                                }
+                            </form>
+                        </div>
                     </div>
-                    <div class="form-group" style="display: flex;">
-                        <label asp-for="Password" class="control-label">密码</label>
-                        <input type="password" asp-for="Password" class="form-control"/>
-                        <span asp-validation-for="Password" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <button onclick="Login" class="btn btn-default">注册</button>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
-
-        <div>
-            <a asp-controller="Home" asp-action="HomePage">返回首页</a>
-        </div>
     </div>
-</div>
-
-
-<script src="~/lib/signalr/dist/browser/signalr.js"></script>
-<script src="~/js/axios/axios.min.js"></script>
-<script src="https://cdn.bootcss.com/holder/2.9.4/holder.min.js"></script>
-<script type="text/javascript" asp-src-include="~/js/all.min.js"></script>
-<script src="~/lib/toastr/toastr.min.js"></script>
-<script>
-    function Login() {
-        $.ajax({
-            url: 'RegisterAsync',
-            type: 'POST',
-            contentType: "application/x-www-form-urlencoded; charset=utf-8",
-            data: $("#form1").serialize(),
-            success: function(result) {
-                toastr.info('注册成功,即将跳转到首页！');
-                window.location.href = "/Home/HomePage";
-            },
-            error: function(res) {
-                toastr.warning('出现错误，请稍后重试。' + res);
-            }
-        });
-    }
-</script>
+    <script type="text/javascript" src="~/pagelogin/js/jquery.min.js"></script>
+    <script type="text/javascript" src="~/pagelogin/js/common.js"></script>
 </body>
 </html>

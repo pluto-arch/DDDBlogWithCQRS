@@ -62,7 +62,9 @@ namespace D3.Blog.Application.ViewModels.Article
         /// </summary>
         [Required]
         public DateTime CreateTime { get; set; }
-        
+
+        public int? GroupId { get; set; }
+
     }
 
     /// <summary>
@@ -94,7 +96,7 @@ namespace D3.Blog.Application.ViewModels.Article
         /// <param name="createTime"></param>
         /// <param name="viewCount"></param>
         /// <param name="commonCount"></param>
-        public ArticleViewModel(int id, string title, string contentMd, string contentHtml, string author, string tags, ArticleSource? blogType, string articleType, ArticleStatus status, DateTime createTime, int viewCount, int commonCount)
+        public ArticleViewModel(int id, string title, string contentMd, string contentHtml, string author, string tags, ArticleSource? blogType, string articleType, ArticleStatus status, DateTime createTime, int viewCount, int commonCount,int supportcount)
         {
             Id = id;
             Title = title;
@@ -108,6 +110,7 @@ namespace D3.Blog.Application.ViewModels.Article
             CreateTime = createTime;
             ViewCount = viewCount;
             CommonCount = commonCount;
+            SupportCount = supportcount;
         }
         /// <summary>
         /// 文章编号
@@ -155,9 +158,13 @@ namespace D3.Blog.Application.ViewModels.Article
         /// </summary>
         public int ViewCount { get; private set; }
         /// <summary>
-        /// 评论次数
+        /// 收藏次数
         /// </summary>
         public int CommonCount { get;private set; }
+        /// <summary>
+        /// 点在支持次数
+        /// </summary>
+        public int SupportCount { get; set; }
 
     }
 

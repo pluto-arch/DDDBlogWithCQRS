@@ -66,6 +66,7 @@ namespace D3.Blog.Application.Services.Articles
                         ArticleStatus.Savedraft,
                         a.AddTime,
                         a.ViewCount,
+                        a.CollectedCount,
                         a.PromitCount
                         )).ToList();
                 return result;
@@ -103,6 +104,7 @@ namespace D3.Blog.Application.Services.Articles
                         ArticleStatus.Savedraft,
                         a.AddTime,
                         a.ViewCount,
+                        a.CollectedCount,
                         a.PromitCount
                     )).ToList();//此处没有用automapper
                 return result;

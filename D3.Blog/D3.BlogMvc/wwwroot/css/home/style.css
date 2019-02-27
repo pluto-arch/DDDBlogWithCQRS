@@ -614,6 +614,7 @@ a.article:hover {
 }
             #post-opt ul li:hover {
                 color: #4285f4;
+                cursor: pointer;
             }
             #post-opt ul li a {
                 color: lightgrey;

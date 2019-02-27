@@ -9,7 +9,7 @@ using Serilog.Core;
 
 namespace D3.Blog.Application.Interface
 {
-    public interface IArticleService
+    public interface IArticleService:IDisposable
     {
         /// <summary>
         /// 创建
