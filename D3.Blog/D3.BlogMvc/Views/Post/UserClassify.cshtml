@@ -34,6 +34,9 @@
     <link href="~/bootstrap-plus/table/bootstrap-table.min.css" rel="stylesheet" />
     <!--[if lt IE 9]><script src="~/lib/html5.min.js"></script><![endif]-->
     <style>
+        * {
+            font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
+        }
         #quick-search > ul, li {
             padding: 0;
             margin: 0;
@@ -46,20 +49,20 @@
             margin: 5px 5px;
         }
 
-            #quick-search ul li {
-                list-style: none;
-                margin-right: 20px;
-                border-bottom: 2px solid white;
-            }
+        #quick-search ul li {
+            list-style: none;
+            margin-right: 20px;
+            border-bottom: 2px solid white;
+        }
 
-            #quick-search ul .active {
-                border-bottom: 2px solid #309dda;
-            }
+        #quick-search ul .active {
+            border-bottom: 2px solid #309dda;
+        }
 
-            #quick-search ul li:hover {
-                border-bottom: 2px solid #309dda;
-                cursor: pointer;
-            }
+        #quick-search ul li:hover {
+            border-bottom: 2px solid #309dda;
+            cursor: pointer;
+        }
 
         #blogtype1:before {
             content: '';
@@ -100,6 +103,9 @@
         .info {
             margin-left: 30px;
         }
+        .pagination-detail {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -138,7 +144,10 @@
                             </div>
                         </div>
                         <table data-toggle="table"
-                               data-pagination="false"
+                               data-pagination="true"
+                               data-pagination-h-align="left"
+                               data-pagination-detail-h-align="right"
+                               data-height="800"
                                data-search="true"
                                data-show-refresh="true"
                                data-toolbar="#toolbar">
@@ -163,90 +172,6 @@
                                 }
                             </tbody>
                         </table>
-
-
-
-                        <!--分页-->
-                        @{
-                            if (ViewBag.totalCount > 10)
-                            {
-                                <div id="pages">
-                                    <div>
-                                        <nav aria-label="Page navigation example">
-                                            <ul class="pagination" id="mypage">
-                                                <li class="page-item">
-                                                    @{
-                                                        var index = 1;
-                                                        if (ViewBag.pageindex == 1)
-                                                        {
-                                                            index = 1;
-                                                        }
-                                                        else
-                                                        {
-                                                            index = ViewBag.pageindex - 1;
-                                                            <a class="page-link" aria-label="Previous" asp-controller="Post" asp-action="UserClassify" asp-route-pageindex="@index" asp-route-flag="@ViewBag.flag">
-                                                                <span aria-hidden="true">&laquo;</span>
-                                                            </a>
-                                                        }
-                                                    }
-
-                                                </li>
-                                                @{
-                                                    var pages = ViewBag.totalCount % 10 == 0 ? ViewBag.totalCount / 10 : ViewBag.totalCount / 10 + 1;
-                                                    for (int i = 1; i <= pages; i++)
-                                                    {
-                                                        if (i == 1)
-                                                        {
-                                                            if (ViewBag.pageindex == i)
-                                                            {
-                                                                <li class="page-item my-page active"><a class="page-link" asp-controller="Post" asp-action="ArticleManager" asp-route-pageindex="@i" asp-route-flag="@ViewBag.flag">@i</a></li>
-                                                            }
-                                                            else
-                                                            {
-                                                                <li class="page-item my-page "><a class="page-link" asp-controller="Post" asp-action="ArticleManager" asp-route-pageindex="@i" asp-route-flag="@ViewBag.flag">@i</a></li>
-                                                            }
-
-                                                        }
-                                                        else
-                                                        {
-                                                            if (ViewBag.pageindex == i)
-                                                            {
-                                                                <li class="page-item my-page active"><a class="page-link" asp-controller="Post" asp-action="ArticleManager" asp-route-pageindex="@i" asp-route-flag="@ViewBag.flag">@i</a></li>
-                                                            }
-                                                            else
-                                                            {
-                                                                <li class="page-item my-page"><a class="page-link" asp-controller="Post" asp-action="ArticleManager" asp-route-pageindex="@i" asp-route-flag="@ViewBag.flag">@i</a></li>
-                                                            }
-
-                                                        }
-
-                                                    }
-
-                                                    <li class="page-item">
-                                                        @{
-                                                            if (ViewBag.pageindex == pages)
-                                                            {
-                                                                index = pages;
-                                                            }
-                                                            else
-                                                            {
-                                                                index = ViewBag.pageindex + 1;
-                                                                <a class="page-link" aria-label="Next" asp-controller="Post" asp-action="ArticleManager" asp-route-pageindex="@index" asp-route-flag="@ViewBag.flag">
-                                                                    <span aria-hidden="true">&raquo;</span>
-                                                                </a>
-                                                            }
-
-                                                        }
-                                                    </li>
-                                                }
-
-                                            </ul>
-                                        </nav>
-                                    </div>
-                                </div>
-                            }
-                        }
-                        <!--end 分页-->
                     </div><!--end 文章管理List-->
                 </div>
 
@@ -277,7 +202,7 @@
                                     <input type="text" name="classifyName" class="form-control" id="classifyName" placeholder="分类名称">
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
-                                        <button type="submit" class="btn btn-primary">保存</button>
+                                        <button type="button" class="btn btn-primary" v-on:click="Save(2,$event)">保存</button>
                                     </div>
                                 </form>
                             </div>
@@ -321,33 +246,5 @@
     <script src="~/js/holder/holder.min.js"></script>
     <script src="~/lib/toastr/toastr.min.js"></script>
     <script src="~/js/posts/manager.js"></script>
-    @{
-        if (ViewBag.isAddSuccess != null)
-        {
-            if (ViewBag.isAddSuccess)
-            {
-                <text>
-                    <script>
-                        toastr.options = {
-                            closeButton: true,                                            // 是否显示关闭按钮，（提示框右上角关闭按钮）
-                            debug: false,                                                    // 是否使用deBug模式
-                            progressBar: false,                                            // 是否显示进度条，（设置关闭的超时时间进度条）
-                            positionClass: "toast-top-center",              // 设置提示款显示的位置
-                            onclick: null,                                                     // 点击消息框自定义事件 
-                            showDuration: "300",                                      // 显示动画的时间
-                            hideDuration: "2000",                                     //  消失的动画时间
-                            timeOut: "2000",                                             //  自动关闭超时时间 
-                            extendedTimeOut: "2000",                             //  加长展示时间
-                            showEasing: "swing",                                     //  显示时的动画缓冲方式
-                            hideEasing: "linear",                                       //   消失时的动画缓冲方式
-                            showMethod: "fadeIn",                                   //   显示时的动画方式
-                            hideMethod: "fadeOut"                                   //   消失时的动画方式
-                        };
-                        toastr.info('添加成功');
-                    </script>
-                </text>
-            }
-        }
-    }
 </body>
 </html>

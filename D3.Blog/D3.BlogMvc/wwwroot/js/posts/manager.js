@@ -16,7 +16,7 @@ var app = new Vue({
     methods: {
         setBaseCtl: function () {
             var v = this;
-            toastr.options.positionClass = 'toast-bottom-center';//信息提示
+            toastr.options.positionClass = 'toast-top-center';//信息提示
         }
         , setNavBarMenu: function () {
             var v = this;
@@ -99,7 +99,6 @@ var app = new Vue({
                 .then(res => {
                     if (res.data.length > 0) {
                         console.log(res.data);
-                        alert(res.data);
                     } else {
                         window.location.reload();//登录成功，刷新当前页面
                     }
@@ -111,6 +110,34 @@ var app = new Vue({
             //个人操作下拉
             var v = this;
             v.isDown = !v.isDown;
+        }
+        , Save: function (flag, event) {
+            var v = this;
+            if (flag === 1) {
+                v.$http.post('/User/AddUserGrout', $('#groupform').serialize())
+                    .then(res => {
+                        if (res.data ==='success') {
+                            toastr.info('添加成功');
+                            setTimeout(function () { window.location.reload(); }, 1500);
+                        } else {
+                            toastr.warning('出现错误：' + res.data);
+                        }
+                    }).catch(error => {
+                        toastr.warning('出现未知错误');
+                    });
+            } else {
+                v.$http.post('/User/AddUserClassify', $('#groupform').serialize())
+                    .then(res => {
+                        if (res.data === 'success') {
+                            toastr.info('添加成功');
+                            setTimeout(function () { window.location.reload(); }, 1500);
+                        } else {
+                            toastr.warning('出现错误：' + res.data);
+                        }
+                    }).catch(error => {
+                        toastr.warning('出现未知错误');
+                    });
+            }
         }
     },
     watch: {

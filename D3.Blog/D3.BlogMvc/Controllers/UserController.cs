@@ -53,11 +53,12 @@ namespace D3.BlogMvc.Controllers
             PostGroupViewModel model=new PostGroupViewModel(groupName,int.Parse(_user.Id));
             _postGroupServer.Add(model);
             var error = _notifications.GetNotifications().Select(n => n.Value);//通知结果
-            if (error.Any())
+            var enumerable = error as string[] ?? error.ToArray();
+            if (enumerable.Any())
             {
-                return RedirectToAction("UserGroup", "Post", new {isSuccess=false});
+                return new JsonResult(enumerable.FirstOrDefault());
             }
-            return RedirectToAction("UserGroup", "Post", new {isSuccess=true});
+            return new JsonResult("success");
         }
         /// <summary>
         /// 添加用户个人分类
@@ -66,12 +67,15 @@ namespace D3.BlogMvc.Controllers
         [HttpPost]
         public IActionResult AddUserClassify(string classifyName)
         {
+            PostGroupViewModel model = new PostGroupViewModel(classifyName, int.Parse(_user.Id));
+            _postGroupServer.Add(model);
             var error = _notifications.GetNotifications().Select(n => n.Value);//通知结果
-            if (error.Any())
+            var enumerable = error as string[] ?? error.ToArray();
+            if (enumerable.Any())
             {
-                return RedirectToAction("UserClassify", "Post", new {isSuccess=false});
+                return new JsonResult(enumerable.FirstOrDefault());
             }
-            return RedirectToAction("UserClassify", "Post", new {isSuccess=true});
+            return new JsonResult("success");
         }
         
     }

@@ -234,7 +234,7 @@ namespace D3.BlogMvc.Controllers
         /// <returns></returns>
         [HttpGet]
         [Authorize]
-        public IActionResult UserClassify(bool isSuccess = false, [FromQuery] int pageindex = 1)
+        public IActionResult UserClassify()
         {
             ViewBag.Title = "个人分类管理";
             var postgroup = new List<ShowPostGroupViewModel>();
@@ -243,12 +243,6 @@ namespace D3.BlogMvc.Controllers
             {
                 postgroup = result.ToList();
             }
-
-            if (isSuccess)
-            {
-                ViewBag.isAddSuccess = true;
-            }
-            ViewBag.totalCount = postgroup.Count;
             return View(postgroup);
         }
 
@@ -260,7 +254,7 @@ namespace D3.BlogMvc.Controllers
         /// <returns></returns>
         [HttpGet]
         [Authorize]
-        public IActionResult UserGroup(bool isSuccess = false, [FromQuery]int pageindex = 1)
+        public IActionResult UserGroup()
         {
             ViewBag.Title = "个人分组管理";
             var postgroup = new List<ShowPostGroupViewModel>();
@@ -269,11 +263,6 @@ namespace D3.BlogMvc.Controllers
             {
                 postgroup = result.ToList();
             }
-            if (isSuccess)
-            {
-                ViewBag.isAddSuccess = true;
-            }
-            ViewBag.totalCount = postgroup.Count;
             return View(postgroup);
         }
 
