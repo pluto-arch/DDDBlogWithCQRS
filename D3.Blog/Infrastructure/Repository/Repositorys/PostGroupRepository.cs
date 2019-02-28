@@ -57,7 +57,8 @@ namespace Infrastructure.Data.Repository.Repositorys
 
         public IQueryable<PostSeries> FindListByClause<TKey>(Expression<Func<PostSeries, bool>> predicate, Expression<Func<PostSeries, TKey>> orderby)
         {
-            throw new NotImplementedException();
+            var result = _dbSet.Where(predicate).OrderBy(orderby);
+            return result;
         }
 
         public IQueryable<PostSeries> FindListByPage<TKey>(int pageSiza, int pageIndex, Expression<Func<PostSeries, bool>> predicate, Expression<Func<PostSeries, TKey>> orderby)

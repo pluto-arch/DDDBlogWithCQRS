@@ -29,6 +29,7 @@
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="wwwroot\bootstrap-plus\table\" />
     <Folder Include="wwwroot\images\" />
     <Folder Include="wwwroot\elementUI\" />
     <Folder Include="wwwroot\js\vue\" />

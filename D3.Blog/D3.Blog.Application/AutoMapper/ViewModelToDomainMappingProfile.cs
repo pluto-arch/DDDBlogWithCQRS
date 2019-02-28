@@ -38,7 +38,7 @@ namespace D3.Blog.Application.AutoMapper
             //文章分组新增
             CreateMap<PostGroupViewModel, AddPostGroupCommands>()
                 .ConstructUsing(c =>
-                    new AddPostGroupCommands(c.GroupName,int.Parse(c.OwinUser)));
+                    new AddPostGroupCommands(c.GroupName,c.OwinUser));
 
         }
     }

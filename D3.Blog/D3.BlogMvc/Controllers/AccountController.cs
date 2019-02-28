@@ -20,6 +20,7 @@ using Infrastructure.NLoger;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.DependencyInjection;
+using static System.TimeZone;
 
 namespace D3.BlogMvc.Controllers
 {
@@ -271,7 +272,8 @@ namespace D3.BlogMvc.Controllers
                 var  newuser=new AppBlogUser
                 {
                     UserName = model.Name,
-                    Email = model.Email
+                    Email = model.Email,
+                    CreateTime = DateTime.Now
                 };
                 IdentityResult issuccess= await _userManager.CreateAsync(newuser, model.Password);
                 if (issuccess.Succeeded)
@@ -325,7 +327,8 @@ namespace D3.BlogMvc.Controllers
             var  newuser=new AppBlogUser
             {
                 UserName = model.Name,
-                Email = model.Email
+                Email = model.Email,
+                CreateTime = DateTime.Now
             };
             IdentityResult issuccess= await _userManager.CreateAsync(newuser, model.Password);
             if (issuccess.Succeeded)
@@ -348,9 +351,9 @@ namespace D3.BlogMvc.Controllers
             await _signInManager.SignOutAsync();
             var endTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             var utime=(DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000000;
-            System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1));
-            DateTime TranslateDate = startTime.AddSeconds(utime);
-            var res= _dbHelper.ExecSqlStoredProcedure("call login_time_length('"+TranslateDate.ToString("yyyy-MM-dd HH:mm:ss")+"',"+_user.Id+",@s);");
+            System.DateTime startTime = CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1));
+            DateTime translateDate = startTime.AddSeconds(utime);
+            var res= _dbHelper.ExecSqlStoredProcedure("call login_time_length('"+translateDate.ToString("yyyy-MM-dd HH:mm:ss")+"',"+_user.Id+",@s);");
             var userOnLineTimes = "";
             if (res!=null&&res.Tables.Count>0)
             {

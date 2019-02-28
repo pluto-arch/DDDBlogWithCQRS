@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 using AutoMapper;
 using D3.Blog.Application.Interface;
 using D3.Blog.Application.ViewModels.PostGroup;
 using D3.Blog.Domain.Commands.PostGroup;
 using D3.Blog.Domain.Core.BUS;
 using D3.Blog.Domain.Core.Notifications;
+using D3.Blog.Domain.Entitys;
 using D3.Blog.Domain.Infrastructure.IRepositorys;
 using Infrastructure.NLoger;
 
@@ -106,4 +111,37 @@ namespace D3.Blog.Application.Services.PostGroup
         #endregion
 
     }
+
+    public partial class PostGroupServer
+    {
+        public async Task<ShowPostGroupViewModel> GetById(int id)
+        {
+            try
+            {
+                var res= await _postGroupRepository.FindByIdAsync(id);
+                return _mapper.Map<ShowPostGroupViewModel>(res);
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+            
+        }
+
+        public IEnumerable<ShowPostGroupViewModel> GetList<TKey>(Expression<Func<PostSeries, bool>> expression)
+        {
+            try
+            {
+                var res= _postGroupRepository.FindListByClause<int>(expression, x=>x.Id);
+                var result=(from pg in res
+                    select new ShowPostGroupViewModel(pg.Id,pg.GroupName,pg.OwinUserId));
+                return result.AsEnumerable();
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+    }
+
 }

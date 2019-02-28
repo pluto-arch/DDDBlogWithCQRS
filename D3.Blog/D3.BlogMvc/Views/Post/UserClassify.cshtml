@@ -3,7 +3,7 @@
 @using Infrastructure.Data.Database
 @using Infrastructure.Identity.Models
 @using Microsoft.AspNetCore.Identity
-@model  IEnumerable<D3.Blog.Application.ViewModels.Article.ArticleViewModel>
+@model List<D3.Blog.Application.ViewModels.PostGroup.ShowPostGroupViewModel>
 @inject UserManager<AppBlogUser> userManager
 @inject SignInManager<AppBlogUser> signInManager
 @{
@@ -17,9 +17,7 @@
     <meta charset="utf-8">
     <meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1">
     <meta name=viewport content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
-
     <title>YL-Blog-@ViewBag.Title</title>
-
     <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="~/css/bootstrap/bootstrap.min.css">
     <!-- Our Custom CSS -->
@@ -33,30 +31,36 @@
     <link rel="stylesheet" href="~/css/jquery/jquery.mCustomScrollbar.min.css">
     <link rel="stylesheet" href="~/bootstrap-tokenfield/css/bootstrap-tokenfield.min.css">
     <link rel="stylesheet" href="~/bootstrap-tokenfield/css/tokenfield-typeahead.min.css">
+    <link href="~/bootstrap-plus/table/bootstrap-table.min.css" rel="stylesheet" />
     <!--[if lt IE 9]><script src="~/lib/html5.min.js"></script><![endif]-->
     <style>
-        #quick-search > ul,li {
+        #quick-search > ul, li {
             padding: 0;
             margin: 0;
         }
+
         #quick-search ul {
             display: flex;
             line-height: 30px;
             padding: 0 10px;
             margin: 5px 5px;
         }
+
             #quick-search ul li {
                 list-style: none;
                 margin-right: 20px;
                 border-bottom: 2px solid white;
             }
-                #quick-search ul .active {
-                    border-bottom: 2px solid #309dda;
-                }
-                #quick-search ul li:hover {
-                    border-bottom: 2px solid #309dda;
-                    cursor: pointer;
-                }
+
+            #quick-search ul .active {
+                border-bottom: 2px solid #309dda;
+            }
+
+            #quick-search ul li:hover {
+                border-bottom: 2px solid #309dda;
+                cursor: pointer;
+            }
+
         #blogtype1:before {
             content: '';
             display: block;
@@ -68,6 +72,7 @@
             transform: rotate(45deg);
             background-color: #5bea37;
         }
+
         #blogtype2:before {
             content: '';
             display: block;
@@ -79,6 +84,7 @@
             transform: rotate(45deg);
             background-color: #3ba8f5;
         }
+
         #blogtype3:before {
             content: '';
             display: block;
@@ -90,6 +96,7 @@
             transform: rotate(45deg);
             background-color: #f9cd2f;
         }
+
         .info {
             margin-left: 30px;
         }
@@ -116,98 +123,48 @@
                         </ul>
                         <hr />
                         <ul>
-                            <li class="write-aside checked"><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="1">文章管理</a></li>
-                            <li class="write-aside"><a asp-controller="Post" asp-action="UserClassify">个人分类管理</a></li>
+                            <li class="write-aside"><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="1">文章管理</a></li>
+                            <li class="write-aside checked"><a asp-controller="Post" asp-action="UserClassify">个人分类管理</a></li>
                             <li class="write-aside"><a asp-controller="Post" asp-action="UserGroup">个人分组管理</a></li>
                             <li class="write-aside"><a href="#">评论管理</a></li>
                         </ul>
                     </div>
                     <!--文章管理List-->
                     <div id="write-area">
-                        <div id="quick-search">
-                            <ul>
-                                @{
-                                    switch (ViewBag.flag)
-                                    {
-                                        case "1":
-                                            <li class="active"><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="1" asp-route-pageindex="1">全部</a></li>
-                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="2" asp-route-pageindex="1">已发布</a></li>
-                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="3" asp-route-pageindex="1">审核中</a></li>
-                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="4" asp-route-pageindex="1">草稿箱</a></li>
-                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="5" asp-route-pageindex="1">回收站</a></li>
-                                            break;
-                                        case "2":
-                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="1" asp-route-pageindex="1">全部</a></li>
-                                            <li class="active"><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="2" asp-route-pageindex="1">已发布</a></li>
-                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="3" asp-route-pageindex="1">审核中</a></li>
-                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="4" asp-route-pageindex="1">草稿箱</a></li>
-                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="5" asp-route-pageindex="1">回收站</a></li>
-                                            break;
-                                        case "3":
-                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="1" asp-route-pageindex="1">全部</a></li>
-                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="2" asp-route-pageindex="1">已发布</a></li>
-                                            <li class="active"><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="3" asp-route-pageindex="1">审核中</a></li>
-                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="4" asp-route-pageindex="1">草稿箱</a></li>
-                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="5" asp-route-pageindex="1">回收站</a></li>
-                                            break;
-                                        case "4":
-                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="1" asp-route-pageindex="1">全部</a></li>
-                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="2" asp-route-pageindex="1">已发布</a></li>
-                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="3" asp-route-pageindex="1">审核中</a></li>
-                                            <li class="active"><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="4" asp-route-pageindex="1">草稿箱</a></li>
-                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="5" asp-route-pageindex="1">回收站</a></li>
-                                            break;
-                                        case "5":
-                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="1" asp-route-pageindex="1">全部</a></li>
-                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="2" asp-route-pageindex="1">已发布</a></li>
-                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="3" asp-route-pageindex="1">审核中</a></li>
-                                            <li><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="4" asp-route-pageindex="1">草稿箱</a></li>
-                                            <li class="active"><a asp-controller="Post" asp-action="ArticleManager" asp-route-flag="5" asp-route-pageindex="1">回收站</a></li>
-                                            break;
-                                    }
-
-                                }
-                            </ul>
-                        </div>
-
                         @* <div style="margin: 5px 0px 10px; padding: 0 5px; line-height: 60px; background-color: #F2F5F7;">搜索</div> *@
-
-                        @foreach (var item in Model)
-                        {
-                            <div id="post-lists" style="padding: 1rem 0;">
-                                <div style="display: flex">
-                                    <h5 style="margin: 0; color: #656565;cursor: pointer"><a target="_blank" title="编辑">@item.Title</a></h5>
-                                    @if (item.BlogType == ArticleSource.Original)
-                                    {
-                                        <span id="blogtype1" style="position: relative;padding-left: 9px;color: white;font-size: 10px;padding-top: 0;background-color: #5bea37;line-height: 20px;height: 20px;margin: 0;margin-left: 10px;width: 42px; margin-right: 50px;cursor: pointer">原创</span>
-                                    }
-                                    else if (item.BlogType == ArticleSource.Transport)
-                                    {
-                                        <span id="blogtype2" style="position: relative;padding-left: 9px;color: white;font-size: 10px;padding-top: 0;background-color: #3ba8f5;line-height: 20px;height: 20px;margin: 0;margin-left: 10px;width: 42px; margin-right: 50px;cursor: pointer">转载</span>
-                                    }
-                                    else
-                                    {
-                                        <span id="blogtype3" style="position: relative;padding-left: 9px;color: white;font-size: 10px;padding-top: 0;background-color: #f9cd2f;line-height: 20px;height: 20px;margin: 0;margin-left: 10px;width: 42px; margin-right: 50px;cursor: pointer">翻译</span>
-                                    }
-
-
-                                </div>
-                                <div style="border-bottom: 1px dotted #ddd; display: flex; position: relative; cursor: pointer; padding-bottom: 5px;">
-                                    <div style="display: flex">
-                                        <p>@item.CreateTime.ToString("yyyy-MM-dd HH:mm")</p>
-                                        <p class="info">阅读：@item.ViewCount</p>
-                                        <p class="info">评论：@item.CommonCount</p>
-                                    </div>
-                                    <div style="position: absolute; right: 5px; cursor: pointer;font-size: 15px;">
-                                        <span style="color: #3ba8f5"><a asp-controller="Post" asp-action="PostDetails" asp-route-id="@item.Id" target="_blank">查看</a></span>
-                                        <span style="color: #cccccc">|</span>
-                                        <span class="text-success">编辑</span>
-                                        <span style="color: #cccccc">|</span>
-                                        <span style="color: orange">删除</span>
-                                    </div>
-                                </div>
+                        <div id="toolbar">
+                            <div>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">新增</button>
                             </div>
-                        }
+                        </div>
+                        <table data-toggle="table"
+                               data-pagination="false"
+                               data-search="true"
+                               data-show-refresh="true"
+                               data-toolbar="#toolbar">
+                            <thead>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>分类名称</th>
+                                    <th data-width="150px">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.Id</td>
+                                        <td>@item.GroupName</td>
+                                        <td>
+                                            <button type="button" class="btn btn-secondary">修改</button>
+                                            <button type="button" class="btn btn-warning">删除</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+
 
                         <!--分页-->
                         @{
@@ -227,7 +184,7 @@
                                                         else
                                                         {
                                                             index = ViewBag.pageindex - 1;
-                                                            <a class="page-link" aria-label="Previous" asp-controller="Post" asp-action="ArticleManager" asp-route-pageindex="@index" asp-route-flag="@ViewBag.flag">
+                                                            <a class="page-link" aria-label="Previous" asp-controller="Post" asp-action="UserClassify" asp-route-pageindex="@index" asp-route-flag="@ViewBag.flag">
                                                                 <span aria-hidden="true">&laquo;</span>
                                                             </a>
                                                         }
@@ -303,6 +260,32 @@
                             </span>
                     </div>
                 </footer>
+
+                <!--弹窗-->
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">新增文章分组</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="groupform" asp-controller="User" asp-action="AddUserClassify">
+                                    <input type="text" name="classifyName" class="form-control" id="classifyName" placeholder="分类名称">
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                                        <button type="submit" class="btn btn-primary">保存</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -332,12 +315,39 @@
     <script src="~/js/axios/axios.min.js"></script>
     <!--tag 输入框-->
     <script src="~/bootstrap-tokenfield/bootstrap-tokenfield.min.js"></script>
+    <script src="~/bootstrap-plus/table/bootstrap-table.min.js"></script>
+    <script src="~/bootstrap-plus/table/bootstrap-table-zh-CN.min.js"></script>
     <script src="~/js/vue/vue.js"></script>
     <script src="~/js/holder/holder.min.js"></script>
     <script src="~/lib/toastr/toastr.min.js"></script>
     <script src="~/js/posts/manager.js"></script>
-    <script type="text/javascript">
-
-    </script>
+    @{
+        if (ViewBag.isAddSuccess != null)
+        {
+            if (ViewBag.isAddSuccess)
+            {
+                <text>
+                    <script>
+                        toastr.options = {
+                            closeButton: true,                                            // 是否显示关闭按钮，（提示框右上角关闭按钮）
+                            debug: false,                                                    // 是否使用deBug模式
+                            progressBar: false,                                            // 是否显示进度条，（设置关闭的超时时间进度条）
+                            positionClass: "toast-top-center",              // 设置提示款显示的位置
+                            onclick: null,                                                     // 点击消息框自定义事件 
+                            showDuration: "300",                                      // 显示动画的时间
+                            hideDuration: "2000",                                     //  消失的动画时间
+                            timeOut: "2000",                                             //  自动关闭超时时间 
+                            extendedTimeOut: "2000",                             //  加长展示时间
+                            showEasing: "swing",                                     //  显示时的动画缓冲方式
+                            hideEasing: "linear",                                       //   消失时的动画缓冲方式
+                            showMethod: "fadeIn",                                   //   显示时的动画方式
+                            hideMethod: "fadeOut"                                   //   消失时的动画方式
+                        };
+                        toastr.info('添加成功');
+                    </script>
+                </text>
+            }
+        }
+    }
 </body>
 </html>

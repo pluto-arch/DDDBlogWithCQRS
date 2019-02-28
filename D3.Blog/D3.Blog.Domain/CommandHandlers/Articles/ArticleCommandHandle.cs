@@ -71,6 +71,7 @@ namespace D3.Blog.Domain.CommandHandlers.Articles
                 article.ContentHtml = request.ContentHtml ?? "";
                 article.Source = request.Source;
                 article.Status = request.Status;
+                article.GroupId = request.GroupId;
                 _articleRepository.Insert(article);
                 if (Commit())
                 {

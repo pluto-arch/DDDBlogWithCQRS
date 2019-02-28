@@ -9,9 +9,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
+using Autofac.Extensions.DependencyInjection;
 using D3.Blog.Application.Interface;
 using D3.Blog.Application.ViewModels;
 using D3.Blog.Application.ViewModels.Article;
+using D3.Blog.Application.ViewModels.PostGroup;
 using D3.Blog.Domain.Core.Notifications;
 using D3.Blog.Domain.Enums;
 using D3.Blog.Domain.Infrastructure;
@@ -32,30 +34,38 @@ namespace D3.BlogMvc.Controllers
     /// <summary>
     /// 文章控制器
     /// </summary>
+    [Authorize]
     public class PostController : BaseController
     {
 
         private readonly IArticleService _articleService;
+
+        private readonly IPostGroupServer _postGroupServer;
+
         private IUser _user;
 
         /// <summary>
         /// 构造函数注入
         /// </summary>
+        /// <param name="articleService"></param>
+        /// <param name="postGroupServer"></param>
         /// <param name="userManager"></param>
         /// <param name="roleManager"></param>
         /// <param name="signInManager"></param>
-        /// <param name="logger"></param>
+        /// <param name="_logger"></param>
         /// <param name="notifications"></param>
         public PostController(
             IArticleService articleService,
-            UserManager<AppBlogUser> userManager, 
-            RoleManager<AppBlogRole> roleManager, 
+            IPostGroupServer postGroupServer,
+            UserManager<AppBlogUser> userManager,
+            RoleManager<AppBlogRole> roleManager,
             SignInManager<AppBlogUser> signInManager,
             INotificationHandler<DomainNotification> notifications,
-            IUser user,ICustomerLogging _logger)
-            : base(userManager, roleManager, signInManager, notifications,_logger)
+            IUser user, ICustomerLogging _logger)
+            : base(userManager, roleManager, signInManager, notifications, _logger)
         {
             _articleService = articleService;
+            _postGroupServer = postGroupServer;
             _user = user;
         }
 
@@ -69,9 +79,11 @@ namespace D3.BlogMvc.Controllers
             ViewBag.title = "YBLOG-写文章";
             ViewBag.editorType = 1;//富文本编辑器
             ViewBag.container = "container-fluid";//写文章页面和其他页面的样式控制
-            return View();
+                                                  //读取个人系列
+            var model = LoadUserGroup();
+            return View(model);
         }
-        
+
         /// <summary>
         /// 保存文章
         /// </summary>
@@ -80,24 +92,23 @@ namespace D3.BlogMvc.Controllers
         /// <returns></returns>
         [HttpPost]
         [Authorize]
-        public JsonResult WritePost([FromForm]NewArticleModel articleModel,[FromQuery]string flag="2")
+        public JsonResult WritePost([FromForm]NewArticleModel articleModel, [FromQuery]string flag = "1")
         {
-           
             var a = _articleService.GetByFilter(x => x.Title.Equals(articleModel.Title));
-            if (a!=null)
+            if (a != null)
             {
-                return new JsonResult("文章标题已存在，请重新输入"); 
+                return new JsonResult("文章标题已存在，请重新输入");
             }
 
-            NewArticleModel mo=articleModel;
-            mo.CreateTime=DateTime.Now;
+            NewArticleModel mo = articleModel;
+            mo.CreateTime = DateTime.Now;
             switch (flag)
             {
-                case "1":
+                case "3":
                     //发布，状态变审核中
                     mo.Status = ArticleStatus.Verify;
                     break;
-                case "2":
+                case "1":
                     //只保存，不进入审核
                     mo.Status = ArticleStatus.Savedraft;
                     break;
@@ -105,11 +116,11 @@ namespace D3.BlogMvc.Controllers
                     mo.Status = ArticleStatus.Savedraft;
                     break;
             }
-            if (articleModel.BlogType==ArticleSource.Original)
+            if (articleModel.BlogType == ArticleSource.Original)
             {
-                if (_user!=null)
+                if (_user != null)
                 {
-                    mo.Author =_user.Name;
+                    mo.Author = _user.Name;
                 }
             }
             _articleService.Add(mo);
@@ -129,7 +140,8 @@ namespace D3.BlogMvc.Controllers
             ViewBag.title = "YBLOG-写文章";
             ViewBag.editorType = 2;//富文本编辑器
             ViewBag.container = "container-fluid";//写文章页面和其他页面的样式控制
-            return View();
+            var model = LoadUserGroup();
+            return View(model);
         }
 
 
@@ -150,18 +162,18 @@ namespace D3.BlogMvc.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> PostDetails([FromRoute]string id)
         {
-            ViewBag.queryValue=id;
-            var model= await _articleService.GetById(int.Parse(id));
-            if (model==null)
+            ViewBag.queryValue = id;
+            var model = await _articleService.GetById(int.Parse(id));
+            if (model == null)
             {
                 return new StatusCodeResult((int)HttpStatusCode.NotFound);
             }
             else
-            {  
-                Tuple<LoginModel,RegisterModel,ArticleViewModel> tmodel=new Tuple<LoginModel, RegisterModel,ArticleViewModel>(new LoginModel(),new RegisterModel(), model);
+            {
+                Tuple<LoginModel, RegisterModel, ArticleViewModel> tmodel = new Tuple<LoginModel, RegisterModel, ArticleViewModel>(new LoginModel(), new RegisterModel(), model);
                 return View(tmodel);
             }
-          
+
         }
 
         /// <summary>
@@ -172,52 +184,121 @@ namespace D3.BlogMvc.Controllers
         /// <returns></returns>
         [HttpGet]
         [Authorize]
-        public IActionResult ArticleManager([FromQuery]string flag="1",[FromQuery]int pageindex=1)
+        public IActionResult ArticleManager([FromQuery]string flag = "1", [FromQuery]int pageindex = 1)
         {
             int pagesize = 10;//页大小
             ViewBag.container = "container";//写文章页面和其他页面的样式控制
             ViewBag.Title = "文章管理";
             ViewBag.flag = flag;
             ViewBag.pageindex = pageindex;
-            IEnumerable<ArticleViewModel> result=new List<ArticleViewModel>();
-            if (_user!=null)
+            IEnumerable<ArticleViewModel> result = new List<ArticleViewModel>();
+            if (_user != null)
             {
                 var uid = -1;
-                if (_user.Id!=null)
+                if (_user.Id != null)
                 {
                     uid = int.Parse(_user.Id);
                 }
                 switch (flag)
                 {
                     case "1":
-                        result = _articleService.GetList<DateTime>(x => x.AddUserId == uid,x=>x.AddTime);//全部
+                        result = _articleService.GetList<DateTime>(x => x.AddUserId == uid, x => x.AddTime);//全部
                         break;
                     case "2":
-                        result = _articleService.GetList<DateTime>(x => x.AddUserId == uid&&x.IsPublish==true,x=>x.AddTime);//已发布
+                        result = _articleService.GetList<DateTime>(x => x.AddUserId == uid && x.IsPublish == true, x => x.AddTime);//已发布
                         break;
                     case "3":
-                        result = _articleService.GetList<DateTime>(x => x.AddUserId == uid&&x.Status==ArticleStatus.Verify,x=>x.AddTime);//审核中
+                        result = _articleService.GetList<DateTime>(x => x.AddUserId == uid && x.Status == ArticleStatus.Verify, x => x.AddTime);//审核中
                         break;
                     case "4":
-                        result = _articleService.GetList<DateTime>(x => x.AddUserId == uid&&x.Status==ArticleStatus.Savedraft,x=>x.AddTime);//草稿箱
+                        result = _articleService.GetList<DateTime>(x => x.AddUserId == uid && x.Status == ArticleStatus.Savedraft, x => x.AddTime);//草稿箱
                         break;
                     case "5":
-                        result = _articleService.GetList<DateTime>(x => x.AddUserId == uid&&x.Status==ArticleStatus.Deleted,x=>x.AddTime);//回收箱
+                        result = _articleService.GetList<DateTime>(x => x.AddUserId == uid && x.Status == ArticleStatus.Deleted, x => x.AddTime);//回收箱
                         break;
                 }
-                ViewBag.totalCount=result.Count();
+                ViewBag.totalCount = result.Count();
             }
-            result = result.Skip((pageindex-1) * pagesize).Take(pagesize).ToList();
-            
+            result = result.Skip((pageindex - 1) * pagesize).Take(pagesize).ToList();
+
 
             return View(result);
         }
 
 
+        /// <summary>
+        /// 个人分类管理
+        /// </summary>
+        /// <param name="isSuccess"></param>
+        /// <param name="pageindex"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize]
+        public IActionResult UserClassify(bool isSuccess = false, [FromQuery] int pageindex = 1)
+        {
+            ViewBag.Title = "个人分类管理";
+            var postgroup = new List<ShowPostGroupViewModel>();
+            var result = _postGroupServer.GetList<int>(x => x.OwinUserId == int.Parse(_user.Id));
+            if (result != null)
+            {
+                postgroup = result.ToList();
+            }
+
+            if (isSuccess)
+            {
+                ViewBag.isAddSuccess = true;
+            }
+            ViewBag.totalCount = postgroup.Count;
+            return View(postgroup);
+        }
+
+        /// <summary>
+        /// 个人分组管理
+        /// </summary>
+        /// <param name="isSuccess"></param>
+        /// <param name="pageindex"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize]
+        public IActionResult UserGroup(bool isSuccess = false, [FromQuery]int pageindex = 1)
+        {
+            ViewBag.Title = "个人分组管理";
+            var postgroup = new List<ShowPostGroupViewModel>();
+            var result = _postGroupServer.GetList<int>(x => x.OwinUserId == int.Parse(_user.Id));
+            if (result != null)
+            {
+                postgroup = result.ToList();
+            }
+            if (isSuccess)
+            {
+                ViewBag.isAddSuccess = true;
+            }
+            ViewBag.totalCount = postgroup.Count;
+            return View(postgroup);
+        }
+
 
         public bool IsValidOperation()
         {
             return (!_notifications.HasNotifications());
+        }
+
+
+
+        /// <summary>
+        /// 读取个人分组
+        /// </summary>
+        /// <returns></returns>
+        private Tuple<D3.Blog.Application.ViewModels.Article.NewArticleModel, List<D3.Blog.Application.ViewModels.PostGroup.ShowPostGroupViewModel>> LoadUserGroup()
+        {
+            var postgroup = new List<ShowPostGroupViewModel>();
+            var result = _postGroupServer.GetList<int>(x => x.OwinUserId == int.Parse(_user.Id));
+            if (result != null)
+            {
+                postgroup = result.ToList();
+            }
+            Tuple<D3.Blog.Application.ViewModels.Article.NewArticleModel, List<D3.Blog.Application.ViewModels.PostGroup.ShowPostGroupViewModel>> model = new Tuple<D3.Blog.Application.ViewModels.Article.NewArticleModel, List<D3.Blog.Application.ViewModels.PostGroup.ShowPostGroupViewModel>>(new D3.Blog.Application.ViewModels.Article.NewArticleModel(), postgroup);
+            return model;
         }
     }
 }

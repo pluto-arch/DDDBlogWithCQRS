@@ -1,36 +1,42 @@
-﻿using Infrastructure.Data.Database;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using Autofac;
+﻿using Autofac;
 using Autofac.Extras.DynamicProxy;
+using D3.Blog.Application.Infrastructure;
+using D3.Blog.Application.Interface;
+using D3.Blog.Application.Services.Articles;
+using D3.Blog.Application.Services.Customer;
+using D3.Blog.Application.Services.PostGroup;
 using D3.Blog.Domain.CommandHandlers.Articles;
 using D3.Blog.Domain.CommandHandlers.Customer;
+using D3.Blog.Domain.CommandHandlers.PostGroup;
 using D3.Blog.Domain.Commands.Articles;
 using D3.Blog.Domain.Commands.Customer;
+using D3.Blog.Domain.Commands.PostGroup;
 using D3.Blog.Domain.Core.BUS;
 using D3.Blog.Domain.Core.Events;
 using D3.Blog.Domain.Core.Notifications;
 using D3.Blog.Domain.EventHandlers;
 using D3.Blog.Domain.EventHandlers.ArticleEventHandler;
+using D3.Blog.Domain.EventHandlers.PostGroupEventHandler;
 using D3.Blog.Domain.Events;
 using D3.Blog.Domain.Events.ArticleEvent;
+using D3.Blog.Domain.Events.PostGroup;
 using D3.Blog.Domain.Infrastructure;
-using Infrastructure.Data.Bus;
-using Infrastructure.Data.EventSourcing;
-using Infrastructure.Data.Repository.EventSourcing;
-using Infrastructure.Data.UOW;
-using Infrastructure.Identity.Models;
-using MediatR;
-using D3.Blog.Application.Infrastructure;
-using D3.Blog.Application.Interface;
-using D3.Blog.Application.Services.Articles;
-using D3.Blog.Application.Services.Customer;
 using D3.Blog.Domain.Infrastructure.IRepositorys;
 using Infrastructure.AOP;
+using Infrastructure.Data.Bus;
+using Infrastructure.Data.Database;
+using Infrastructure.Data.EventSourcing;
+using Infrastructure.Data.Repository.EventSourcing;
 using Infrastructure.Data.Repository.Repositorys;
+using Infrastructure.Data.UOW;
+using Infrastructure.Identity.Models;
 using Infrastructure.NLoger;
+using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
+using System;
 
 namespace DependencyInjection
 {
@@ -56,6 +62,7 @@ namespace DependencyInjection
             services.AddScoped<IRequestHandler<RegisterNewCustomerCommand>, CustomerCommandHandler>();
             services.AddScoped<IRequestHandler<UpdateCustomerCommand>, CustomerCommandHandler>();
             services.AddScoped<IRequestHandler<AddNewArticleCommand>, ArticleCommandHandle>();
+            services.AddScoped<IRequestHandler<AddPostGroupCommands>, PostGroupCommandHandler>();
             #endregion
 
 
@@ -64,6 +71,7 @@ namespace DependencyInjection
             services.AddScoped<INotificationHandler<CustomerRegisteredEvent>, CustomerEventHandler>();
             services.AddScoped<INotificationHandler<CustomerUpdatedEvent>, CustomerEventHandler>();
             services.AddScoped<INotificationHandler<ArticleAddOrEditEvent>, ArticleEventHandler>();
+            services.AddScoped<INotificationHandler<PostGroupAddOrEditEvent>, PostGroupEventHandler>();
             #endregion
 
 
@@ -105,6 +113,11 @@ namespace DependencyInjection
             builder.RegisterType<ArticleRepository>().As(typeof(IArticleRepository)).InstancePerLifetimeScope()
                 .EnableInterfaceInterceptors()//启动动态代理，拦截器
                 .InterceptedBy(typeof(BlogLogAOP));//附加拦截器;
+            builder.RegisterType<PostGroupRepository>().As(typeof(IPostGroupRepository)).InstancePerLifetimeScope()
+                .EnableInterfaceInterceptors()//启动动态代理，拦截器
+                .InterceptedBy(typeof(BlogLogAOP));//附加拦截器;
+
+
 
             builder.RegisterType<CustomerService>().As(typeof(ICustomerService)).InstancePerLifetimeScope()
                 .EnableInterfaceInterceptors()//启动动态代理，拦截器
@@ -114,6 +127,9 @@ namespace DependencyInjection
                 .EnableInterfaceInterceptors() //启动动态代理，拦截器
                 .InterceptedBy(typeof(BlogLogAOP));
             //              .InterceptedBy(typeof(BlogCacheAOP));//附加拦截器
+            builder.RegisterType<PostGroupServer>().As(typeof(IPostGroupServer)).InstancePerLifetimeScope()
+                .EnableInterfaceInterceptors()//启动动态代理，拦截器
+                .InterceptedBy(typeof(BlogLogAOP));//附加拦截器;
         }
 
 

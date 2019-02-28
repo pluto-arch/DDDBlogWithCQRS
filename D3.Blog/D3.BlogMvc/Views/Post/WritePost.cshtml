@@ -3,7 +3,7 @@
 @using Infrastructure.Identity.Models
 @using Microsoft.AspNetCore.Identity
 @using D3.Blog.Domain.Enums
-@model D3.Blog.Application.ViewModels.Article.NewArticleModel
+@model Tuple<D3.Blog.Application.ViewModels.Article.NewArticleModel, List<D3.Blog.Application.ViewModels.PostGroup.ShowPostGroupViewModel>>
 @inject UserManager<AppBlogUser> userManager
 @inject SignInManager<AppBlogUser> signInManager
 @{
@@ -34,6 +34,12 @@
     <link rel="stylesheet" href="~/bootstrap-tokenfield/css/bootstrap-tokenfield.min.css">
     <link rel="stylesheet" href="~/bootstrap-tokenfield/css/tokenfield-typeahead.min.css">
     <!--[if lt IE 9]><script src="~/lib/html5.min.js"></script><![endif]-->
+    <style>
+        .tokenfield {
+            font-size: 12px;
+            padding-left: 3px;
+        }
+    </style>
 </head>
 <body>
     <div id="app">
@@ -50,8 +56,8 @@
                 </div>
                 <div class="container-fluid" style="display: flex; padding: 0 25px;">
                     <div id="write-area">
-                        <form id="formPost" asp-controller="Post" asp-action="WritePost" method="post">
-                            <input type="text" id="txtTitle" maxlength="100" placeholder="输入文章标题" asp-for="Title">
+                        <form id="formPost"  asp-controller="Post" asp-action="WritePost" method="post">
+                            <input type="text" name="@nameof(Model.Item1.Title)" id="txtTitle" maxlength="100" placeholder="输入文章标题" asp-for="Item1.Title">
                             <!--富文本编辑器-->
                             <div style="text-align:left;">
                                 <div id="divDemo">
@@ -62,25 +68,43 @@
                                 <textarea style="display: none;"></textarea>
                             </div>
                             <!--富文本编辑器 end-->
-                            <input id="articlehtml" type="hidden" asp-for="ContentHtml" /><!--文章内容-->
+                            <input id="articlehtml" name="@nameof(Model.Item1.ContentHtml)" type="hidden" asp-for="Item1.ContentHtml" /><!--文章内容-->
                             <div class="post-info" style="margin-top:25px;font-size:14px;position:relative">
                                 <div style="margin: 15px 0;">
                                     <div class="post-tag" style="display: flex;">
                                         <div id="posttag">
-                                            <input asp-for="Tags" type="text" class="form-control" id="tokenfield" value="" placeholder="输入文章标签" /><span style="font-size: 10px;color: #ccc;">最多5个，每输入一个按回车键添加</span>
+                                            <input name="@nameof(Model.Item1.Tags)" asp-for="Item1.Tags" type="text" class="form-control" id="tokenfield" value="" placeholder="输入文章标签" /><span style="font-size: 10px;color: #ccc;">最多5个，每输入一个按回车键添加</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="margin: 15px 0;">
+                                    <div class="post-tag" style="display: flex;">
+                                        <div id="posttag" style="">
+                                             @{
+                                                 if (Model.Item2 != null && Model.Item2.Count > 0)
+                                                 {
+                                                     <select id="sel2" class="article-type" name="@nameof(Model.Item1.GroupId)" asp-for="Item1.GroupId">
+                                                         <option value="">文章系列</option>
+                                                         @foreach (var pg in Model.Item2)
+                                                         {
+                                                             <option value="@pg.Id">@pg.GroupName</option>
+                                                         }
+                                                     </select>
+                                                 }
+                                             }
                                         </div>
                                     </div>
                                 </div>
                                 <div style="margin-bottom:25px;display: flex">
                                     <!--取值：var value = $('#sel').val();-->
-                                    <select id="sel1" class="article-type" asp-for="BlogType">
+                                    <select id="sel1" class="article-type" name="@nameof(Model.Item1.BlogType)" asp-for="Item1.BlogType">
                                         <option value="">博客类型</option>
                                         <option value="@ArticleSource.Original">原创</option>
                                         <option value="@ArticleSource.Transport">转载</option>
                                         <option value="@ArticleSource.Translate">翻译</option>
                                     </select>
                                     &nbsp;&nbsp;
-                                    <select id="sel2" class="article-type" asp-for="ArticleType">
+                                    <select id="sel2" class="article-type" name="@nameof(Model.Item1.ArticleType)" asp-for="Item1.ArticleType">
                                         <option value="">文章类型</option>
                                         <option value="前端">前端</option>
                                         <option value="后端">后端</option>
@@ -89,8 +113,8 @@
                                         <option value="程序人生">程序人生</option>
                                     </select>
                                     &nbsp;&nbsp;
-                                    <input type="text" id="txtUrl" class="form-control" style="width: 350px;" placeholder="请注明转载链接" asp-for="ExternalUrl" v-show="iszz" required="required">
-                                    <input type="text" id="txtAuthor" class="form-control" style="width: 250px;" placeholder="请注明原作者" asp-for="Author" v-show="iszz" required="required">
+                                    <input type="text" id="txtUrl" class="form-control" style="width: 350px;" placeholder="请注明转载链接" name="@nameof(Model.Item1.ExternalUrl)" asp-for="Item1.ExternalUrl" v-show="iszz" required="required">
+                                    <input type="text" id="txtAuthor" class="form-control" style="width: 250px;" placeholder="请注明原作者" name="@nameof(Model.Item1.Author)" asp-for="Item1.Author" v-show="iszz" required="required">
                                 </div>
                                 <div style="display: flex">
                                     <button id="publish" type="button" class="btn btn-outline-primary" v-on:click="publish(1,$event)">发布文章</button>&nbsp;

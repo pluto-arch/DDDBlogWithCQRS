@@ -9,6 +9,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using D3.BlogApi.AuthHelper;
 using D3.BlogApi.InitialSetup;
+using DependencyInjection;
 using Infrastructure.AOP;
 using Infrastructure.Data.Database;
 using Infrastructure.Identity.Data;
@@ -58,7 +59,8 @@ namespace D3.BlogApi
         /// <param name="services"></param>
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.ConfigureDependencies(); //配置依赖注入   
+//            services.ConfigureDependencies(); //配置依赖注入   
+            services.ServerDependencies(); //配置依赖注入  
                                               //            services.ConfigureSeriLog(Configuration); //配置serilog
             services.AddAutoMapperSetup();
 
@@ -204,7 +206,8 @@ namespace D3.BlogApi
             builder.Populate(services);//将原生的注入填充进去
             builder.RegisterType<BlogLogAOP>();//可以直接替换其他拦截器！一定要把拦截器进行注册
             builder.RegisterType<BlogCacheAOP>();
-            builder.ConfigureDependenciesAutofac();
+//            builder.ConfigureDependenciesAutofac();
+            builder.ServerDependenciesAutofac();
             var applicationContainer = builder.Build();//构建新容器
             #endregion
 

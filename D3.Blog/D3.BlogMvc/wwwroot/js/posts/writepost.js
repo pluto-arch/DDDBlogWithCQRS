@@ -54,7 +54,7 @@ var app = new Vue({
             /* 选择改变事件(转载链接) */
             $("#sel1").change(function () {
                 var opt = $("#sel1").val();
-                alert(opt);
+//                alert(opt);
                 if (opt.trim() == 'Transport') {
                     v.iszz = true;
                 } else {
@@ -121,7 +121,7 @@ var app = new Vue({
                 $(clickel).addClass('checked');
             });//写博客页面侧边菜单
 
-            $('#tokenfield').tokenfield({ minWidth: 250 });//标签输入
+            $('#tokenfield').tokenfield({ minWidth: 250, limit:5});//标签输入
 
         }
         , Login: function () {
@@ -130,7 +130,6 @@ var app = new Vue({
                 .then(res => {
                     if (res.data.length > 0) {
                         console.log(res.data);
-                        alert(res.data);
                     } else {
                         window.location.reload();//登录成功，刷新当前页面
                     }
@@ -154,16 +153,17 @@ var app = new Vue({
             console.log(v.mdeditor.getHTML());//md编辑器的内容
             console.log(v.editor.txt.html());//富文本编辑器的内容
             switch (flag) {
-                case 1:
+                case 3:
                     //发布
+                    v.publishArticle(3);
+                    break;
+                case 1:
+                    //保存
                     v.publishArticle(1);
                     break;
-                case 2:
+                default:
                     //保存
-                    v.publishArticle(2);
-                    break;
-                case 3:
-                    //预览
+                    v.publishArticle(1);
                     break;
             }
         }

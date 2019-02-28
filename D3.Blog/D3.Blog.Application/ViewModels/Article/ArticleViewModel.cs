@@ -62,7 +62,9 @@ namespace D3.Blog.Application.ViewModels.Article
         /// </summary>
         [Required]
         public DateTime CreateTime { get; set; }
-
+        /// <summary>
+        /// 文章分组id
+        /// </summary>
         public int? GroupId { get; set; }
 
     }
