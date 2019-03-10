@@ -144,15 +144,6 @@ namespace D3.BlogMvc.Controllers
             return View(model);
         }
 
-
-        [HttpGet]
-        [AllowAnonymous]
-        public JsonResult GetData()
-        {
-            return Json("ok");
-        }
-
-
         /// <summary>
         /// 文章详细页面
         /// </summary>
@@ -270,6 +261,20 @@ namespace D3.BlogMvc.Controllers
         public bool IsValidOperation()
         {
             return (!_notifications.HasNotifications());
+        }
+
+
+        
+        [HttpGet]
+        public IActionResult GetData()
+        {
+            var postgroup = new List<ShowPostGroupViewModel>();
+            var result = _postGroupServer.GetList<int>(x => x.OwinUserId == int.Parse(_user.Id));
+            if (result != null)
+            {
+                postgroup = result.ToList();
+            }
+            return Json(new {total=postgroup.Count,rows =postgroup});
         }
 
 

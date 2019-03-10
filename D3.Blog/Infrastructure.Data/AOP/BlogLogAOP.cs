@@ -44,7 +44,7 @@ namespace Infrastructure.AOP
                 invocation.Proceed();
                 logJson.ErrorMessage = "";
                 var resjson = NewtonsoftJsonHelper.SerializeObject(logJson);
-                _logger.LogCustomerInfo(resjson,invocation.Method.Name,invocation.Method.Name,null);
+                _logger.LogCustomerInfo(resjson,invocation.Method.Name,invocation.TargetType.FullName,null);
             }
             catch (Exception e)
             {

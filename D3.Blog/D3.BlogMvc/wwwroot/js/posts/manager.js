@@ -118,7 +118,8 @@ var app = new Vue({
                     .then(res => {
                         if (res.data ==='success') {
                             toastr.info('添加成功');
-                            setTimeout(function () { window.location.reload(); }, 1500);
+                            $('#groupTab').bootstrapTable("refresh");
+                            $("#exampleModalCenter").modal('hide');  //手动关闭
                         } else {
                             toastr.warning('出现错误：' + res.data);
                         }

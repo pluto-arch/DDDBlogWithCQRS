@@ -77,6 +77,8 @@ namespace D3.BlogMvc.Controllers
             }
             return new JsonResult("success");
         }
+
+
         
     }
 }
