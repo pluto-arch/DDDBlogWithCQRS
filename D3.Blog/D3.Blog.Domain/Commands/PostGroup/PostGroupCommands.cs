@@ -31,6 +31,25 @@ namespace D3.Blog.Domain.Commands.PostGroup
 
 
 
+    /// <summary>
+    /// 删除分组command
+    /// </summary>
+    public class DeletePostGroupCommand : Command
+    {
+        public DeletePostGroupCommand(int id)
+        {
+            Id = id;
+        }
+
+        public int Id { get; set; }
+        public override bool IsValid()
+        {
+            return true;
+        }
+    }
+
+
+
 
 
     /// <summary>

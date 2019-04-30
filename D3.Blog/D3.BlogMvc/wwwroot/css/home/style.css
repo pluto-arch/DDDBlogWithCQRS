@@ -475,6 +475,7 @@ a.article:hover {
     display: flex;
     font-size: 14px;
     height: 70px;
+    margin-top:20px;
     align-items: center;
     justify-content: center;
     border-top: 1px solid lightgray;

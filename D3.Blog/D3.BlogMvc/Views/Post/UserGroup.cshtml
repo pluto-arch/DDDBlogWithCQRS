@@ -126,7 +126,7 @@
                         <button data-flag="1" type="submit" style="line-height: 30px;border: none;background-color: #309dda;width: 60px;border: 1px solid #309dda;">搜索</button>
                     </form>
                 </div>
-                <div class="container" style="display: flex; padding: 0 25px;">
+                <div class="container" style="display: flex; padding: 0 25px;height:760px">
                     <div id="aside-content">
                         <ul>
                             <li class="write-aside"><a href="#">富文本编辑器</a></li>
@@ -151,37 +151,6 @@
                         
                         <table id="groupTab"></table>
                         
-                        
-
-                        @*                         <table data-toggle="table" *@
-@*                                data-pagination="true" *@
-@*                                data-pagination-h-align="left" *@
-@*                                data-pagination-detail-h-align="right" *@
-@*                                data-height="800" *@
-@*                                data-search="true" *@
-@*                                data-show-refresh="true" *@
-@*                                data-toolbar="#toolbar"> *@
-@*                             <thead> *@
-@*                                 <tr> *@
-@*                                     <th>序号</th> *@
-@*                                     <th>分类名称</th> *@
-@*                                     <th data-width="150px">操作</th> *@
-@*                                 </tr> *@
-@*                             </thead> *@
-@*                             <tbody> *@
-@*                                 @foreach (var item in Model) *@
-@*                                 { *@
-@*                                     <tr> *@
-@*                                         <td>@item.Id</td> *@
-@*                                         <td>@item.GroupName</td> *@
-@*                                         <td> *@
-@*                                             <button type="button" class="btn btn-secondary">修改</button> *@
-@*                                             <button type="button" class="btn btn-warning">删除</button> *@
-@*                                         </td> *@
-@*                                     </tr> *@
-@*                                 } *@
-@*                             </tbody> *@
-@*                         </table> *@
                     </div><!--end 文章管理List-->
                 </div>
 
@@ -212,7 +181,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form id="groupform" asp-controller="User" asp-action="AddUserGrout">
+                                <form id="groupform" asp-controller="User" asp-action="AddUserGrout" onkeydown="if(event.keyCode==13){return false;}">
                                     <input type="text" name="groupName" class="form-control" id="groupName" placeholder="分组名称">
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
@@ -264,9 +233,8 @@
         $('#groupTab').bootstrapTable({
             url: "/Post/GetData",
             toolbar: '#toolbar',
-            pageSize: 20,
+            pageSize: 15,
             pageNumber: 1,
-            pageList: "[10, 25, 50, 100, All]",
             showToggle: true,
             showRefresh: true,
             showColumns: true,
@@ -282,11 +250,12 @@
                 }, {
                     field: 'owinUser',
                     title: '操作',
+                    width:'120',
                     formatter: function operateFormatter(value, row, index) {
                         return [
                             '<div class="btn-group btn-group-sm" role="group" aria-label="...">',
                             '<button type="button" class="btn btn-secondary">修改</button>&nbsp;&nbsp;',
-                            '<button type="button" class="btn btn-warning">删除</button>',
+                            '<button type="button" class="btn btn-warning" onclick="Delete(' + row.id + ')">删除</button>',
                             '</div>'
                         ].join('');
                     } //自定义方法，添加操作按钮
@@ -294,6 +263,22 @@
             ]
         });
     });
+
+    function Delete(data) {
+        toastr.options.positionClass = 'toast-top-right';//信息提示
+        $.ajax({
+            url: '/Post/DeleteGroup/' + data,
+            method: 'POST',
+            success: function (result) {
+                if (result.length <= 0) {
+                    toastr.info('删除成功');
+                    $('#groupTab').bootstrapTable('refresh');
+                } else {
+                    toastr.info('删除失败');
+                }
+            }
+        });
+    }
 </script>
 
 

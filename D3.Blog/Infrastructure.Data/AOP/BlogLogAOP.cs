@@ -59,6 +59,7 @@ namespace Infrastructure.AOP
                 }
                 var resjson = NewtonsoftJsonHelper.SerializeObject(logJson);
                 _logger.LogCustomerError(resjson,invocation.Method.Name,invocation.Method.Name,e);
+                throw;
             }
         }
     }

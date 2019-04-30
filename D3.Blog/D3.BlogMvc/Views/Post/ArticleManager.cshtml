@@ -1,6 +1,7 @@
 ﻿@using System.Security.Claims
 @using D3.Blog.Domain.Enums
 @using Infrastructure.Data.Database
+@using Infrastructure.Extensions
 @using Infrastructure.Identity.Models
 @using Microsoft.AspNetCore.Identity
 @model  IEnumerable<D3.Blog.Application.ViewModels.Article.ArticleViewModel>
@@ -111,7 +112,7 @@
                         <button data-flag="1" type="submit" style="line-height: 30px;border: none;background-color: #309dda;width: 60px;border: 1px solid #309dda;">搜索</button>
                     </form>
                 </div>
-                <div class="container" style="display: flex; padding: 0 25px;">
+                <div class="container" style="display: flex; padding: 0 25px;height:800px">
                     <div id="aside-content">
                         <ul>
                             <li class="write-aside"><a href="#">富文本编辑器</a></li>
@@ -193,7 +194,7 @@
                                         <span id="blogtype3" style="position: relative;padding-left: 9px;color: white;font-size: 10px;padding-top: 0;background-color: #f9cd2f;line-height: 20px;height: 20px;margin: 0;margin-left: 10px;width: 42px; margin-right: 50px;cursor: pointer">翻译</span>
                                     }
 
-
+                                    <span style="float: right;color: darkgray;">@item.Status.GetDescription()</span>
                                 </div>
                                 <div style="border-bottom: 1px dotted #ddd; display: flex; position: relative; cursor: pointer; padding-bottom: 5px;">
                                     <div style="display: flex">

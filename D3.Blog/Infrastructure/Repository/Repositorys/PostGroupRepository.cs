@@ -11,12 +11,10 @@ namespace Infrastructure.Data.Repository.Repositorys
 {
     public class PostGroupRepository : IPostGroupRepository
     {
-        internal D3BlogDbContext _context;
         internal DbSet<PostSeries> _dbSet;
 
         public PostGroupRepository(D3BlogDbContext context)
         {
-            _context = context;
             _dbSet = context.Set<PostSeries>();
         }
 
@@ -27,12 +25,14 @@ namespace Infrastructure.Data.Repository.Repositorys
 
         public void Delete(Expression<Func<PostSeries, bool>> where)
         {
-            throw new NotImplementedException();
+            var delmodel = _dbSet.First(where);
+            _dbSet.Remove(delmodel);
         }
 
         public void DeleteById(object id)
         {
-            throw new NotImplementedException();
+            var delmodel= _dbSet.First(x => x.Id == int.Parse(id.ToString()));
+           _dbSet.Remove(delmodel);
         }
 
         public void DeleteByIds(object[] ids)

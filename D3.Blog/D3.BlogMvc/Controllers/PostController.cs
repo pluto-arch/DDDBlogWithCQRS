@@ -113,7 +113,7 @@ namespace D3.BlogMvc.Controllers
                     mo.Status = ArticleStatus.Savedraft;
                     break;
                 default:
-                    mo.Status = ArticleStatus.Savedraft;
+                    mo.Status = ArticleStatus.Verify;
                     break;
             }
             if (articleModel.BlogType == ArticleSource.Original)
@@ -125,7 +125,7 @@ namespace D3.BlogMvc.Controllers
             }
             _articleService.Add(mo);
             var error = _notifications.GetNotifications().Select(n => n.Value);//通知结果
-            return new JsonResult(error);
+            return new JsonResult("hahahah");
         }
 
 
@@ -275,6 +275,22 @@ namespace D3.BlogMvc.Controllers
                 postgroup = result.ToList();
             }
             return Json(new {total=postgroup.Count,rows =postgroup});
+        }
+
+
+
+        /// <summary>
+        /// 删除个人分组
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Authorize]
+        public JsonResult DeleteGroup(int id)
+        {
+             _postGroupServer.Remove(id);
+             var error = _notifications.GetNotifications().Select(n => n.Value);//通知结果
+             return new JsonResult(error);
         }
 
 

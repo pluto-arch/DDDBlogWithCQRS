@@ -67,7 +67,14 @@ namespace D3.Blog.Application.Services.PostGroup
 
         public void Remove(int id)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                Bus.SendCommand(command: new DeletePostGroupCommand(id));
+            }
+            catch (Exception e)
+            {
+                Bus.RaiseEvent(new DomainNotification("", "出现错误，请稍后重试"));
+            }
         }
 
         public void Update(PostGroupViewModel updatemodel)

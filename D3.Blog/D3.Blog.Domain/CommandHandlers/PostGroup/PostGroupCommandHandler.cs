@@ -14,7 +14,8 @@ namespace D3.Blog.Domain.CommandHandlers.PostGroup
 {
     public class PostGroupCommandHandler
         : CommandHandler,
-            IRequestHandler<AddPostGroupCommands>
+            IRequestHandler<AddPostGroupCommands>,
+            IRequestHandler<DeletePostGroupCommand>
     {
         private readonly IPostGroupRepository _groupRepository;
         private readonly IMediatorHandler    _bus;
@@ -43,7 +44,7 @@ namespace D3.Blog.Domain.CommandHandlers.PostGroup
                     if (Commit())
                     {
                         //提交成功，发布领域事件
-                        _bus.RaiseEvent(new ArticleAddOrEditEvent(postSeries.Id));
+//                        _bus.RaiseEvent(new ArticleAddOrEditEvent(postSeries.Id));
                     }
                 }
                 catch (Exception e)
@@ -54,5 +55,37 @@ namespace D3.Blog.Domain.CommandHandlers.PostGroup
             return Unit.Task;
         }
 
+
+        /// <summary>
+        /// 删除分组
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<Unit> Handle(DeletePostGroupCommand request, CancellationToken cancellationToken)
+        {
+            if (!request.IsValid())
+            {
+                NotifyValidationErrors(request);
+                return Unit.Task;
+            }
+            else
+            {
+                try
+                {
+                    _groupRepository.Delete(x=>x.Id==request.Id);
+                    if (Commit())
+                    {
+                        //提交成功，发布领域事件
+//                        _bus.RaiseEvent(new ArticleAddOrEditEvent(request.Id));
+                    }
+                }
+                catch (Exception e)
+                {
+                    _bus.RaiseEvent(new DomainNotification(request.MessageType, e.Message));
+                }
+            }
+            return Unit.Task;
+        }
     }
 }

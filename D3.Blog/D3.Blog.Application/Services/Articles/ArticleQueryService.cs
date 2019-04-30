@@ -63,7 +63,7 @@ namespace D3.Blog.Application.Services.Articles
                         "",
                         a.Source,
                         "",
-                        ArticleStatus.Savedraft,
+                        a.Status,
                         a.AddTime,
                         a.ViewCount,
                         a.CollectedCount,

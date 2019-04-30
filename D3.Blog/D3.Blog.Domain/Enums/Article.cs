@@ -1,4 +1,6 @@
-﻿namespace D3.Blog.Domain.Enums
+﻿using System.ComponentModel;
+
+namespace D3.Blog.Domain.Enums
 {
     /// <summary>
     /// 文章来源
@@ -26,18 +28,22 @@
         /// <summary>
         /// 已经发布
         /// </summary>
-        Publish=0, 
+        [Description("已发布")]
+        Publish =0,
         /// <summary>
         /// 保存为草稿
         /// </summary>
-        Savedraft=1,
+        [Description("草稿")]
+        Savedraft =1,
         /// <summary>
         /// 审核中
         /// </summary>
-        Verify=3,
+        [Description("审核中")]
+        Verify =3,
         /// <summary>
         /// 已删除（回收箱）
         /// </summary>
-        Deleted=4,
+        [Description("回收箱")]
+        Deleted =4,
     }
 }

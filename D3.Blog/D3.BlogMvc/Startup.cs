@@ -161,7 +161,7 @@ namespace D3.BlogMvc
             }
             
 
-//            app.UseStaticFiles();
+            app.UseStaticFiles();
             app.UseStatusCodePagesWithRedirects("/Exception/ErrorStatusCode/{0}");//http 错误状态码页面
             app.UseHttpsRedirection();
 

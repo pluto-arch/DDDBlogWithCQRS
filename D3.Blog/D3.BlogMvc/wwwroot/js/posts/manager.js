@@ -140,6 +140,15 @@ var app = new Vue({
                     });
             }
         }
+        , groupDelete: function (data, event) {
+            var v = this;
+            v.$http.post('/Post/DeleteGroup/' + data)
+                .then(res => {
+                    console.log(res);
+                }).catch(error => {
+                    toastr.warning('出现未知错误');
+                });
+        }
     },
     watch: {
         isDown: function (newval, oldval) {

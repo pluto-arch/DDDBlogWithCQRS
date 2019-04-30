@@ -106,6 +106,11 @@
         .pagination-detail {
             display: none;
         }
+        .bootstrap-table .fixed-table-container .table th, .bootstrap-table .fixed-table-container .table td {
+            vertical-align: middle;
+            box-sizing: border-box;
+            padding: 3px;
+        }
     </style>
 </head>
 <body>
@@ -121,7 +126,7 @@
                         <button data-flag="1" type="submit" style="line-height: 30px;border: none;background-color: #309dda;width: 60px;border: 1px solid #309dda;">搜索</button>
                     </form>
                 </div>
-                <div class="container" style="display: flex; padding: 0 25px;">
+                <div class="container" style="display: flex; padding: 0 25px;height:760px">
                     <div id="aside-content">
                         <ul>
                             <li class="write-aside"><a href="#">富文本编辑器</a></li>
@@ -143,35 +148,7 @@
                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">新增</button>
                             </div>
                         </div>
-                        <table data-toggle="table"
-                               data-pagination="true"
-                               data-pagination-h-align="left"
-                               data-pagination-detail-h-align="right"
-                               data-height="800"
-                               data-search="true"
-                               data-show-refresh="true"
-                               data-toolbar="#toolbar">
-                            <thead>
-                                <tr>
-                                    <th>序号</th>
-                                    <th>分类名称</th>
-                                    <th data-width="150px">操作</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model)
-                                {
-                                    <tr>
-                                        <td>@item.Id</td>
-                                        <td>@item.GroupName</td>
-                                        <td>
-                                            <button type="button" class="btn btn-secondary">修改</button>
-                                            <button type="button" class="btn btn-warning">删除</button>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
+                        <table id="groupTab"></table>
                     </div><!--end 文章管理List-->
                 </div>
 
@@ -198,7 +175,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form id="groupform" asp-controller="User" asp-action="AddUserClassify">
+                                <form id="groupform" asp-controller="User" asp-action="AddUserClassify" onkeydown="if(event.keyCode==13){return false;}">
                                     <input type="text" name="classifyName" class="form-control" id="classifyName" placeholder="分类名称">
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
@@ -245,6 +222,43 @@
     <script src="~/js/vue/vue.js"></script>
     <script src="~/js/holder/holder.min.js"></script>
     <script src="~/lib/toastr/toastr.min.js"></script>
-    <script src="~/js/posts/manager.js"></script>
+<script src="~/js/posts/manager.js"></script>
+<script>
+    $(function() {
+        $('#groupTab').bootstrapTable({
+            url: "/Post/GetData",
+            toolbar: '#toolbar',
+            pageSize: 15,
+            pageNumber: 1,
+            showToggle: true,
+            showRefresh: true,
+            showColumns: true,
+            search: true,
+            pagination: true,
+            columns: [
+                {
+                    field: "id",
+                    title: '序号'
+                }, {
+                    field: 'groupName',
+                    title: '分组名称'
+                }, {
+                    field: 'owinUser',
+                    title: '操作',
+                    width:'120',
+                    formatter: function operateFormatter(value, row, index) {
+                        return [
+                            '<div class="btn-group btn-group-sm" role="group" aria-label="...">',
+                            '<button type="button" class="btn btn-secondary">修改</button>&nbsp;&nbsp;',
+                            '<button type="button" class="btn btn-warning">删除</button>',
+                            '</div>'
+                        ].join('');
+                    } //自定义方法，添加操作按钮
+                }
+            ]
+        });
+    });
+
+</script>
 </body>
 </html>
