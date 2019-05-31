@@ -19,6 +19,7 @@ update database -verbose -Context AppIdentityDbContext
 
 
 ##### 因为数据库变更为mysql  使用serilog 时无法自定义列，所以将日志框架新增NLog 日志框架。原有serilog暂时不适用。如果使用sqlserver的话就使用serilog，比NLog方便些。
+*** Nlog配置文件中的数据库连接也要修改
 
 
 - 如果出现缺少XXX.XML文件的话  将api 和 application 右键->属性->生成 有个输出，将路径改到api的路径下就可以了。这是为了给api的swagger 添加说明文字使用。
