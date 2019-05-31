@@ -60,7 +60,7 @@ namespace D3.BlogMvc
             DiagnosticListener.AllListeners.Subscribe(new CommandListener());
 
 
-            services.ServerDependencies(typeof(Startup)); //配置依赖注入  
+            services.ServerDependencies(); //配置依赖注入  
 
 //            services.ConfigureSeriLog(Configuration);//配置serilog
 

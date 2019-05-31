@@ -45,7 +45,7 @@ namespace DependencyInjection
 {
     public static class DependencyInjection
     {
-        public static void ServerDependencies(this IServiceCollection services,Type t)
+        public static void ServerDependencies(this IServiceCollection services)
         {
             // ASP.NET HttpContext dependency
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

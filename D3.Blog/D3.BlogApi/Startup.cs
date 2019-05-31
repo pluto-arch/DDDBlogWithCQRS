@@ -61,7 +61,7 @@ namespace D3.BlogApi
         {
             //            services.ConfigureDependencies(); //配置依赖注入   
             services.AddScoped(typeof(JwtHelper));
-            services.ServerDependencies(typeof(Startup)); //配置依赖注入  
+            services.ServerDependencies(); //配置依赖注入  
 //                                              services.ConfigureSeriLog(Configuration); //配置serilog
             services.AddAutoMapperSetup();
 

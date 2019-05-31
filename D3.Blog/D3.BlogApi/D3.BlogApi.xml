@@ -44,14 +44,14 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:D3.BlogApi.Controllers.ValuesController.Get(System.Int32)">
+        <member name="M:D3.BlogApi.Controllers.ValuesController.auth(System.Int32)">
             <summary>
             GET api/values/5
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:D3.BlogApi.Controllers.ValuesController.Post(System.String)">
+        <member name="M:D3.BlogApi.Controllers.ValuesController.DealHttpBody">
             <summary>
             POST api/values
             </summary>
@@ -78,19 +78,6 @@
         <member name="M:D3.BlogApi.InitialSetup.AutoMapperSetup.AddAutoMapperSetup(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
             注入automapper
-            </summary>
-            <param name="services"></param>
-        </member>
-        <member name="T:D3.BlogApi.InitialSetup.Dependency">
-            <summary>
-            依赖注入
-            </summary>d
-        </member>
-        <member name="M:D3.BlogApi.InitialSetup.Dependency.ConfigureDependencies(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
-            <summary>
-            配置依赖注入
-            IServiceCollection：负责注册
-            IServiceProvider：负责提供实例
             </summary>
             <param name="services"></param>
         </member>
