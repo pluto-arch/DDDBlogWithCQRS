@@ -10,6 +10,7 @@ using D3.Blog.Domain.Commands.PostGroup;
 using D3.Blog.Domain.Core.BUS;
 using D3.Blog.Domain.Core.Notifications;
 using D3.Blog.Domain.Entitys;
+using D3.Blog.Domain.Infrastructure;
 using D3.Blog.Domain.Infrastructure.IRepositorys;
 using Infrastructure.NLoger;
 
@@ -24,7 +25,7 @@ namespace D3.Blog.Application.Services.PostGroup
         /// <summary>
         /// Article仓储
         /// </summary>
-        private readonly IPostGroupRepository _postGroupRepository;
+        private readonly IRepository<PostSeries> _postGroupRepository;
         ///// <summary>
         ///// 事件存储对象
         ///// </summary>
@@ -44,10 +45,10 @@ namespace D3.Blog.Application.Services.PostGroup
         /// <param name="postGroupRepository"></param>
         /// <param name="bus"></param>
         /// <param name="logger"></param>
-        public PostGroupServer(IMapper mapper, IPostGroupRepository postGroupRepository, IMediatorHandler bus, ICustomerLogging logger)
+        public PostGroupServer(IMapper mapper, IUnitOfWork uow, IMediatorHandler bus, ICustomerLogging logger)
         {
             _mapper = mapper ;
-            _postGroupRepository = postGroupRepository ;
+            _postGroupRepository = uow.GetRepository<PostSeries>();
             Bus = bus;
             _logger = logger;
         }
@@ -139,7 +140,7 @@ namespace D3.Blog.Application.Services.PostGroup
         {
             try
             {
-                var res= _postGroupRepository.FindListByClause<int>(expression, x=>x.Id);
+                var res= _postGroupRepository.FindListByClause<int>(expression, x=>x.Id,false);
                 var result=(from pg in res
                     select new ShowPostGroupViewModel(pg.Id,pg.GroupName,pg.OwinUserId));
                 return result.AsEnumerable();

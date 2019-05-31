@@ -4,6 +4,7 @@ using D3.Blog.Application.Interface;
 using D3.Blog.Application.ViewModels;
 using D3.Blog.Domain.Commands.Customer;
 using D3.Blog.Domain.Core.BUS;
+using D3.Blog.Domain.Infrastructure;
 using D3.Blog.Domain.Infrastructure.IRepositorys;
 
 namespace D3.Blog.Application.Services.Customer
@@ -20,7 +21,7 @@ namespace D3.Blog.Application.Services.Customer
         /// <summary>
         /// customer仓储
         /// </summary>
-        private readonly ICustomerRepository   _customerRepository;
+        private readonly IRepository<Domain.Entitys.Customer>   _customerRepository;
         ///// <summary>
         ///// 事件存储对象
         ///// </summary>
@@ -39,10 +40,10 @@ namespace D3.Blog.Application.Services.Customer
         public CustomerService(
             IMapper               mapper,
             ICustomerRepository   customerRepository,
-            IMediatorHandler      bus)
+            IMediatorHandler      bus,IUnitOfWork uow)
         {
             _mapper               = mapper;
-            _customerRepository   = customerRepository;
+            _customerRepository   = uow.GetRepository<Domain.Entitys.Customer>();
             Bus                   = bus;
         }
 

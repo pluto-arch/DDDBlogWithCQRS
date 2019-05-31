@@ -59,33 +59,34 @@ namespace D3.BlogApi
         /// <param name="services"></param>
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-//            services.ConfigureDependencies(); //配置依赖注入   
-            services.ServerDependencies(); //配置依赖注入  
-                                              //            services.ConfigureSeriLog(Configuration); //配置serilog
+            //            services.ConfigureDependencies(); //配置依赖注入   
+            services.AddScoped(typeof(JwtHelper));
+            services.ServerDependencies(typeof(Startup)); //配置依赖注入  
+//                                              services.ConfigureSeriLog(Configuration); //配置serilog
             services.AddAutoMapperSetup();
 
             #region 支持跨域
 
 
-            services.AddCors();
-            // services.AddCors(options =>
-            //  {
-            //      options.AddPolicy("allowAll", policy =>
-            //      {
-            //            policy.AllowAnyOrigin()    //允许任何源
-            //                  .AllowAnyMethod()    //允许任何方式
-            //                  .AllowAnyHeader()    //允许任何头
-            //                  .AllowCredentials(); //允许cookie
-            //      });
-            //      //一般采用这种方法
-            //      //options.AddPolicy("allowAll", policy =>
-            //      //{
-            //      //    policy
-            //      //        .WithOrigins("http://localhost", "http://localhost:44388", "https://localhost", "https://localhost:44388")//支持多个域名端口
-            //      //        .AllowAnyMethod()//请求方法添加到策略
-            //      //        .WithHeaders("authorization");//标头添加到策略
-            //      //});
-            // });
+//            services.AddCors();
+            services.AddCors(options =>
+             {
+                 options.AddPolicy("allowAll", policy =>
+                 {
+                       policy.AllowAnyOrigin()    //允许任何源
+                             .AllowAnyMethod()    //允许任何方式
+                             .AllowAnyHeader()    //允许任何头
+                             .AllowCredentials(); //允许cookie
+                 });
+                 //一般采用这种方法
+                 //options.AddPolicy("allowAll", policy =>
+                 //{
+                 //    policy
+                 //        .WithOrigins("http://localhost", "http://localhost:44388", "https://localhost", "https://localhost:44388")//支持多个域名端口
+                 //        .AllowAnyMethod()//请求方法添加到策略
+                 //        .WithHeaders("authorization");//标头添加到策略
+                 //});
+            });
 
             #endregion
 
@@ -132,7 +133,7 @@ namespace D3.BlogApi
 
             #region IDentity
             services.AddDbContext<AppIdentityDbContext>(
-                        options => options.UseSqlServer(Configuration.GetConnectionString("ID_DBCONN")));
+                options => options.UseMySql(Configuration.GetConnectionString("BLOG_MYSQL")));//MYSQL
             services.AddIdentity<AppBlogUser, AppBlogRole>()
                     .AddEntityFrameworkStores<AppIdentityDbContext>()
                     .AddDefaultTokenProviders();
@@ -227,11 +228,7 @@ namespace D3.BlogApi
             //引入Nlog配置文件
             env.ConfigureNLog("Nlog.config");  
             // global cors policy
-            app.UseCors(x => x
-                            .AllowAnyOrigin()
-                            .AllowAnyMethod()
-                            .AllowAnyHeader()
-                            .AllowCredentials());
+            app.UseCors("allowAll");
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

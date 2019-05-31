@@ -43,7 +43,7 @@ namespace D3.Blog.Domain.EventHandlers
         public Task Handle(CustomerDeletedEvent notification, CancellationToken cancellationToken)
         {
             //刷新缓存或者其他操作
-
+            
             return Task.CompletedTask;
         }
     }

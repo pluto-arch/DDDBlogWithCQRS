@@ -29,6 +29,7 @@
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="Areas\Admin\Views\Share\" />
     <Folder Include="wwwroot\bootstrap-plus\table\" />
     <Folder Include="wwwroot\images\" />
     <Folder Include="wwwroot\elementUI\" />
@@ -38,6 +39,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\admin\assets\css\app.less" />
+    <None Include="wwwroot\admin\assets\fonts\fontawesome-webfont.woff2" />
+    <None Include="wwwroot\admin\assets\js\amazeui.datatables.min.js" />
+    <None Include="wwwroot\admin\assets\js\amazeui.min.js" />
+    <None Include="wwwroot\admin\assets\js\app.js" />
+    <None Include="wwwroot\admin\assets\js\dataTables.responsive.min.js" />
+    <None Include="wwwroot\admin\assets\js\echarts.min.js" />
+    <None Include="wwwroot\admin\assets\js\fullcalendar.min.js" />
+    <None Include="wwwroot\admin\assets\js\jquery.min.js" />
+    <None Include="wwwroot\admin\assets\js\moment.js" />
+    <None Include="wwwroot\admin\assets\js\theme.js" />
     <None Include="wwwroot\fontawesome-free\js\all.js" />
     <None Include="wwwroot\fontawesome-free\js\all.min.js" />
     <None Include="wwwroot\fontawesome-free\js\brands.js" />
@@ -1582,6 +1594,30 @@
     <None Include="wwwroot\fontawesome-free\webfonts\fa-regular-400.woff2" />
     <None Include="wwwroot\fontawesome-free\webfonts\fa-solid-900.svg" />
     <None Include="wwwroot\fontawesome-free\webfonts\fa-solid-900.woff2" />
+    <None Include="wwwroot\layui\font\iconfont.svg" />
+    <None Include="wwwroot\layui\layer\layer.js" />
+    <None Include="wwwroot\layui\layer\mobile\layer.js" />
+    <None Include="wwwroot\layui\layui.all.js" />
+    <None Include="wwwroot\layui\layui.js" />
+    <None Include="wwwroot\layui\lay\modules\carousel.js" />
+    <None Include="wwwroot\layui\lay\modules\code.js" />
+    <None Include="wwwroot\layui\lay\modules\colorpicker.js" />
+    <None Include="wwwroot\layui\lay\modules\element.js" />
+    <None Include="wwwroot\layui\lay\modules\flow.js" />
+    <None Include="wwwroot\layui\lay\modules\form.js" />
+    <None Include="wwwroot\layui\lay\modules\jquery.js" />
+    <None Include="wwwroot\layui\lay\modules\laydate.js" />
+    <None Include="wwwroot\layui\lay\modules\layedit.js" />
+    <None Include="wwwroot\layui\lay\modules\layer.js" />
+    <None Include="wwwroot\layui\lay\modules\laypage.js" />
+    <None Include="wwwroot\layui\lay\modules\laytpl.js" />
+    <None Include="wwwroot\layui\lay\modules\mobile.js" />
+    <None Include="wwwroot\layui\lay\modules\rate.js" />
+    <None Include="wwwroot\layui\lay\modules\slider.js" />
+    <None Include="wwwroot\layui\lay\modules\table.js" />
+    <None Include="wwwroot\layui\lay\modules\tree.js" />
+    <None Include="wwwroot\layui\lay\modules\upload.js" />
+    <None Include="wwwroot\layui\lay\modules\util.js" />
     <None Include="wwwroot\wangEditor-3.1.1\wangEditor.js" />
     <None Include="wwwroot\wangEditor-3.1.1\wangEditor.min.js" />
     <None Include="wwwroot\wangEditor-3.1.1\wangEditor.min.js.map" />
@@ -1597,14 +1633,13 @@
     <PackageReference Include="AutoMapper" Version="8.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="BuildBundlerMinifier" Version="2.8.391" />
-    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="6.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.QQ" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.2.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
     <PackageReference Include="MySql.Data" Version="8.0.15" />
     <PackageReference Include="NLog" Version="4.5.11" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.8.0" />

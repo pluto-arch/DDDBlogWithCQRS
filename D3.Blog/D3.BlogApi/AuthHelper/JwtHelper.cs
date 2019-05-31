@@ -37,13 +37,13 @@ namespace D3.BlogApi.AuthHelper
         /// <returns></returns>
         internal object GenerateJwtToken(string role, AppBlogUser user)
         {
-            
 
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub,user.Email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Sub,"Blog"),//主题
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), //一个唯一标识符
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.UserName.ToString()),
                 new Claim(ClaimTypes.Role, role)
             };
 

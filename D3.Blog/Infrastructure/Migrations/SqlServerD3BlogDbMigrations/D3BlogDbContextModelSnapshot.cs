@@ -14,7 +14,7 @@ namespace Infrastructure.Data.Migrations.SqlServerD3BlogDbMigrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("D3.Blog.Domain.Entitys.Article", b =>
@@ -45,6 +45,10 @@ namespace Infrastructure.Data.Migrations.SqlServerD3BlogDbMigrations
                     b.Property<string>("ContentMd")
                         .IsRequired()
                         .HasColumnType("text")
+                        .IsUnicode(true);
+
+                    b.Property<string>("ErrorReason")
+                        .HasMaxLength(300)
                         .IsUnicode(true);
 
                     b.Property<string>("ExternalUrl")

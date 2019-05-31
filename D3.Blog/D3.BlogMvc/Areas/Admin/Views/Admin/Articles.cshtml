@@ -1,0 +1,122 @@
+﻿@using D3.Blog.Domain.Enums
+@{
+    ViewData["Title"] = "Articles";
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+}
+
+<link rel="stylesheet" href="~/layui/css/layui.css" media="all">
+
+<div style="padding-left: 10px;padding-right: 15px;">
+    <table class="layui-hide" id="test" lay-filter="demoEvent" ></table>
+</div>
+
+
+   
+
+
+    <script src="~/layui/layui.js" charset="utf-8"></script>
+    <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+
+<script>
+    layui.use(['table','layer'], function () {
+        var table = layui.table
+            , form = layui.form, layer = layui.layer;;
+
+        table.render({
+            elem: '#test'
+            , url: '/admin/GetArticles'
+            , skin: 'nob'
+            ,request: {
+                pageName: 'pageIndex', //页码的参数名称，默认：pageNum
+                limitName: 'pageSize' //每页数据量的参数名，默认：pageSize
+            }
+            , id: 'test'
+            , cols: [[
+                {type: 'checkbox', fixed: 'left'}
+                , { field: 'title', title: '标题',event: 'viewDetails', templet: '#usernameTpl' }
+                , { field: 'author', title: '作者' ,width: 70}
+                , { field: 'status', title: '状态', width: 80, templet:'#status'}
+                , { field: 'createTime', title: '创建时间', width: 250, templet: "<div>{{layui.util.toDateString(d.createTime, 'yyyy年MM月dd日 HH:mm:ss')}}</div>"}
+                , { field: 'createTime', title: '操作', width: 200, templet: '#switchTpl', unresize: true }
+            ]]
+            , page: true
+        });
+        table.on('tool(demoEvent)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'viewDetails') {
+                window.location.href = "/admin/ViewDetails?id=" + data.id;
+            }
+            if (obj.event === 'edit') {
+                var id = data.id;
+                layer.confirm('是否通过审核？', {
+                    btn: ['通过', '拒绝'] //可以无限个按钮
+                }, function(index, layero){
+                    //通过的回调
+                    layer.load(2);
+                    $.post('/admin/AuditingPost', { id: id, errorMsg:"",status:0}, function(data) {
+                        if (data.errorcode == '0') {
+                            layer.msg('审核通过');
+                            layer.closeAll('loading');
+                            table.reload('test', {
+                                page: {
+                                    curr: 1 //重新从第 1 页开始
+                                }
+                            });
+                        } else {
+                            layer.closeAll('loading');
+                            layer.msg(data.msg);
+                        }
+                    });
+                    
+                }, function(index){
+                    //拒绝的回调
+                    layer.msg('no');
+                }); 
+            }
+            if (obj.event === 'del') {
+                var id = data.id;
+                $.post('/admin/DeleteArticle', { id: id }, function(data) {
+                    if (data.errorcode == '0') {
+                        layer.msg('删除成功');
+                        layer.closeAll('loading');
+                        table.reload('test', {
+                                page: {
+                                    curr: 1 //重新从第 1 页开始
+                                }
+                            });
+                    } else {
+                        layer.closeAll('loading');
+                        layer.msg(data.msg);
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+<script type="text/html" id="status">
+    {{#  if(d.status == '0'){ }}
+    <b style="color: lightgreen">已发布</b>
+    {{#  } else if(d.status == '3') { }}
+    <b style="color:chocolate">待审核</b>
+    {{# } else if(d.status == '4') { }}
+    <b style="color:chocolate">未通过</b>
+    {{#}}}
+</script>
+
+<script type="text/html" id="usernameTpl">
+    <a class="layui-table-link" lay-filter="details">{{ d.title }}</a>
+</script>
+<script type="text/html" id="switchTpl">
+    <!-- 这里的 checked 的状态只是演示 -->
+@*   <input type="checkbox" name="sex" value="{{d.id}}" lay-skin="switch" lay-text="女|男" lay-filter="sexDemo" {{ d.id }}>   *@
+    <div class="tpl-table-black-operation">
+        <a href="javascript:;" lay-event="edit">
+            <i class="am-icon-pencil"></i> 审核
+        </a>
+        <a href="javascript:;" class="tpl-table-black-operation-del" lay-event="del">
+            <i class="am-icon-trash"></i> 删除
+        </a>
+    </div>
+</script>
+

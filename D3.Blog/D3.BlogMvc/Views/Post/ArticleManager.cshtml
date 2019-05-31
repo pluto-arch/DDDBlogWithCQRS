@@ -193,8 +193,13 @@
                                     {
                                         <span id="blogtype3" style="position: relative;padding-left: 9px;color: white;font-size: 10px;padding-top: 0;background-color: #f9cd2f;line-height: 20px;height: 20px;margin: 0;margin-left: 10px;width: 42px; margin-right: 50px;cursor: pointer">翻译</span>
                                     }
-
                                     <span style="float: right;color: darkgray;">@item.Status.GetDescription()</span>
+                                    <span style="float: right; color: darkgray;">
+                                        @if (!string.IsNullOrEmpty(item.ErrorReason) && item.Status == ArticleStatus.VerifyFailed)
+                                        {
+                                            <span style="margin: 0; padding: 0;">拒绝原因：@item.ErrorReason</span>
+                                        }
+                                    </span>
                                 </div>
                                 <div style="border-bottom: 1px dotted #ddd; display: flex; position: relative; cursor: pointer; padding-bottom: 5px;">
                                     <div style="display: flex">

@@ -21,6 +21,17 @@ namespace D3.Blog.Application.Interface
         /// </summary>
         /// <param name="updatemodel"></param>
         void Update(NewArticleModel updatemodel);
+
+
+        /// <summary>
+        /// 更新审核状态
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="status"></param>
+        /// <param name="errorMsg"></param>
+        void PassArticle(int id, int status, string errorMsg);
+
+
         /// <summary>
         /// 根据id删除
         /// </summary>
@@ -53,7 +64,7 @@ namespace D3.Blog.Application.Interface
         /// <param name="expression"></param>
         /// <param name="orderby"></param>
         /// <returns></returns>
-        IEnumerable<ArticleViewModel> GetListByPage<TKey>(int pageSize,int pageIndex,Expression<Func<Article, bool>> expression,Expression<Func<Article, TKey>> orderby);
+        IEnumerable<ArticleViewModel> GetListByPage<TKey>(int pageSize,int pageIndex,Expression<Func<Article, bool>> expression,Expression<Func<Article, TKey>> orderby,out int count);
 
         /// <summary>
         /// 根据条件获取单条数据

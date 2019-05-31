@@ -125,7 +125,7 @@ namespace D3.BlogMvc.Controllers
             }
             _articleService.Add(mo);
             var error = _notifications.GetNotifications().Select(n => n.Value);//通知结果
-            return new JsonResult("hahahah");
+            return new JsonResult(error);
         }
 
 

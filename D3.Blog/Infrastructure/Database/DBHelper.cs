@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Data;
+using System.Diagnostics;
+using D3.Blog.Domain.Entitys;
 using Microsoft.EntityFrameworkCore;
 using MySql.Data.MySqlClient;
 
@@ -52,6 +54,9 @@ namespace Infrastructure.Data.Database
                 connection.Close();
                 return ds;
             }
+            
         }
+
+
     }
 }

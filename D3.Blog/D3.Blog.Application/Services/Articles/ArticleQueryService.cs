@@ -14,6 +14,7 @@ namespace D3.Blog.Application.Services.Articles
     /// </summary>
     public partial class ArticleService
     {
+
         /// <summary>
         /// 根据id查找记录
         /// </summary>
@@ -50,7 +51,7 @@ namespace D3.Blog.Application.Services.Articles
         {
             try
             {
-                var allArticles = _articleRepository.FindListByClause<TKey>(expression,orderby).ToList();
+                var allArticles = _articleRepository.FindListByClause<TKey>(expression,orderby,false).ToList();
 
 
                 var result = (from a in allArticles
@@ -67,7 +68,8 @@ namespace D3.Blog.Application.Services.Articles
                         a.AddTime,
                         a.ViewCount,
                         a.CollectedCount,
-                        a.PromitCount
+                        a.PromitCount,
+                        a.ErrorReason
                         )).ToList();
                 return result;
             }
@@ -85,12 +87,14 @@ namespace D3.Blog.Application.Services.Articles
         /// <param name="pageIndex">页索引（1）开始</param>
         /// <param name="expression">查询条件</param>
         /// <param name="orderby">排序条件</param>
+        /// <param name="count"></param>
         /// <returns></returns>
-        public IEnumerable<ArticleViewModel> GetListByPage<TKey>(int pageSize, int pageIndex, Expression<Func<Article, bool>> expression, Expression<Func<Article, TKey>> orderby)
+        public IEnumerable<ArticleViewModel> GetListByPage<TKey>(int pageSize, int pageIndex, Expression<Func<Article, bool>> expression, Expression<Func<Article, TKey>> orderby,out int count)
         {
             try
             {
-                var allArticles = _articleRepository.FindListByPage<TKey>(pageSize,pageIndex,expression,orderby).ToList();
+                count = 0;
+                var allArticles = _articleRepository.FindListByPage<TKey>(pageSize,pageIndex,expression,orderby,false,out count).ToList();
                 var result = (from a in allArticles
                     select new ArticleViewModel(
                         a.Id,
@@ -101,16 +105,18 @@ namespace D3.Blog.Application.Services.Articles
                         "",
                         a.Source,
                         "",
-                        ArticleStatus.Savedraft,
+                        a.Status,
                         a.AddTime,
                         a.ViewCount,
                         a.CollectedCount,
-                        a.PromitCount
+                        a.PromitCount,
+                        a.ErrorReason
                     )).ToList();//此处没有用automapper
                 return result;
             }
             catch (Exception e)
             {
+                count = 0;
                 return null;
             }
         }

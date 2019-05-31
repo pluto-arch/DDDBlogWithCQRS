@@ -45,5 +45,12 @@ namespace D3.Blog.Domain.Enums
         /// </summary>
         [Description("回收箱")]
         Deleted =4,
+
+
+        /// <summary>
+        /// 已删除（回收箱）
+        /// </summary>
+        [Description("审核失败")]
+        VerifyFailed = 4,
     }
 }

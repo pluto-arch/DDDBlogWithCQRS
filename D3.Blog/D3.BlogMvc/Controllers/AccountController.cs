@@ -207,7 +207,7 @@ namespace D3.BlogMvc.Controllers
             var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
             if (result.Succeeded)
             {
-                // _logger.LogInformation("用户使用 {Name} 登录了.", info.LoginProvider);
+                _logger.LogCustomerInfo($"用户使用 {info.Principal.FindFirstValue(ClaimTypes.Name)} 登录了.", "ExternalLoginCallback","",null);
                 return RedirectToLocal(returnUrl);
             }
             if (result.IsLockedOut)
@@ -222,7 +222,8 @@ namespace D3.BlogMvc.Controllers
                 ViewData["ReturnUrl"]     = returnUrl;
                 ViewData["LoginProvider"] = info.LoginProvider;
                 var email = info.Principal.FindFirstValue(ClaimTypes.Email);
-                return View("Register", new RegisterModel{ Email = email });
+                var name = info.Principal.FindFirstValue(ClaimTypes.Name);
+                return View("Register", new RegisterModel{ Email = email,Name = name });
             }
         }
 
@@ -388,7 +389,7 @@ namespace D3.BlogMvc.Controllers
             }
             else
             {
-                return RedirectToAction(nameof(HomeController.Index), "Home");
+                return RedirectToAction(nameof(HomeController.HomePage), "Home");
             }
         }
 

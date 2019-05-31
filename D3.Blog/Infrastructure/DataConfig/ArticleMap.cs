@@ -42,6 +42,8 @@ namespace Infrastructure.Data.DataConfig
 
             //-----------上：一般新增必用，下边一般修改比用---------
 
+            builder.Property(x => x.ErrorReason).HasMaxLength(300).IsUnicode();
+
             builder.Property(x => x.CollectedCount).HasDefaultValue(0);
             
             builder.Property(x => x.ViewCount).HasDefaultValue(0);

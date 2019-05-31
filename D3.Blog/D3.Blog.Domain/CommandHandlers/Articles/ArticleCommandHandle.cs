@@ -18,9 +18,11 @@ namespace D3.Blog.Domain.CommandHandlers.Articles
     /// </summary>
     public class ArticleCommandHandle
         :CommandHandler,
-         IRequestHandler<AddNewArticleCommand>
+         IRequestHandler<AddNewArticleCommand>,
+         IRequestHandler<DeleteArticleCommand>,
+         IRequestHandler<ApprovalArticleCommand>
     {
-        private readonly IArticleRepository _articleRepository;
+        private readonly IRepository<Article> _articleRepository;
         private readonly IMediatorHandler    _bus;
         private readonly IUser _user;
         /// <summary>
@@ -30,19 +32,18 @@ namespace D3.Blog.Domain.CommandHandlers.Articles
 
         public ArticleCommandHandle(
             IUser user,
-            IArticleRepository articleRepository,
             IUnitOfWork uow, 
             IMediatorHandler bus, 
             INotificationHandler<DomainNotification> notifications) : base(uow, bus, notifications)
         {
-            _articleRepository = articleRepository;
+            _articleRepository = uow.GetRepository<Article>();
             _bus = bus;
             _user = user;
 //            _logger = logger;
         }
 
         /// <summary>
-        /// 处理程序
+        /// 新增
         /// </summary>
         /// <param name="request"></param>
         /// <param name="cancellationToken"></param>
@@ -82,6 +83,59 @@ namespace D3.Blog.Domain.CommandHandlers.Articles
             catch (Exception e)
             {
                 _bus.RaiseEvent(new DomainNotification(request.MessageType,e.Message));
+            }
+            return Unit.Task;
+        }
+
+        /// <summary>
+        /// 删除文章
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<Unit> Handle(DeleteArticleCommand request, CancellationToken cancellationToken)
+        {
+            if (!request.IsValid())
+            {
+                NotifyValidationErrors(request);
+                return Unit.Task;
+            }
+            _articleRepository.DeleteById(request.Id);
+            if (Commit())
+            {
+                //提交成功，发布领域事件
+                _bus.RaiseEvent(new DomainNotification(nameof(DeleteArticleCommand), "删除成功"));
+            }
+            else
+            {
+                _bus.RaiseEvent(new DomainNotification(nameof(DeleteArticleCommand), "删除失败，请稍后再试"));
+            }
+            return Unit.Task;
+        }
+
+
+        /// <summary>
+        /// 审批
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<Unit> Handle(ApprovalArticleCommand request, CancellationToken cancellationToken)
+        {
+            if (!request.IsValid())
+            {
+                NotifyValidationErrors(request);
+                return Unit.Task;
+            }
+            _articleRepository.Update(request.Post);
+            if (Commit())
+            {
+                //提交成功，发布领域事件
+                _bus.RaiseEvent(new DomainNotification(nameof(ApprovalArticleCommand), "成功"));
+            }
+            else
+            {
+                _bus.RaiseEvent(new DomainNotification(nameof(ApprovalArticleCommand), "失败，请稍后再试"));
             }
             return Unit.Task;
         }

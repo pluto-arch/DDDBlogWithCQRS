@@ -1,6 +1,7 @@
 ﻿using D3.Blog.Domain.Core.BUS;
 using D3.Blog.Domain.Core.Commands;
 using D3.Blog.Domain.Core.Notifications;
+using D3.Blog.Domain.Entitys;
 using D3.Blog.Domain.Infrastructure;
 using MediatR;
 
@@ -32,6 +33,17 @@ namespace D3.Blog.Domain.CommandHandlers
                 _bus.RaiseEvent(new DomainNotification(message.MessageType, error.ErrorMessage));
             }
         }
+
+        /// <summary>
+        /// 获取对应仓储
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <returns></returns>
+        public IRepository<TEntity> GetRepository<TEntity>() where TEntity:BaseEntity
+        {
+            return _uow.GetRepository<TEntity>();
+        }
+
 
         public bool Commit()
         {

@@ -37,22 +37,30 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 using System;
+using D3.Blog.Domain.Entitys;
+using System.Reflection;
+using D3.Blog.Domain.CommandHandlers;
 
 namespace DependencyInjection
 {
     public static class DependencyInjection
     {
-        public static void ServerDependencies(this IServiceCollection services)
+        public static void ServerDependencies(this IServiceCollection services,Type t)
         {
             // ASP.NET HttpContext dependency
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IUser, AspNetUser>();
             services.AddScoped<ICustomerLogging, CustomerLogging>();
             services.AddScoped<IDBHelper, DBHelper>();
-            services.AddMediatR();
+            services.AddMediatR(typeof(CommandHandler).GetTypeInfo().Assembly);
 
-            #region 单元工作与总线bus
-            services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
+
+
+            #region 单元工作,仓储,总线bus
+            services.AddScoped<D3BlogDbContext>().AddUnitOfWork<D3BlogDbContext>();
+//            services.AddCustomRepository<Customer, CustomerRepository>();
+//            services.AddCustomRepository<Article, ArticleRepository>();
+//            services.AddCustomRepository<PostSeries, PostGroupRepository>();
             services.AddScoped<IMediatorHandler, InMemoryBus>();
             #endregion
 
@@ -80,23 +88,12 @@ namespace DependencyInjection
             services.AddScoped<IEventStore, SqlEventStore>();
             services.AddScoped<EventStoreSQLContext>();
             #endregion
-
-
-            #region 仓储和服务 未加拦截器
-            //            services.AddScoped<ICustomerRepository, CustomerRepository>();
-            //            services.AddScoped<IArticleRepository, ArticleRepository>();
-            //
-            //            services.AddScoped<ICustomerService, CustomerService>();
-            //            services.AddScoped<IArticleService, ArticleService>();
-            #endregion
-
+         
             #region 事件存储需要
             services.AddScoped(typeof(AppBlogUser));
             #endregion
 
-            #region BlogDbContext
-            services.AddScoped<D3BlogDbContext>();
-            #endregion
+            
         }
 
 
@@ -107,13 +104,13 @@ namespace DependencyInjection
         public static void ServerDependenciesAutofac(this ContainerBuilder builder)
         {
 
-            builder.RegisterType<CustomerRepository>().As(typeof(ICustomerRepository)).InstancePerLifetimeScope()
+            builder.RegisterType<CustomerRepository>().As(typeof(IRepository<Customer>)).InstancePerLifetimeScope()
                .EnableInterfaceInterceptors()//启动动态代理，拦截器
                .InterceptedBy(typeof(BlogLogAOP));//附加拦截器;
-            builder.RegisterType<ArticleRepository>().As(typeof(IArticleRepository)).InstancePerLifetimeScope()
+            builder.RegisterType<ArticleRepository>().As(typeof(IRepository<Article>)).InstancePerLifetimeScope()
                 .EnableInterfaceInterceptors()//启动动态代理，拦截器
                 .InterceptedBy(typeof(BlogLogAOP));//附加拦截器;
-            builder.RegisterType<PostGroupRepository>().As(typeof(IPostGroupRepository)).InstancePerLifetimeScope()
+            builder.RegisterType<PostGroupRepository>().As(typeof(IRepository<PostSeries>)).InstancePerLifetimeScope()
                 .EnableInterfaceInterceptors()//启动动态代理，拦截器
                 .InterceptedBy(typeof(BlogLogAOP));//附加拦截器;
 
@@ -123,9 +120,9 @@ namespace DependencyInjection
                 .EnableInterfaceInterceptors()//启动动态代理，拦截器
                 .InterceptedBy(typeof(BlogLogAOP));//附加拦截器;
             builder.RegisterType<ArticleService>().As(typeof(IArticleService))
-                .InstancePerLifetimeScope()
-                .EnableInterfaceInterceptors() //启动动态代理，拦截器
-                .InterceptedBy(typeof(BlogLogAOP));
+                .InstancePerLifetimeScope();
+                //.EnableInterfaceInterceptors() //启动动态代理，拦截器
+                //.InterceptedBy(typeof(BlogLogAOP));
             //              .InterceptedBy(typeof(BlogCacheAOP));//附加拦截器
             builder.RegisterType<PostGroupServer>().As(typeof(IPostGroupServer)).InstancePerLifetimeScope()
                 .EnableInterfaceInterceptors()//启动动态代理，拦截器

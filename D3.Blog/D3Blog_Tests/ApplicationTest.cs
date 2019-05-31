@@ -2,8 +2,15 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using D3.Blog.Application.AutoMapper;
 using D3.Blog.Domain.CommandHandlers.Customer;
@@ -45,13 +52,25 @@ using D3.Blog.Domain.Entitys;
 using D3.Blog.Domain.EventHandlers.PostGroupEventHandler;
 using D3.Blog.Domain.Events.ArticleEvent;
 using D3.Blog.Domain.Events.PostGroup;
+using Infrastructure.AOP;
 using Infrastructure.Logging;
+using Infrastructure.Tools;
 using Microsoft.Extensions.DependencyInjection;
+using DependencyInjection;
+using MySql.Data.MySqlClient;
+using Xunit.Abstractions;
 
 namespace D3Blog_Tests
 {
     public class ApplicationTest
     {
+        private readonly ITestOutputHelper _testOutputHelper;
+
+        public ApplicationTest(ITestOutputHelper testOutputHelper)
+        {
+            _testOutputHelper = testOutputHelper;
+        }
+
         /// <summary>
         /// EF 并发测试（乐观锁）
         /// </summary>
@@ -178,72 +197,116 @@ namespace D3Blog_Tests
 
 
         /// <summary>
+        /// 添加文章分组测试
+        /// </summary>
+        [Fact]
+        public void BulkToDB()
+        {
+            DataTable table = new DataTable();
+            table.TableName = "PostSeries";
+            table.Columns.AddRange(new DataColumn[] {
+                                new DataColumn("GroupName",typeof(string)),
+                                new DataColumn("OwinUserId",typeof(string))
+                             });
+            for (int i = 0; i < 2000000; i++)
+            {
+                DataRow dr = table.NewRow();
+                dr["GroupName"] = i;
+                dr["OwinUserId"] = i++;
+                table.Rows.Add(dr);
+            }
+
+            Stopwatch sw = new Stopwatch();
+            MySqlConnection sqlconn = new MySqlConnection("Server=35.240.152.58; Port=3306; Database=zylblog; Uid=root; Pwd=970307Lbx$;");
+            ToCsv(table);
+            using (sqlconn)
+            {
+                var path = AppDomain.CurrentDomain.BaseDirectory + table.TableName + ".csv";
+                var columns = table.Columns.Cast<DataColumn>().Select(colum => colum.ColumnName).ToList();
+                Stopwatch stopwatch = new Stopwatch(); stopwatch.Start();
+                sqlconn.Open();
+                MySqlBulkLoader bulk = new MySqlBulkLoader(sqlconn)
+                {
+                    FieldTerminator = ",",
+                    FieldQuotationCharacter = '"',
+                    EscapeCharacter = '"',
+                    LineTerminator = "\r\n",
+                    FileName = AppDomain.CurrentDomain.BaseDirectory + table.TableName+ ".csv",
+                    NumberOfLinesToSkip = 0,
+                    TableName = table.TableName,
+                };
+
+                bulk.Columns.AddRange(columns);
+                var aaa= bulk.Load();
+
+                stopwatch.Stop();
+                _testOutputHelper.WriteLine("耗时:{0}", stopwatch.ElapsedMilliseconds);
+                Assert.True(stopwatch.ElapsedMilliseconds>0);
+            }
+
+        }
+
+
+        public void ToCsv(DataTable table)
+        {
+            //以半角逗号（即,）作分隔符，列为空也要表达其存在。
+            //列内容如存在半角逗号（即,）则用半角引号（即""）将该字段值包含起来。
+            //列内容如存在半角引号（即"）则应替换成半角双引号（""）转义，并用半角引号（即""）将该字段值包含起来。
+            StringBuilder sb = new StringBuilder();
+            DataColumn colum;
+            foreach (DataRow row in table.Rows)
+            {
+                for (int i = 0; i < table.Columns.Count; i++)
+                {
+                    colum = table.Columns[i];
+                    if (i != 0) sb.Append(",");
+                    if (colum.DataType == typeof(string) && row[colum].ToString().Contains(","))
+                    {
+                        sb.Append("\"" + row[colum].ToString().Replace("\"", "\"\"") + "\"");
+                    }
+                    else sb.Append(row[colum].ToString());
+                }
+                sb.AppendLine();
+            }
+
+            File.WriteAllText(table.TableName + ".csv", sb.ToString());
+        }
+
+
+
+
+
+
+
+
+
+        /// <summary>
         /// 注入容器
         /// </summary>
         /// <returns></returns>
         public IServiceProvider BuildService()
         {
             var services = new ServiceCollection();
-
-            #region 注入
-            // ASP.NET HttpContext dependency
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddScoped<IUser, AspNetUser>();
-            #region 单元工作与总线bus
-            services.AddScoped(typeof(IUnitOfWork),typeof(UnitOfWork));
-            services.AddScoped<IMediatorHandler,InMemoryBus>();
-            #endregion
-            services.AddMediatR();
-            #region  Domain - Commands
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPerformanceBehaviour<,>));
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
-            services.AddScoped<IRequestHandler<RegisterNewCustomerCommand>, CustomerCommandHandler>();
-            services.AddScoped<IRequestHandler<UpdateCustomerCommand>, CustomerCommandHandler>();
-            services.AddScoped<IRequestHandler<AddNewArticleCommand>, ArticleCommandHandle>();
-            services.AddScoped<IRequestHandler<AddPostGroupCommands>, PostGroupCommandHandler>();
-            #endregion
-            #region Domain - Events
-            services.AddScoped<INotificationHandler<DomainNotification>, DomainNotificationHandler>();
-            services.AddScoped<INotificationHandler<CustomerRegisteredEvent>, CustomerEventHandler>();
-            services.AddScoped<INotificationHandler<CustomerUpdatedEvent>, CustomerEventHandler>();
-            services.AddScoped<INotificationHandler<PostGroupAddOrEditEvent>, PostGroupEventHandler>();
-            #endregion
-            #region 事件存储
-            services.AddScoped<IEventStoreRepository, EventStoreSqlRepository>();
-            services.AddScoped<IEventStore, SqlEventStore>();
-            services.AddScoped<EventStoreSQLContext>();
-            #endregion
-
-            services.AddAutoMapper();
-
-            // Registering Mappings automatically only works if the 
-            // Automapper Profile classes are in ASP.NET project
-            AutoMapperConfig.RegisterMappings();
-
-            #region 仓储和服务
-            services.AddScoped<ICustomerRepository, CustomerRepository>();
-            services.AddScoped<IArticleRepository, ArticleRepository>();
-            services.AddScoped<IPostGroupRepository, PostGroupRepository>();
-            services.AddScoped<ICustomerService, CustomerService>();
-            services.AddScoped<IArticleService, ArticleService>();
-            services.AddScoped<IPostGroupServer, PostGroupServer>();
-            #endregion
+            DiagnosticListener.AllListeners.Subscribe(new CommandListener());
 
 
-            #region 事件存储需要
-            services.AddScoped(typeof(AppBlogUser));
-            #endregion
+            services.ServerDependencies(); //配置依赖注入  
+//            services.AddAutoMapperSetup();
+            services.AddMemoryCache();
+            services.AddMvc();
 
-            #region BlogDbContext
-            services.AddScoped<D3BlogDbContext>();
-            #endregion
-            
+            #region Autofac  暂时当作service和repoitory的拦截器使用
+
+            var builder = new ContainerBuilder();
+            builder.Populate(services);//将原生的注入填充进去
+            builder.RegisterType<BlogLogAOP>();//可以直接替换其他拦截器！一定要把拦截器进行注册
+            builder.RegisterType<BlogCacheAOP>();
+            builder.ServerDependenciesAutofac();
+            var applicationContainer = builder.Build();//构建新容器
 
             #endregion
 
-            IServiceProvider ser=services.BuildServiceProvider();
-
-            return ser; //构建服务提供程序
+            return new AutofacServiceProvider(applicationContainer);//新容器
         }
         public IConfiguration GetConfiguration()
         {

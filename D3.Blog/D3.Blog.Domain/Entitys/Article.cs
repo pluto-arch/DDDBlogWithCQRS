@@ -108,6 +108,11 @@ namespace D3.Blog.Domain.Entitys
         /// </summary>
         public int? VerifyUserId { get; set; }
 
+        /// <summary>
+        /// 审核失败原因
+        /// </summary>
+        public string ErrorReason { get; set; }
+
         #region 导航属性
         /// <summary>
         /// 类别id

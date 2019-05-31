@@ -152,6 +152,7 @@ var app = new Vue({
             var v = this;
             console.log(v.mdeditor.getHTML());//md编辑器的内容
             console.log(v.editor.txt.html());//富文本编辑器的内容
+            layer.load(1);
             switch (flag) {
                 case 3:
                     //发布
@@ -176,13 +177,16 @@ var app = new Vue({
                         if (res.data.length > 0) {
                            //有错误
                             console.log(res);
-                            toastr.warning('出现错误：' + res.data);
+                            layer.closeAll('loading');
+                            layer.msg('出现错误：' + res.data);
                         } else {
                            //无错误
-                            toastr.info('发布成功');
+                           layer.closeAll('loading');
+                           layer.msg('发布成功');
                         }
                     }).catch(error => {
-                        toastr.warning('出现错误，请稍后重试');
+                        layer.closeAll('loading');
+                        layer.msg('出现错误，请稍后重试');
                     });
             } else {
                 

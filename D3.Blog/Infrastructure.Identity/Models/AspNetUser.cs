@@ -30,7 +30,7 @@ namespace Infrastructure.Identity.Models
             {
                 try
                 {
-                    return _accessor.HttpContext.User.Identity.Name;
+                    return _accessor.HttpContext.User.Identity.Name?? _accessor.HttpContext.User.Claims.First(x => x.Type == ClaimTypes.Name).Value;
                 }
                 catch (Exception e)
                 {
@@ -72,6 +72,7 @@ namespace Infrastructure.Identity.Models
         {
             return _accessor.HttpContext.User.Claims;
         }
+
         /// <summary>
         /// 客户端ip,或者客户端连接id
         /// </summary>
@@ -79,7 +80,8 @@ namespace Infrastructure.Identity.Models
         {
             get
             {
-                return _accessor.HttpContext.Connection.RemoteIpAddress.ToString();
+                //因为nginx代理问题，客户端id 采用这总方式获取   
+                return _accessor.HttpContext.Request.Headers["X-Forwarded-For"].ToString();
             }
         }
 

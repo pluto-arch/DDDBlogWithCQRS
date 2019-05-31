@@ -1,0 +1,77 @@
+﻿@using D3.Blog.Domain.Enums
+@model D3.Blog.Application.ViewModels.Article.ArticleViewModel
+@{
+    ViewData["Title"] = "ViewDetails";
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+}
+
+<!-- 内容区域 -->
+<div class="tpl-content-wrapper" style="margin-left: 0">
+    <div class="row-content am-cf">
+        <div class=" am-cf">
+            <div class="row">
+                <div class="am-u-sm-12 am-u-md-12 am-u-lg-9">
+                    <div class="page-header-heading"><a style="margin: 0;padding: 0" href="javascript:history.back(-1)"><span class="am-icon-backward "></span>&nbsp;&nbsp;返回</a></div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+
+            <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+                <div class="widget am-cf">
+                    <div class="widget-head am-cf">
+                        <div class="widget-title" style="font-size: 25px">@Model.Title</div>
+                        <div class="widget-function">
+                           作者： @Model.Author
+                        </div>
+                        <div class="widget-function">
+                           创建时间： @Model.CreateTime
+                        </div>
+                    </div>
+                    <div class="widget-body am-fr">
+                        <div id="test-editormd">
+                            <textarea style="display: none;">
+
+@if (@Model.ContentMd.Trim() == "")
+{
+    @Model.ContentHtml
+}
+else
+{
+    @Model.ContentMd
+}
+</textarea>
+                        </div>
+                            
+                        </div>
+                    </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="~/lib/markdown/lib/marked.min.js"></script>
+<script src="~/lib/markdown/lib/prettify.min.js"></script>
+<script src="~/lib/markdown/lib/raphael.min.js"></script>
+<script src="~/lib/markdown/lib/underscore.min.js"></script>
+<script src="~/lib/markdown/lib/sequence-diagram.min.js"></script>
+<script src="~/lib/markdown/lib/flowchart.min.js"></script>
+<script src="~/lib/markdown/lib/jquery.flowchart.min.js"></script>
+<script src="~/lib/markdown/editormd.min.js"></script>
+<script>
+    $(function () {
+        editormd.markdownToHTML("test-editormd", {
+            htmlDecode: "style,script,iframe",  // you can filter tags decode
+            emoji: true,
+            taskList: true,
+            tex: true,  // 默认不解析
+            flowChart: true,  // 默认不解析
+            sequenceDiagram: true,  // 默认不解析
+
+
+        });
+    });
+
+</script>

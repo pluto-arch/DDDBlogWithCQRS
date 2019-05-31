@@ -76,7 +76,7 @@ namespace D3.BlogMvc.Controllers
             ViewBag.title = "YLBlog-首页";
             ViewBag.container = "container";//写文章页面和其他页面的样式控制
             ViewBag.NewAreaLogin = false;//异地登录标志
-            var postlist= _articleService.GetListByPage(10, 1, x=>x.Status==0, a => a.AddTime).ToList();
+            var postlist= _articleService.GetListByPage(10, 1, x=>x.Status==0, a => a.AddTime,out int count).ToList();
 
             var postlists = (from p in postlist
                 select new PostListModel(
@@ -100,7 +100,7 @@ namespace D3.BlogMvc.Controllers
         [HttpGet]
         public IActionResult GetPostList()
         {
-            var postlist= _articleService.GetListByPage(10, 2, null, a => a.AddTime).ToList();
+            var postlist= _articleService.GetListByPage(10, 2, null, a => a.AddTime,out int count).ToList();
             var postlists = (from p in postlist
                 select new PostListModel(
                     p.Id,
@@ -140,7 +140,7 @@ namespace D3.BlogMvc.Controllers
         public IActionResult NewAreaLogin()
         {
             ViewBag.NewAreaLogin = true;//异地登录标志
-            var postlist= _articleService.GetListByPage(10, 1, null, a => a.AddTime).ToList();
+            var postlist= _articleService.GetListByPage(10, 1, null, a => a.AddTime,out int count).ToList();
             var postlists = (from p in postlist
                 select new PostListModel(
                     p.Id,

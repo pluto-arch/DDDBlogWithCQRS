@@ -25,8 +25,5 @@ namespace D3.BlogMvc.Controllers
             _notifications = (DomainNotificationHandler)notifications;
             _logger = logger;
         }
-
-
-
     }
 }

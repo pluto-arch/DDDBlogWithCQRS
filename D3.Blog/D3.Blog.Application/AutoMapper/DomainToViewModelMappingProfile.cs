@@ -26,7 +26,7 @@ namespace D3.Blog.Application.AutoMapper
             //article转ArticleViewModel,单个
             CreateMap<Article, ArticleViewModel>()
                 .ConstructUsing(c => new ArticleViewModel(c.Id,c.Title,c.ContentMd,c.ContentHtml,c.Author,"",
-                    c.Source,"",c.Status,c.AddTime,c.ViewCount,c.CollectedCount,c.PromitCount));
+                    c.Source,"",c.Status,c.AddTime,c.ViewCount,c.CollectedCount,c.PromitCount,c.ErrorReason));
             //list形式
             CreateMap<List<Article>, List<ArticleViewModel>>();
 

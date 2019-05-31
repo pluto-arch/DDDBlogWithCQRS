@@ -135,6 +135,14 @@
             </summary>
             <param name="updatemodel"></param>
         </member>
+        <member name="M:D3.Blog.Application.Interface.IArticleService.PassArticle(System.Int32,System.Int32,System.String)">
+            <summary>
+            更新审核状态
+            </summary>
+            <param name="id"></param>
+            <param name="status"></param>
+            <param name="errorMsg"></param>
+        </member>
         <member name="M:D3.Blog.Application.Interface.IArticleService.Remove(System.Int32)">
             <summary>
             根据id删除
@@ -156,7 +164,7 @@
             <param name="orderby"></param>
             <returns></returns>
         </member>
-        <member name="M:D3.Blog.Application.Interface.IArticleService.GetListByPage``1(System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{D3.Blog.Domain.Entitys.Article,System.Boolean}},System.Linq.Expressions.Expression{System.Func{D3.Blog.Domain.Entitys.Article,``0}})">
+        <member name="M:D3.Blog.Application.Interface.IArticleService.GetListByPage``1(System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{D3.Blog.Domain.Entitys.Article,System.Boolean}},System.Linq.Expressions.Expression{System.Func{D3.Blog.Domain.Entitys.Article,``0}},System.Int32@)">
             <summary>
             分页获取数据
             </summary>
@@ -256,11 +264,6 @@
             automapper对象
             </summary>
         </member>
-        <member name="F:D3.Blog.Application.Services.Articles.ArticleService._articleRepository">
-            <summary>
-            Article仓储
-            </summary>
-        </member>
         <member name="F:D3.Blog.Application.Services.Articles.ArticleService.Bus">
             <summary>
             总线
@@ -277,6 +280,20 @@
             </summary>
             <param name="model"></param>
         </member>
+        <member name="M:D3.Blog.Application.Services.Articles.ArticleService.Remove(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+        </member>
+        <member name="M:D3.Blog.Application.Services.Articles.ArticleService.PassArticle(System.Int32,System.Int32,System.String)">
+            <summary>
+            审核帖子
+            </summary>
+            <param name="id">帖子id</param>
+            <param name="status">审核状态</param>
+            <param name="errorMsg"></param>
+        </member>
         <member name="M:D3.Blog.Application.Services.Articles.ArticleService.GetById(System.Int32)">
             <summary>
             根据id查找记录
@@ -284,7 +301,7 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:D3.Blog.Application.Services.Articles.ArticleService.GetListByPage``1(System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{D3.Blog.Domain.Entitys.Article,System.Boolean}},System.Linq.Expressions.Expression{System.Func{D3.Blog.Domain.Entitys.Article,``0}})">
+        <member name="M:D3.Blog.Application.Services.Articles.ArticleService.GetListByPage``1(System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{D3.Blog.Domain.Entitys.Article,System.Boolean}},System.Linq.Expressions.Expression{System.Func{D3.Blog.Domain.Entitys.Article,``0}},System.Int32@)">
             <summary>
             分页获取数据
             </summary>
@@ -293,6 +310,7 @@
             <param name="pageIndex">页索引（1）开始</param>
             <param name="expression">查询条件</param>
             <param name="orderby">排序条件</param>
+            <param name="count"></param>
             <returns></returns>
         </member>
         <member name="T:D3.Blog.Application.Services.Customer.CustomerService">
@@ -315,7 +333,7 @@
             总线
             </summary>
         </member>
-        <member name="M:D3.Blog.Application.Services.Customer.CustomerService.#ctor(AutoMapper.IMapper,D3.Blog.Domain.Infrastructure.IRepositorys.ICustomerRepository,D3.Blog.Domain.Core.BUS.IMediatorHandler)">
+        <member name="M:D3.Blog.Application.Services.Customer.CustomerService.#ctor(AutoMapper.IMapper,D3.Blog.Domain.Infrastructure.IRepositorys.ICustomerRepository,D3.Blog.Domain.Core.BUS.IMediatorHandler,D3.Blog.Domain.Infrastructure.IUnitOfWork)">
             <summary>
             构造函数
             </summary>
@@ -379,7 +397,7 @@
             日志
             </summary>
         </member>
-        <member name="M:D3.Blog.Application.Services.PostGroup.PostGroupServer.#ctor(AutoMapper.IMapper,D3.Blog.Domain.Infrastructure.IRepositorys.IPostGroupRepository,D3.Blog.Domain.Core.BUS.IMediatorHandler,Infrastructure.NLoger.ICustomerLogging)">
+        <member name="M:D3.Blog.Application.Services.PostGroup.PostGroupServer.#ctor(AutoMapper.IMapper,D3.Blog.Domain.Infrastructure.IUnitOfWork,D3.Blog.Domain.Core.BUS.IMediatorHandler,Infrastructure.NLoger.ICustomerLogging)">
             <summary>
             构造函数
             </summary>
@@ -458,7 +476,7 @@
             文章查看model
             </summary>
         </member>
-        <member name="M:D3.Blog.Application.ViewModels.Article.ArticleViewModel.#ctor(System.Int32,System.String,System.String,System.String,System.String,System.String,System.Nullable{D3.Blog.Domain.Enums.ArticleSource},System.String,D3.Blog.Domain.Enums.ArticleStatus,System.DateTime,System.Int32,System.Int32,System.Int32)">
+        <member name="M:D3.Blog.Application.ViewModels.Article.ArticleViewModel.#ctor(System.Int32,System.String,System.String,System.String,System.String,System.String,System.Nullable{D3.Blog.Domain.Enums.ArticleSource},System.String,D3.Blog.Domain.Enums.ArticleStatus,System.DateTime,System.Int32,System.Int32,System.Int32,System.String)">
             <summary>
             构造函数赋值
             </summary>
@@ -538,6 +556,11 @@
         <member name="P:D3.Blog.Application.ViewModels.Article.ArticleViewModel.SupportCount">
             <summary>
             点在支持次数
+            </summary>
+        </member>
+        <member name="P:D3.Blog.Application.ViewModels.Article.ArticleViewModel.ErrorReason">
+            <summary>
+            审核失败原因
             </summary>
         </member>
         <member name="T:D3.Blog.Application.ViewModels.CustomerViewModel">

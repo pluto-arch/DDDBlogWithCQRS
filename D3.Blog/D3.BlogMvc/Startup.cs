@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using AspectCore.Configuration;
@@ -37,6 +38,7 @@ using Infrastructure.Identity.Authorization;
 using NLog.Extensions.Logging;
 using NLog.Web;
 using DependencyInjection;
+using Infrastructure.Tools;
 
 namespace D3.BlogMvc
 {
@@ -54,7 +56,11 @@ namespace D3.BlogMvc
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.ServerDependencies(); //配置依赖注入  
+
+            DiagnosticListener.AllListeners.Subscribe(new CommandListener());
+
+
+            services.ServerDependencies(typeof(Startup)); //配置依赖注入  
 
 //            services.ConfigureSeriLog(Configuration);//配置serilog
 
@@ -130,12 +136,11 @@ namespace D3.BlogMvc
             #region Autofac  暂时当作service和repoitory的拦截器使用
             var builder = new ContainerBuilder();
             builder.Populate(services);//将原生的注入填充进去
-            builder.RegisterType<BlogLogAOP>();//可以直接替换其他拦截器！一定要把拦截器进行注册
+            builder.RegisterType<BlogLogAOP>();//可以直接替换其他拦截器
             builder.RegisterType<BlogCacheAOP>();
             builder.ServerDependenciesAutofac();
             var applicationContainer = builder.Build();//构建新容器
             #endregion
-            
 
             return new AutofacServiceProvider(applicationContainer);//新容器
         }

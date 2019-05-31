@@ -11,6 +11,7 @@ using D3.Blog.Domain.Core.BUS;
 using D3.Blog.Domain.Core.Notifications;
 using D3.Blog.Domain.Entitys;
 using D3.Blog.Domain.Enums;
+using D3.Blog.Domain.Infrastructure;
 using D3.Blog.Domain.Infrastructure.IRepositorys;
 using Infrastructure.Cache;
 using Infrastructure.Data.Repository.EventSourcing;
@@ -27,10 +28,9 @@ namespace D3.Blog.Application.Services.Articles
         /// automapper对象
         /// </summary>
         private readonly IMapper  _mapper;
-        /// <summary>
-        /// Article仓储
-        /// </summary>
-        private readonly IArticleRepository _articleRepository;
+
+        private readonly IRepository<Article> _articleRepository;
+
         ///// <summary>
         ///// 事件存储对象
         ///// </summary>
@@ -46,14 +46,13 @@ namespace D3.Blog.Application.Services.Articles
 
         public ArticleService(
             IMapper               mapper,
-            IArticleRepository   articleRepository,
             IMediatorHandler      bus,
-            ICustomerLogging  logger)
+            ICustomerLogging  logger, IUnitOfWork uow)
         {
             _mapper               = mapper;
-            _articleRepository   = articleRepository;
             Bus                   = bus;
             _logger = logger;
+            _articleRepository = uow.GetRepository<Article>();
         }
 
 
@@ -75,15 +74,58 @@ namespace D3.Blog.Application.Services.Articles
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
         public void Remove(int id)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                Bus.SendCommand(new DeleteArticleCommand(id));
+            }
+            catch (Exception e)
+            {
+                Bus.RaiseEvent(new DomainNotification($"error", "出现错误，请稍后重试"));
+            }
         }
 
+        
         public void Update(NewArticleModel updatemodel)
         {
             throw new System.NotImplementedException();
         }
+
+        /// <summary>
+        /// 审核帖子
+        /// </summary>
+        /// <param name="id">帖子id</param>
+        /// <param name="status">审核状态</param>
+        /// <param name="errorMsg"></param>
+        public void PassArticle(int id, int status,string errorMsg)
+        {
+            try
+            {
+                var model= _articleRepository.FindById(id);
+                if (model!=null)
+                {
+                    model.Status = (ArticleStatus) status;
+                    model.ErrorReason = errorMsg;
+                    Bus.SendCommand(new ApprovalArticleCommand(model));
+                }
+                else
+                {
+                    Bus.RaiseEvent(new DomainNotification($"ApprovalArticleCommand", "文章不存在！"));
+                }
+               
+            }
+            catch (Exception e)
+            {
+                Bus.RaiseEvent(new DomainNotification($"ApprovalArticleCommand", "出现错误，请稍后重试"));
+            }
+        }
+
+
 
         #region IDisposable Support
         private bool disposedValue = false; // 要检测冗余调用
@@ -118,6 +160,8 @@ namespace D3.Blog.Application.Services.Articles
             // TODO: 如果在以上内容中替代了终结器，则取消注释以下行。
             // GC.SuppressFinalize(this);
         }
+
+        
         #endregion
 
         /********************************************************/
