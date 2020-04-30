@@ -3,7 +3,7 @@
   "name": "asp.net",
   "private": true,
   "devDependencies": {
-    "jquery": "3.3.1",
+    "jquery": "3.5.0",
     "jquery-slim": "3.0.0",
     "popper.js": "1.14.5",
     "bootstrap": "4.1.3",
